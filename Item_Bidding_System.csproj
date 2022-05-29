@@ -67,9 +67,61 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Admin\ManageAccount.aspx" />
+    <Content Include="Admin\ManageComplaint.aspx" />
+    <Content Include="Admin\ManageProduct.aspx" />
+    <Content Include="General\Home.aspx" />
+    <Content Include="General\Product.aspx" />
+    <Content Include="MasterCSS.css" />
+    <Content Include="Seller\ManageFinance.aspx" />
+    <Content Include="Seller\ManageOrder.aspx" />
+    <Content Include="Seller\ManageProduct.aspx" />
+    <Content Include="Seller\SalesSummary.aspx" />
+    <Content Include="Seller\UploadProduct.aspx" />
+    <Content Include="SideMenuAdmin.ascx" />
+    <Content Include="SideMenuSeller.ascx" />
+    <Content Include="SideMenuUser.ascx" />
+    <Content Include="TopMenu.ascx" />
+    <Content Include="TopMenuCategory.ascx" />
+    <Content Include="User\Watchlist.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin\ManageAccount.aspx.cs">
+      <DependentUpon>ManageAccount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\ManageAccount.aspx.designer.cs">
+      <DependentUpon>ManageAccount.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ManageComplaint.aspx.cs">
+      <DependentUpon>ManageComplaint.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\ManageComplaint.aspx.designer.cs">
+      <DependentUpon>ManageComplaint.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ManageProduct.aspx.cs">
+      <DependentUpon>ManageProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\ManageProduct.aspx.designer.cs">
+      <DependentUpon>ManageProduct.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="General\Home.aspx.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="General\Home.aspx.designer.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="General\Product.aspx.cs">
+      <DependentUpon>Product.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="General\Product.aspx.designer.cs">
+      <DependentUpon>Product.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ItemBidding.Master.cs">
       <DependentUpon>ItemBidding.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -78,6 +130,83 @@
       <DependentUpon>ItemBidding.Master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seller\ManageFinance.aspx.cs">
+      <DependentUpon>ManageFinance.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Seller\ManageFinance.aspx.designer.cs">
+      <DependentUpon>ManageFinance.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Seller\ManageOrder.aspx.cs">
+      <DependentUpon>ManageOrder.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Seller\ManageOrder.aspx.designer.cs">
+      <DependentUpon>ManageOrder.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Seller\ManageProduct.aspx.cs">
+      <DependentUpon>ManageProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Seller\ManageProduct.aspx.designer.cs">
+      <DependentUpon>ManageProduct.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Seller\SalesSummary.aspx.cs">
+      <DependentUpon>SalesSummary.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Seller\SalesSummary.aspx.designer.cs">
+      <DependentUpon>SalesSummary.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Seller\UploadProduct.aspx.cs">
+      <DependentUpon>UploadProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Seller\UploadProduct.aspx.designer.cs">
+      <DependentUpon>UploadProduct.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SideMenuAdmin.ascx.cs">
+      <DependentUpon>SideMenuAdmin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SideMenuAdmin.ascx.designer.cs">
+      <DependentUpon>SideMenuAdmin.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SideMenuSeller.ascx.cs">
+      <DependentUpon>SideMenuSeller.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SideMenuSeller.ascx.designer.cs">
+      <DependentUpon>SideMenuSeller.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SideMenuUser.ascx.cs">
+      <DependentUpon>SideMenuUser.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SideMenuUser.ascx.designer.cs">
+      <DependentUpon>SideMenuUser.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="TopMenu.ascx.cs">
+      <DependentUpon>TopMenu.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TopMenu.ascx.designer.cs">
+      <DependentUpon>TopMenu.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="TopMenuCategory.ascx.cs">
+      <DependentUpon>TopMenuCategory.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TopMenuCategory.ascx.designer.cs">
+      <DependentUpon>TopMenuCategory.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="User\Watchlist.aspx.cs">
+      <DependentUpon>Watchlist.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User\Watchlist.aspx.designer.cs">
+      <DependentUpon>Watchlist.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ItemBidding.Master" />
@@ -89,11 +218,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Admin\" />
-    <Folder Include="Seller\" />
-    <Folder Include="User\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

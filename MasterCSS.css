@@ -1,0 +1,38 @@
+﻿.flex-container-top-menu {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    align-items: flex-start;
+    background-color: #99eeff;
+    height: 50px;
+    width: 100%;
+}
+
+.flex-item-top-menu {
+    margin-right: 30px;
+}
+
+.flex-container-top-menu2 {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #99eeff;
+    height: 50px;
+    width: 100%;
+}
+
+.Logo {
+    font-family: 'Century Schoolbook';
+}
+
+#btnCart {
+    background: url(""); /*url of cart images*/
+}
+
+.flex-container-top-menu3 {
+    display: flex;
+    flex-flow: row wrap;
+    height: 50%;
+    width: 100%;
+}
