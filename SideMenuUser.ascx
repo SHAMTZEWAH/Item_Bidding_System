@@ -45,6 +45,9 @@
         height:50px;
         width:50px;
     }
+    #username{
+        margin-left:10px;
+    }
     .side-menu-top{
         display:flex;
         flex-flow: row wrap;

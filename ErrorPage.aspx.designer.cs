@@ -11,16 +11,7 @@ namespace Item_Bidding_System
 {
 
 
-    public partial class TopMenu
+    public partial class ErrorPage
     {
-
-        /// <summary>
-        /// LoginStatus1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LoginStatus LoginStatus1;
     }
 }

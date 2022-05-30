@@ -13,17 +13,28 @@ namespace Item_Bidding_System.General
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            SqlConnection con;
+            //SqlConnection con;
             //Response.Write(Request.Url);
-            if (!IsPostBack)
+            try
             {
-                if (Request.QueryString["category"].ToString() != null)
+                if (!IsPostBack)
                 {
-                    //string connection
-                    Response.Write(Request.QueryString["category"].ToString());
-                    con  = new SqlConnection();
+                    if (Request.QueryString["category"].ToString() != null)
+                    {
+                        //string connection
+                        Response.Write(Request.QueryString["category"].ToString());
+                        //con = new SqlConnection();
+                    }
+                    else if (Request.QueryString["keyword"].ToString() != null)
+                    {
+                        Response.Write(Request.QueryString["keyword"].ToString());
+                    }
+
                 }
-                
+            }
+            catch(NullReferenceException ex)
+            {
+                Response.Redirect("/ErrorPage.aspx");
             }
             
         }

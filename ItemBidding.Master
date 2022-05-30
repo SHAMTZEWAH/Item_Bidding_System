@@ -14,35 +14,34 @@
 <body>
    
     <form id="form1" runat="server">
-        <div class="flex-container-top-menu">
-            <div class="flex-item-top-menu">
-               <button class="btn-watchlist" onclick="~/User/Watchlist.aspx">Watchlist<i class="bi bi-bookmark-fill"></i></button>
-            </div>
-            <div class="flex-item-top-menu">
-                <asp:LoginStatus ID="LoginStatus1" runat="server" />
-            </div>
-        </div>
+        <div id="TopLoginMenu" runat="server"></div>
+
         <div class="flex-container-top-menu2">
-            <div class="flex-item-top-menu">
+            <div class="flex-item-top-menu-row2 logo-container" onclick="location.href='/General/Home.aspx'">
+                <i class="bi bi-hammer"></i>
                <div class="Logo">EAuction</div>
             </div>
-            <div class="flex-item-top-menu">
-                <asp:TextBox ID="txtSearch" runat="server"></asp:TextBox>
-                <asp:ImageButton ID="btnSearch" runat="server" /> <!-- add search image -->
+            <div class="flex-item-top-menu-row2 search-container">
+                <input id="txtSearch" type="text" />
+                <button ID="btnSearch" ><i class="bi bi-search"></i></button>
             </div>
-            <div class="flex-item-top-menu">
-                <button class="btnCart" onclick="~/User/Cart.aspx"></button><!-- add onclick navigation -->
-
+            <div class="flex-item-top-menu-row2">
+                <button id="btnCart" onclick="~/User/Cart.aspx"><i class="bi bi-cart-fill"></i></button><!-- add onclick navigation -->
             </div>    
         </div>
-        
-        <div class="flex-container-top-menu3">
-            <div id="TopCategory" runat="server"></div>
+        <div id="TopCategory" runat="server"></div>
+        <div class="flex-container-top-menu4">
+            <div id="SideMenu" runat="server"></div>
             <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server">
                 
             </asp:ContentPlaceHolder>
         </div>
-         
+         <script>
+             keyword = document.getElementById("txtSearch").innerText
+             document.getElementById("btnSearch").addEventListener("click", function () {
+                 window.location.href = "/General/Product.aspx?keyword=" + keyword;
+             });
+         </script>
     </form>
     
 </body>

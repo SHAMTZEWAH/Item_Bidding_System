@@ -70,8 +70,11 @@
     <Content Include="Admin\ManageAccount.aspx" />
     <Content Include="Admin\ManageComplaint.aspx" />
     <Content Include="Admin\ManageProduct.aspx" />
+    <Content Include="ErrorPage.aspx" />
     <Content Include="General\Home.aspx" />
+    <Content Include="General\LoginPage.aspx" />
     <Content Include="General\Product.aspx" />
+    <Content Include="General\SignUpPage.aspx" />
     <Content Include="MasterCSS.css" />
     <Content Include="Seller\ManageFinance.aspx" />
     <Content Include="Seller\ManageOrder.aspx" />
@@ -83,6 +86,7 @@
     <Content Include="SideMenuUser.ascx" />
     <Content Include="TopMenu.ascx" />
     <Content Include="TopMenuCategory.ascx" />
+    <Content Include="TopMenuGeneral.ascx" />
     <Content Include="User\Watchlist.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -108,6 +112,13 @@
     <Compile Include="Admin\ManageProduct.aspx.designer.cs">
       <DependentUpon>ManageProduct.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ErrorPage.aspx.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ErrorPage.aspx.designer.cs">
+      <DependentUpon>ErrorPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="General\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -115,12 +126,26 @@
     <Compile Include="General\Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
     </Compile>
+    <Compile Include="General\LoginPage.aspx.cs">
+      <DependentUpon>LoginPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="General\LoginPage.aspx.designer.cs">
+      <DependentUpon>LoginPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="General\Product.aspx.cs">
       <DependentUpon>Product.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="General\Product.aspx.designer.cs">
       <DependentUpon>Product.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="General\SignUpPage.aspx.cs">
+      <DependentUpon>SignUpPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="General\SignUpPage.aspx.designer.cs">
+      <DependentUpon>SignUpPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="ItemBidding.Master.cs">
       <DependentUpon>ItemBidding.Master</DependentUpon>
@@ -199,6 +224,13 @@
     </Compile>
     <Compile Include="TopMenuCategory.ascx.designer.cs">
       <DependentUpon>TopMenuCategory.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="TopMenuGeneral.ascx.cs">
+      <DependentUpon>TopMenuGeneral.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TopMenuGeneral.ascx.designer.cs">
+      <DependentUpon>TopMenuGeneral.ascx</DependentUpon>
     </Compile>
     <Compile Include="User\Watchlist.aspx.cs">
       <DependentUpon>Watchlist.aspx</DependentUpon>
