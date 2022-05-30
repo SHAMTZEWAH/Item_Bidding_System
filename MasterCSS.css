@@ -1,0 +1,166 @@
+﻿/*This is for Master page*/
+.flex-container-top-menu {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    align-items: flex-start;
+    background-color: #99eeff;
+    height: 30px;
+    width: 100%;
+}
+
+.flex-item-top-menu-row2 {
+    margin-right: 30px;
+}
+
+.flex-container-top-menu2 {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: #99eeff;
+    height: 50px;
+    width: 100%;
+}
+
+.logo-container{
+    display:flex;
+    flex-flow: row wrap;
+    justify-content:center;
+    align-items: center;
+}
+
+.logo-container:hover{
+    cursor:pointer;
+}
+
+.bi-hammer {
+    font-size: 30px;
+    color: blue;
+}
+
+.Logo {
+    font-family: 'Century Schoolbook';
+    font-size: 30px;
+    color: blue;
+}
+
+.search-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+input#txtSearch {
+    width: 650px !important;
+    height:32px;
+}
+
+#btnSearch {
+    border:none;
+    background-color: lightgray;
+    padding: 5px 7px;
+}
+
+#btnSearch:hover {
+    cursor:pointer;
+}
+
+.bi-search{
+    font-size:25px;
+}
+
+#btnCart {
+    width: 50px;
+    height: 40px;
+    border: none;
+    background: #99eeff;
+}
+
+#btnCart:hover {
+    cursor: pointer;
+}
+
+.bi-cart-fill{
+    font-size:30px;
+}
+
+#TopCategory {
+    background-color: #99eeff;
+    padding-bottom: 4px;
+}
+.flex-container-top-menu3 {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content:center;
+    height: 50%;
+    width: 100%;
+}
+
+.flex-item-top-menu3{
+    padding: 0 15px;
+    border-radius: 3px;
+}
+
+.flex-item-top-menu3:hover {
+    color: darkblue;
+    background-color: aliceblue;
+    cursor: pointer;
+}
+
+.flex-container-top-menu4 {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    height: 50%;
+    width: 100%;
+}
+
+/*This is for Login user control page*/
+
+ #btnLogin{
+     border:none;
+     border-radius: 8px;
+     font-size: 20px;
+     background-color: lightgray;
+     margin-right: 10px;
+ }
+
+ #btnLogin:hover{
+     cursor:pointer;
+     color: blue;
+     background-color: lightblue;
+ }
+
+ .flex-item{
+     font-size: 20px;
+     margin-right: 120px;
+ }
+
+.flex-item:hover{
+    color: red;
+}
+
+/*This is for Watchlist user control page*/
+.btn-watchlist {
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    background-color: lightgray;
+    margin-right: 10px;
+}
+
+.bi-bookmark-fill{
+    padding-left: 3px;
+}
+
+.btn-watchlist:hover {
+    cursor: pointer;
+    color: blue;
+    background-color: lightblue;
+}
+
+.login-status-container {
+    margin-right: 120px;
+}
