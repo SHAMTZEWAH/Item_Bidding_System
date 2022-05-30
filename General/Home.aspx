@@ -4,6 +4,9 @@
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
     <div>
-           
+           Today's New:
+    </div>
+    <div>
+        Today's Hot:
     </div>
 </asp:Content>
