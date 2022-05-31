@@ -54,7 +54,8 @@
 
 input#txtSearch {
     width: 650px !important;
-    height:32px;
+    height:38px;
+    font-size:25px;
 }
 
 #btnSearch {

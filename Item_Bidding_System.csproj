@@ -71,10 +71,12 @@
     <Content Include="Admin\ManageComplaint.aspx" />
     <Content Include="Admin\ManageProduct.aspx" />
     <Content Include="ErrorPage.aspx" />
+    <Content Include="Footer.ascx" />
     <Content Include="General\Home.aspx" />
     <Content Include="General\LoginPage.aspx" />
     <Content Include="General\Product.aspx" />
     <Content Include="General\SignUpPage.aspx" />
+    <Content Include="General\SlideShow.css" />
     <Content Include="MasterCSS.css" />
     <Content Include="Seller\ManageFinance.aspx" />
     <Content Include="Seller\ManageOrder.aspx" />
@@ -118,6 +120,13 @@
     </Compile>
     <Compile Include="ErrorPage.aspx.designer.cs">
       <DependentUpon>ErrorPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Footer.ascx.cs">
+      <DependentUpon>Footer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Footer.ascx.designer.cs">
+      <DependentUpon>Footer.ascx</DependentUpon>
     </Compile>
     <Compile Include="General\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
