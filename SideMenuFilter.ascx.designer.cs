@@ -7,47 +7,56 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Item_Bidding_System.General
+namespace Item_Bidding_System
 {
 
 
-    public partial class SignUpPage
+    public partial class SideMenuFilter
     {
 
         /// <summary>
-        /// form1 control.
+        /// chkBoxCategory control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.CheckBoxList chkBoxCategory;
 
         /// <summary>
-        /// CreateUserWizard1 control.
+        /// txtMinPrice control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CreateUserWizard CreateUserWizard1;
+        protected global::System.Web.UI.WebControls.TextBox txtMinPrice;
 
         /// <summary>
-        /// CreateUserWizardStep1 control.
+        /// txtMaxPrice control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CreateUserWizardStep CreateUserWizardStep1;
+        protected global::System.Web.UI.WebControls.TextBox txtMaxPrice;
 
         /// <summary>
-        /// CompleteWizardStep1 control.
+        /// chkBoxState control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CompleteWizardStep CompleteWizardStep1;
+        protected global::System.Web.UI.WebControls.CheckBoxList chkBoxState;
+
+        /// <summary>
+        /// chkBoxSellOption control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList chkBoxSellOption;
     }
 }

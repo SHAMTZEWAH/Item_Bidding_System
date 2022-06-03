@@ -53,7 +53,7 @@
 }
 
 input#txtSearch {
-    width: 650px !important;
+    width: 800px !important;
     height:38px;
     font-size:25px;
 }
@@ -116,17 +116,27 @@ input#txtSearch {
     justify-content: flex-start;
     height: 50%;
     width: 100%;
+    position:relative;
 }
 
-/*This is for Login user control page*/
+#SideMenu {
+    width: 200px;
+    height: 1100px;
+    margin-left:10%;
+}
 
- #btnLogin{
-     border:none;
-     border-radius: 8px;
-     font-size: 20px;
-     background-color: lightgray;
-     margin-right: 10px;
- }
+.main-content-container{
+    width:65%;
+    height:auto;
+}
+/*This is for Login user control page*/
+#btnLogin {
+    border: none;
+    border-radius: 8px;
+    font-size: 20px;
+    background-color: lightgray;
+    margin-right: 10px;
+}
 
  #btnLogin:hover{
      cursor:pointer;

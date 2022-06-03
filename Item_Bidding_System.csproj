@@ -70,6 +70,10 @@
     <Content Include="Admin\ManageAccount.aspx" />
     <Content Include="Admin\ManageComplaint.aspx" />
     <Content Include="Admin\ManageProduct.aspx" />
+    <Content Include="App_Data\ItemBidDB.mdf" />
+    <Content Include="App_Data\ItemBidDB_log.ldf">
+      <DependentUpon>ItemBidDB.mdf</DependentUpon>
+    </Content>
     <Content Include="ErrorPage.aspx" />
     <Content Include="Footer.ascx" />
     <Content Include="General\Home.aspx" />
@@ -84,11 +88,14 @@
     <Content Include="Seller\SalesSummary.aspx" />
     <Content Include="Seller\UploadProduct.aspx" />
     <Content Include="SideMenuAdmin.ascx" />
+    <Content Include="SideMenuFilter.ascx" />
     <Content Include="SideMenuSeller.ascx" />
     <Content Include="SideMenuUser.ascx" />
     <Content Include="TopMenu.ascx" />
     <Content Include="TopMenuCategory.ascx" />
     <Content Include="TopMenuGeneral.ascx" />
+    <Content Include="User\AccountManagement.aspx" />
+    <Content Include="User\SellerRegistration.aspx" />
     <Content Include="User\Watchlist.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -206,6 +213,13 @@
     <Compile Include="SideMenuAdmin.ascx.designer.cs">
       <DependentUpon>SideMenuAdmin.ascx</DependentUpon>
     </Compile>
+    <Compile Include="SideMenuFilter.ascx.cs">
+      <DependentUpon>SideMenuFilter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SideMenuFilter.ascx.designer.cs">
+      <DependentUpon>SideMenuFilter.ascx</DependentUpon>
+    </Compile>
     <Compile Include="SideMenuSeller.ascx.cs">
       <DependentUpon>SideMenuSeller.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -240,6 +254,20 @@
     </Compile>
     <Compile Include="TopMenuGeneral.ascx.designer.cs">
       <DependentUpon>TopMenuGeneral.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="User\AccountManagement.aspx.cs">
+      <DependentUpon>AccountManagement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User\AccountManagement.aspx.designer.cs">
+      <DependentUpon>AccountManagement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="User\SellerRegistration.aspx.cs">
+      <DependentUpon>SellerRegistration.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User\SellerRegistration.aspx.designer.cs">
+      <DependentUpon>SellerRegistration.aspx</DependentUpon>
     </Compile>
     <Compile Include="User\Watchlist.aspx.cs">
       <DependentUpon>Watchlist.aspx</DependentUpon>

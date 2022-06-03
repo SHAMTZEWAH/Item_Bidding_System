@@ -4,8 +4,6 @@
 
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-    <div>
-           
-    </div>
+   
 </asp:Content>
 

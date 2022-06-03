@@ -2,11 +2,10 @@
 
 <style>
     nav.side-menu-seller-body{
-        position:fixed;
+        position:relative;
         border: 3px solid black;
-        margin-left:15%;
         width:200px;
-        height: 85%;
+        height: 1100px;
     }
     div.side-menu-seller-container{
         list-style-type: none;

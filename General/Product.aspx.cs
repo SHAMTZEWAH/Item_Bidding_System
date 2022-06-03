@@ -29,12 +29,12 @@ namespace Item_Bidding_System.General
                     {
                         Response.Write(Request.QueryString["keyword"].ToString());
                     }
-
                 }
             }
             catch(NullReferenceException ex)
             {
-                Response.Redirect("/ErrorPage.aspx");
+                //Show Hot product
+                //Response.Redirect("/ErrorPage.aspx");
             }
             
         }

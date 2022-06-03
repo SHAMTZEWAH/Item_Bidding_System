@@ -5,9 +5,8 @@
     nav.side-menu-admin-body{
         position:fixed;
         border: 3px solid black;
-        margin-left:15%;
         width:200px;
-        height: 85%;
+        height: 1100px;
     }
     div.side-menu-admin-container{
         list-style-type: none;

@@ -32,9 +32,10 @@
         <div id="TopCategory" runat="server"></div>
         <div class="flex-container-top-menu4">
             <div id="SideMenu" runat="server"></div>
-            <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server">
-                
-            </asp:ContentPlaceHolder>
+            <div class="main-content-container">
+                <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
+            </div>
+            
         </div>
          <script>
              keyword = document.getElementById("txtSearch").innerText

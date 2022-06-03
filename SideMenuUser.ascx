@@ -3,9 +3,9 @@
 <style>
     nav.side-menu-seller-body{
         border: 3px solid black;
-        margin-left:15%;
         width:200px;
         height: 1100px;
+        position:relative;
     }
     div.side-menu-seller-container{
         list-style-type: none;
