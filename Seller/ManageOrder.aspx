@@ -1,89 +1,97 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/ItemBidding.Master" AutoEventWireup="true" CodeBehind="ManageOrder.aspx.cs" Inherits="Item_Bidding_System.Seller.ManageOrder" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-    <div>
-            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False">
-                <Columns>
-                    <asp:TemplateField Visible = "False">
-                        <HeaderTemplate>
-                            <asp:CheckBox ID = "chkHeader" runat="server" OnCheckedChanged="chkHeader_CheckedChanged"/>
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <asp:CheckBox ID = "chkAccAll" runat="server"  />
-                        </ItemTemplate>
-                        <ControlStyle BorderStyle = "None" />
-                        <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
-                    </asp:TemplateField>
-
-                    <asp:TemplateField>
-                        <HeaderTemplate>
-                            <asp:Label ID = "lblCustID" runat="server" Text=""></asp:Label>
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <div><%# Eval("custID") %></div>
-                        </ItemTemplate>
-                        <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
-                    </asp:TemplateField>
-
-                    <asp:TemplateField>
-                        <HeaderTemplate>
-                            <asp:Label ID = "lblusername" runat="server" Text="Username"></asp:Label>
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <div id="username"><%# Eval("Username") %></div>
-                        </ItemTemplate>
-                        <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
-                    </asp:TemplateField>
-
-                    <asp:TemplateField>
-                        <HeaderTemplate>
-                            <asp:Label ID = "lblCustName" runat="server" Text="Customer Name"></asp:Label>
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <div><%# Eval("custName") %></div>
-                        </ItemTemplate>
-                        <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
-                    </asp:TemplateField>
-                        
-                    <asp:TemplateField>
-                         <EditItemTemplate>
-                            <asp:DropDownList ID ="ddlRoles" runat="server" AutoPostBack="True" Width="152px" OnSelectedIndexChanged="ddlRoles_SelectedIndexChanged1">
-                            </asp:DropDownList>
-                        </EditItemTemplate>
-                        <HeaderTemplate>
-                            <asp:Label ID = "lblRoles" runat="server" Text="Roles"></asp:Label>
-                        </HeaderTemplate>
-                         <ItemTemplate>
-                             <div><%# Eval("RoleName") %></div>
-                         </ItemTemplate>
-                        <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
-                    </asp:TemplateField>
-
-                    <asp:TemplateField>
-                        <HeaderTemplate>
-                            <asp:Label ID = "lblCustEmail" runat="server" Text="Customer Email"></asp:Label>
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <div><%# Eval("email") %></div>
-                        </ItemTemplate>
-                        <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
-                    </asp:TemplateField>
-                    
-                    <asp:CommandField ShowDeleteButton="True" />
-                    
-                </Columns>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css" />
+    <style>
+        .content-title{
+            font-family:'Century Schoolbook';
+            font-size: 25px;
+            font-weight: bold; 
+            margin: 20px 0px;
+            margin-left: 20px;
+        }
+        .filter-option{
+            display:flex;
+            flex-flow: row wrap;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .filter-content{
+            display: none;
+            border: 1px solid black;
+            margin-left: 45px;
+            margin-top: 10px;
+            padding: 5px;
+            width: fit-content;
+        }
+        .btn-filter, .btn-upload-product, .btnCreateStore{
+            border: 1px solid gray;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 15px;
+            color: black;
+            text-align:center;
+            padding: 10px 0px;
+            cursor: pointer;
+            margin-left: 40px;
+            display:flex;
+            flex-flow: column wrap;
+            justify-content: center;
+            align-items: center;
+            width: 150px;
+        }
+        .btn-filter:hover, .btn-upload-product:hover, .btnCreateStore:hover{
+            opacity: 0.8;
+            background-color:mintcream;
+        }
+    </style>
+    
+    <div class="content-container">
+        <div class="top-filter">
+            <div class="content-title">Manage Orders</div>
+            <div class="filter-option">
+                <div class="btn-filter">
+                    <i class="bi bi-funnel-fill"></i>
+                    <div class="filter-text">Filter</div>
+                </div>
+                <div class="btn-upload-product">
+                    <i class="bi bi-plus-circle-fill"></i>
+                    <div class="filter-text">Upload New Products</div>
+                </div>
+                <div class="btn-create-store">
+                    <i class="bi bi-shop"></i>
+                    <asp:Button ID="btnCreateStore" CssClass="btnCreateStore" runat="server" Text="Button" OnClick="btnCreateStore_Click" />
+                </div>
+            </div>
+            <div id="radioContainer" class="filter-content">
+                <asp:RadioButtonList ID="RadioButtonList1" runat="server">
+                    <asp:ListItem>All</asp:ListItem>
+                    <asp:ListItem>Pending Orders</asp:ListItem>
+                    <asp:ListItem>ToShipped</asp:ListItem>
+                    <asp:ListItem>Product Received</asp:ListItem>
+                </asp:RadioButtonList>
+            </div>
+            <div id="SubStoreCon" class="substore-container" runat="server">
                 
-                <FooterStyle BackColor="#CCCC99" ForeColor="Black" />
-                <HeaderStyle BackColor="#333333" Font-Bold="True" ForeColor="White" />
-                <PagerStyle BackColor="White" ForeColor="Black" HorizontalAlign="Right" />
-                <SelectedRowStyle BackColor="#CC3333" Font-Bold="True" ForeColor="White" />
-                <SortedAscendingCellStyle BackColor="#F7F7F7" />
-                <SortedAscendingHeaderStyle BackColor="#4B4B4B" />
-                <SortedDescendingCellStyle BackColor="#E5E5E5" />
-                <SortedDescendingHeaderStyle BackColor="#242121" />
-            </asp:GridView>
+            </div>
         </div>
+        
+        </div>
+    <script>
+        document.getElementsByClassName("btn-filter")[0].addEventListener("click", function () {
+            elem = document.getElementById("radioContainer")
+            if (window.getComputedStyle(elem).display === "none") {
+                elem.style.display = "flex";
+            }
+            else {
+                elem.style.display = "none";
+            }
+        });
 
+        document.getElementsByClassName("btn-upload-product")[0].addEventListener("click", function () {
+            window.location.href = "/UploadProduct.aspx";
+        });
+    </script>
 </asp:Content>
         
 

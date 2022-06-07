@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css" />
     <link type="text/css" rel="stylesheet" href="MasterCSS.css" />
+    <link type="text/css" rel="stylesheet" href="SideMenu.css" />
     <title>Item Bidding System</title>
 
     <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
@@ -15,23 +16,28 @@
    
     <form id="form1" runat="server">
         <div id="TopLoginMenu" runat="server"></div>
-
-        <div class="flex-container-top-menu2">
-            <div class="flex-item-top-menu-row2 logo-container" onclick="location.href='/General/Home.aspx'">
-                <i class="bi bi-hammer"></i>
-               <div class="Logo">EAuction</div>
+        <!--row 1-->
+        <div class="flex-container-top flex-subcontainer-top"> 
+            <div class="flex-subcontainer-top" onclick="location.href='/General/Home.aspx'">
+                <i class="bi bi-hammer title1"></i>
+               <div class="title1">EAuction</div>
             </div>
-            <div class="flex-item-top-menu-row2 search-container">
-                <input id="txtSearch" type="text" />
-                <button ID="btnSearch" ><i class="bi bi-search"></i></button>
+            <div class="flex-subcontainer-top">
+                <input id="txtSearch" class="textBox textBox-search" type="text" />
+                <button ID="btnSearch" class="btn-medium-lightgray"><i class="bi bi-search larger-size"></i></button>
             </div>
-            <div class="flex-item-top-menu-row2">
-                <button id="btnCart" onclick="~/User/Cart.aspx"><i class="bi bi-cart-fill"></i></button><!-- add onclick navigation -->
+            <div class="flex-subcontainer-top">
+                <button id="btnCart" class="btn-medium-bgColor" onclick="~/User/Cart.aspx">
+                    <i class="bi bi-cart-fill larger-size"></i>
+                </button><!-- add onclick navigation -->
             </div>    
         </div>
-        <div id="TopCategory" runat="server"></div>
-        <div class="flex-container-top-menu4">
-            <div id="SideMenu" runat="server"></div>
+        <!--row 2-->
+        <div id="TopCategory" class="bg-color" runat="server"></div>
+
+        <!--row 3-->
+        <div class="master-content-container"><!--Adjust-->
+            <div id="SideMenu" class="side-menu" runat="server"></div><!--Adjust-->
             <div class="main-content-container">
                 <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
             </div>

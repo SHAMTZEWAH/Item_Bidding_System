@@ -3,43 +3,36 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-    <style>
-        .product-container{
-            border: 1px solid black;
-        }
-        .content-title{
-            font-size: 20px;
-        }
-    </style>
-    <div class="product-container">
-        <div class="content-title">Results:</div>
-        <div class="product">
+    <link type="text/css" rel="stylesheet" href="../MasterCSS.css" />
+    <link type="text/css" rel="stylesheet" href="../Content.css" />
+
+    <div class="content-container">
+        <div class="title1-black title1-bold">Results:</div>
+        <div class="content-subcontainer">
             <asp:Repeater ID="Repeater1" runat="server" DataSourceID="SqlDataSource1">
                 <ItemTemplate>
-            <div style="border: solid 1px black; width: 95%; margin: 5px; height:fit-content; padding: 5px;">
-                <img alt="" src="<%# Eval("artURL") %>" style="float: left; width: 70px; height:90px; padding-right: 10px;"/>
-                
-                <asp:Label ID="prodName" runat="server" Text='<%# Eval("") %>' />
-                <br />
-                
-                <asp:Label ID="currentBidPrice" runat="server" Text='<%# Eval("") %>' />
-                <br />
-                
-                <asp:Label ID="fixedPrice" runat="server" Text='<%# Eval("") %>' />
-                <br />
-                
-                <asp:Label ID="stock" runat="server" Text='<%# Eval("quantity") %>' />
-                <br />
-                 
-                <asp:Label ID="yourBid" runat="server" Text='<%# Eval("custName") %>' />
-            </div>
-        </ItemTemplate>
+                <div class="content-subcontainer" >
+                        <div>
+                            <img class="medium-image" alt=""  /> <!--src="# Eval("") "-->
+                        </div>
+                        <div>
+                            <asp:Label ID="prodName" runat="server"  /> <!--Text='# Eval("") '-->
+                            <asp:Label ID="currentBidPrice" runat="server"  /><!--Text='# Eval("") '-->
+                            <asp:Label ID="fixedPrice" runat="server"  /><!--Text='# Eval("") '-->
+                        </div>
+                        <div>
+                            <asp:Label ID="stock" runat="server"  /> <!--Text='# Eval("") '-->
+                            <asp:Label ID="yourBid" runat="server"  /> <!--Text='# Eval("") '-->
+                        </div>
+                        <div>
+                            <button class="btn-medium-blue" onclick="/General/Product.aspx?prodName=">View</button> <!--URL need to add-->
+                            <asp:Button ID="btnAddCart" CssClass="btn-medium-golden" runat="server" Text="Add to cart" />
+                        </div>
+                </div>
+                </ItemTemplate>
             </asp:Repeater>
-            
 
             <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\ItemBidDB.mdf;Integrated Security=True" ProviderName="System.Data.SqlClient" SelectCommand="SELECT * FROM"></asp:SqlDataSource>
-            
-
-        </div>
+        </div> 
     </div>
 </asp:Content>

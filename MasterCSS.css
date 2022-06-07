@@ -1,177 +1,309 @@
-﻿/*This is for Master page*/
-.flex-container-top-menu {
+﻿/*Components - container*/
+
+.flex-row {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.flex-column{
+    display:flex;
+    flex-flow: column wrap;
+}
+
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-end-start { /*flex-row-col*/
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.flex-start{
+    justify-content: flex-start;
+}
+
+.flex-center-center {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-subcontainer-top { /*row container top menu master page*/
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px;
+    background-color: #99eeff;
+    position: relative;
+}
+
+.flex-container-top {
+    height: 50px;
+    width: 100%;
+}
+
+.flex-container-category { /*TopMenuCategory*/
+    height: 25px;
+    width: 100%;
+}
+
+.flex-container-watchlist { /*TopMenu*/
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-end;
     align-items: flex-start;
     background-color: #99eeff;
-    height: 30px;
+    height: 25px;
     width: 100%;
 }
 
-.flex-item-top-menu-row2 {
-    margin-right: 30px;
-}
-
-.flex-container-top-menu2 {
+.master-content-container { /*Content container master page*/
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
-    align-items: center;
-    background-color: #99eeff;
-    height: 50px;
+    height: 100%;
     width: 100%;
+    position: relative;
 }
 
-.logo-container{
-    display:flex;
-    flex-flow: row wrap;
-    justify-content:center;
-    align-items: center;
+.container { /*Signup and login use*/
 }
 
-.logo-container:hover{
-    cursor:pointer;
+
+.side-menu { /*Content master page*/
+    width: 210px;
+    height: 100%;
+    margin-left: 10%;
 }
 
-.bi-hammer {
-    font-size: 30px;
-    color: blue;
+.main-content-container {
+    width: 75%;
+    height: auto;
 }
 
-.Logo {
-    font-family: 'Century Schoolbook';
-    font-size: 30px;
-    color: blue;
+/*Components - flex item*/
+
+.flex-item { /*TopMenuGeneral*/
+    font-size: 18px;
+    margin-right: 120px;
 }
 
-.search-container {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-}
-
-input#txtSearch {
-    width: 800px !important;
-    height:38px;
-    font-size:25px;
-}
-
-#btnSearch {
-    border:none;
-    background-color: lightgray;
-    padding: 5px 7px;
-}
-
-#btnSearch:hover {
-    cursor:pointer;
-}
-
-.bi-search{
-    font-size:25px;
-}
-
-#btnCart {
-    width: 50px;
-    height: 40px;
-    border: none;
-    background: #99eeff;
-}
-
-#btnCart:hover {
-    cursor: pointer;
-}
-
-.bi-cart-fill{
-    font-size:30px;
-}
-
-#TopCategory {
-    background-color: #99eeff;
-    padding-bottom: 4px;
-}
-.flex-container-top-menu3 {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content:center;
-    height: 50%;
-    width: 100%;
-}
-
-.flex-item-top-menu3{
+.flex-item-category { /*TopMenuCategory*/
     padding: 0 15px;
     border-radius: 3px;
 }
 
-.flex-item-top-menu3:hover {
-    color: darkblue;
-    background-color: aliceblue;
-    cursor: pointer;
+/*Title*/
+
+.title1 {
+    font-family: 'Century Schoolbook';
+    font-size: 30px; /*Change*/
+    color: blue;
 }
 
-.flex-container-top-menu4 {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
-    height: 50%;
-    width: 100%;
-    position:relative;
+.title1-black {
+    font-family: 'Century Schoolbook';
+    font-size: 30px; /*Change*/
+    color: black;
 }
 
-#SideMenu {
-    width: 200px;
-    height: 1100px;
-    margin-left:10%;
+.title2-black {
+    font-family: 'Century Schoolbook';
+    font-size: 25px; /*Change*/
+    color: black;
 }
 
-.main-content-container{
-    width:65%;
-    height:auto;
-}
-/*This is for Login user control page*/
-#btnLogin {
-    border: none;
-    border-radius: 8px;
-    font-size: 20px;
-    background-color: lightgray;
-    margin-right: 10px;
+.title2-black-bold {
+    font-family: 'Century Schoolbook';
+    font-size: 25px;
+    font-weight: bold;
+    color: black;
 }
 
- #btnLogin:hover{
-     cursor:pointer;
-     color: blue;
-     background-color: lightblue;
- }
+/*Colour*/
 
- .flex-item{
-     font-size: 20px;
-     margin-right: 120px;
- }
-
-.flex-item:hover{
-    color: red;
+.bg-color {
+    background-color: #99eeff;
 }
 
-/*This is for Watchlist user control page*/
-.btn-watchlist {
-    border: none;
-    border-radius: 8px;
+.icon-light-color-larger{
+
+}
+
+/*Size (big to small)*/
+.larger-size {
+    font-size: 30px;
+}
+
+.large-size{
+    font-size: 25px;
+}
+
+.medium-size{
     font-size: 18px;
-    background-color: lightgray;
-    margin-right: 10px;
 }
 
-.bi-bookmark-fill{
+.larger-right-gap { /*Top Menu*/
+    margin-right: 120px;
+}
+
+.item-gap, .medium-right-gap {
+    margin-right: 30px;
+}
+
+.medium-bottom-inner-gap {
+    padding-bottom: 20px;
+}
+
+.small-left-inner-gap { /*Top Menu padding*/
     padding-left: 3px;
 }
 
-.btn-watchlist:hover {
+.small-gap{
+    
+}
+
+/* Behaviour */
+#btnLogin:hover, .btn-watchlist:hover, .flex-item-category:hover, .btn-watchlist:hover{ /*Hover blue*/
     cursor: pointer;
     color: blue;
     background-color: lightblue;
 }
 
-.login-status-container {
-    margin-right: 120px;
+flex-item:hover { /*Hover red*/
+    color: red;
 }
+
+.btn-signUp:hover, .btn-login:hover, .btnSave:hover, .btn-register:hover { /*Hover respond (Sign up page)*/
+    opacity: 0.8;
+}
+/*Button*/
+.btn-large-golden { /*normal button*/
+    border: none;
+    border-radius: 4px;
+    background-color: goldenrod;
+    font-size: 18px;
+    color: white;
+    text-align: center;
+    padding: 10px 50px;
+    cursor: pointer;
+}
+
+.btn-medium-golden { /*Sign up page, product page*/
+    border: 1px solid goldenrod;
+    border-radius: 4px;
+    background-color: goldenrod;
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    padding: 10px 0px;
+    cursor: pointer;
+    margin: auto;
+    width: 40%;
+    margin-right: 130px;
+    margin-top: 5px;
+}
+
+.btn-medium-blue { /*product page*/
+    border: 1px solid lightskyblue;
+    border-radius: 4px;
+    background-color: lightskyblue;
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    padding: 10px 0px;
+    cursor: pointer;
+    margin: auto;
+    width: 40%;
+    margin-right: 130px;
+    margin-top: 5px;
+}
+
+.btn-medium-lightgray { /*top menu button*/
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    background-color: lightgray;
+    margin-right: 10px;
+    padding: 5px 7px;
+    cursor: pointer;
+}
+
+.btn-medium-bgColor {
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    background-color: #99eeff;
+    width: 50px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.btn-small-golden {
+    border: 1px solid goldenrod;
+    border-radius: 4px;
+    background-color: goldenrod;
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    padding: 10px 0px;
+    cursor: pointer;
+    margin: auto;
+    width: 10%;
+    margin-right: 130px;
+    margin-top: 5px;
+}
+
+.btn-medium-white{ /*filter button*/
+
+}
+
+/*Textbox*/
+.textBox {
+    border: 1px solid #F5F5F5;
+    border-radius: 4px;
+    background-color: #F5F5F5;
+    height: 35px;
+    width: 250px;
+    font-size: 18px;
+}
+
+.textBox-custom {
+    border: 1px solid #F5F5F5;
+    border-radius: 4px;
+    background-color: #F5F5F5;
+    font-size: 18px;
+}
+
+.textBox-search {
+    width: 800px !important;
+}
+
+::placeholder {
+    color: #AAAAAA;
+}
+
+/*Image*/
+.larger-image {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    overflow: visible;
+    aspect-ratio: 1 / 1;
+    background-image: url(https://www.jumblebee.co.uk/site/wp-content/uploads/2014/06/JB-FE-Shop_10.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.medium-image {
+    float: left;
+    width: 70px;
+    height: 90px;
+    padding-right: 10px;
+}
+

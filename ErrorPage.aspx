@@ -15,7 +15,7 @@
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            margin: 20px 0px;
+            margin:0 auto;
         }
     </style>
     

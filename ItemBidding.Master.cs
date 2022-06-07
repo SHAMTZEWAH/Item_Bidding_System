@@ -34,7 +34,7 @@ namespace Item_Bidding_System
                 {
                     ctrl = Page.LoadControl("/SideMenuAdmin.ascx");
                 }
-                else if (path.Contains("Seller") == true)
+                else if (path.Contains("Seller") == true && path.Contains("Registration")==false)
                 {
                     ctrl = Page.LoadControl("/SideMenuSeller.ascx");
                 }

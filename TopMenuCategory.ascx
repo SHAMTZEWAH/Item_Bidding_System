@@ -1,20 +1,20 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TopMenuCategory.ascx.cs" Inherits="Item_Bidding_System.TopMenuCategory" %>
 <link type="text/css" rel="stylesheet" href="MasterCSS.css" />
 
-<div class="flex-container-top-menu3">
-            <div id="fashion" class="flex-item-top-menu flex-item-top-menu3">
+<div class="flex-container-category flex-subcontainer-top">
+            <div id="fashion" class="flex-item-category">
                 Fashion Apparel <!--URL to fashion page-->
             </div>
-            <div id='art' class="flex-item-top-menu flex-item-top-menu3">
+            <div id='art' class="flex-item-category">
                 Artworks <!--URL to Artwork page-->
             </div>
-            <div id='modern' class="flex-item-top-menu flex-item-top-menu3">
+            <div id='modern' class="flex-item-category">
                 Modern Collectible <!--URL to Modern c page-->
             </div>
-            <div id="old" class="flex-item-top-menu flex-item-top-menu3">
+            <div id="old" class="flex-item-category">
                 Old Collectible <!--URL to Decoration c page-->
             </div>
-            <div id="luxury" class="flex-item-top-menu flex-item-top-menu3">
+            <div id="luxury" class="flex-item-category">
                 Luxury Items <!--URL to Luxury Items page (might use button) -->
             </div>
  </div>

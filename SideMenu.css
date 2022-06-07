@@ -1,0 +1,151 @@
+﻿/*Side Menu*/
+
+.side-menu-body { /*body container for whole width*/
+    width: 200px;
+    height: 1500px;
+    border: 3px solid black;
+    position: relative;
+}
+
+.side-menu-container { /*Big container for adjusting position and width*/
+    list-style-type: none;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: center;
+    height: 100%;
+    padding-left: 0px;
+}
+
+.side-menu-item { /*item container*/
+    width: 100%;
+    border-bottom: 1px solid lightgray;
+    text-align: center;
+    padding: 20px 0;
+}
+    .side-menu-item:hover {
+        background-color: aliceblue;
+        cursor: pointer;
+    }
+
+.menu-top { /*for header use*/
+    padding: 30px 0;
+    font-family: Georgia;
+    font-weight: bold;
+}
+    .menu-top:hover {
+        background-color: white;
+        cursor: default;
+    }
+
+.side-menu{ /*item*/
+    color: black;
+    text-decoration: none;
+    margin: 0px;
+}
+
+.side-menu-top { /*Flexbox to adjust position*/
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.side-menu-subcontainer { /*the big container for the inner navigation bar*/
+    border-bottom: 1px solid lightgray;
+    background-color: lightgray;
+    padding: 0 0 !important;
+    display: none;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-content: flex-start;
+}
+
+    .side-menu-subcontainer:hover {
+        background-color: lightgray !important;
+        cursor: default !important;
+    }
+
+.side-menu-subitem { /*inner navigation bar container for each item*/
+    width: 80%;
+    margin-left: 20%;
+    margin-top: 0;
+    padding: 10px 0;
+    border-bottom: 1px solid lightgray;
+}
+
+    .side-menu-subitem:hover {
+        background-color: aliceblue;
+        cursor: pointer;
+    }
+
+#profilePic {
+    height: 50px;
+    width: 50px;
+}
+
+#username {
+    margin-left: 10px;
+}
+
+/*Filter side menu page*/
+.filter-container {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.filter-title {
+    font-size: 20px;
+    text-decoration: underline;
+    text-align: center;
+    align-self: center;
+}
+
+.filter-subtitle {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.filter-subcontainer {
+    padding: 10px 0px;
+    border-bottom: 1px solid lightgray;
+    margin-left: 30px;
+}
+
+.txtPrice {
+    width: 50px;
+}
+
+.filter-price-subcontainer {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 19px 0px 15px 0px;
+}
+
+.line-price-range {
+    height: 1px;
+    width: 20px;
+    background-color: gray;
+    margin: 0px 5px;
+}
+
+.filterSelect {
+    height: 76px;
+}
+
+.filterCategory {
+    height: 200px;
+}
+
+.filterState {
+    height: 608px;
+}
+
+.sellingOption {
+    height: 114px;
+}

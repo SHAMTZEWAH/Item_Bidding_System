@@ -74,8 +74,10 @@
     <Content Include="App_Data\ItemBidDB_log.ldf">
       <DependentUpon>ItemBidDB.mdf</DependentUpon>
     </Content>
+    <Content Include="Content.css" />
     <Content Include="ErrorPage.aspx" />
     <Content Include="Footer.ascx" />
+    <Content Include="General\General.css" />
     <Content Include="General\Home.aspx" />
     <Content Include="General\LoginPage.aspx" />
     <Content Include="General\Product.aspx" />
@@ -85,8 +87,10 @@
     <Content Include="Seller\ManageFinance.aspx" />
     <Content Include="Seller\ManageOrder.aspx" />
     <Content Include="Seller\ManageProduct.aspx" />
+    <Content Include="Seller\OrderList.ascx" />
     <Content Include="Seller\SalesSummary.aspx" />
     <Content Include="Seller\UploadProduct.aspx" />
+    <Content Include="SideMenu.css" />
     <Content Include="SideMenuAdmin.ascx" />
     <Content Include="SideMenuFilter.ascx" />
     <Content Include="SideMenuSeller.ascx" />
@@ -191,6 +195,13 @@
     </Compile>
     <Compile Include="Seller\ManageProduct.aspx.designer.cs">
       <DependentUpon>ManageProduct.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Seller\OrderList.ascx.cs">
+      <DependentUpon>OrderList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Seller\OrderList.ascx.designer.cs">
+      <DependentUpon>OrderList.ascx</DependentUpon>
     </Compile>
     <Compile Include="Seller\SalesSummary.aspx.cs">
       <DependentUpon>SalesSummary.aspx</DependentUpon>

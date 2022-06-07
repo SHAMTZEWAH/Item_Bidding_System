@@ -1,0 +1,52 @@
+﻿.content-container {
+    margin-left: 10px;
+}
+
+.content-subcontainer {
+    border: solid 1px black;
+    width: 95%;
+    margin: 5px;
+    height: fit-content;
+    padding: 5px;
+}
+
+.content-title {
+    margin: 20px 0px;
+    margin-left: 20px;
+}
+
+.lbl { /*acc mng page, seller reg page*/
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 80%;
+    height: 35px;
+    margin-left: 30px;
+    padding-top: 25px;
+}
+
+.content-adjust { /*acc mng page, seller reg page*/
+    margin-left: 60px;
+    padding-top: 25px;
+}
+
+.image-container { /*acc mng page*/
+    display: flex;
+    flex-flow: column wrap;
+    border: 1px solid black;
+}
+
+.right-container { /*container for change image, acc mng page*/
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    margin-left: 10%;
+    height: 100px;
+}
+
+.btn-container { /*container for save, reg btn, acc mng page, seller reg page*/
+    width: 100%;
+    text-align: end;
+    margin: 20px 0px;
+    margin-left: 5%;
+}

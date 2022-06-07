@@ -1,0 +1,85 @@
+﻿/*Container*/
+.content-container-signUp {
+    height: 75%;
+    width: 75%;
+    margin: auto;
+    margin-top: 5%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+}
+
+.content-subcontainer-signUp {
+    position: relative;
+    width: 48%;
+    height: auto;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start; /*align-self: flex-start*/
+    justify-content: center;
+}
+
+.image-container-signUp {
+    position: relative;
+    width: 50%;
+    padding: 20px 0px;
+    background-color: aliceblue;
+    display: flex;
+    flex-flow: row wrap; /*Change*/
+    justify-content: center;
+    align-items: center;
+}
+
+.table-signUp{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items:center;
+    padding: 0px;
+}
+
+.btn-signUp{
+    margin-right: 130px;
+}
+
+.title1-bold { /*move #signUpTitle,*/
+    font-weight: bold;
+    vertical-align: top;
+    padding: 30px 0px 60px 0px;
+}
+
+::placeholder { /*move*/
+    color: #AAAAAA;
+    text-align: center;
+}
+
+.phone-container{
+    
+}
+
+.phone-subcontainer {
+    width: 185px;
+    height: 30px;
+    margin-left: 5px;
+}
+
+.phone-subcontainer:focus{
+    outline:none;
+}
+
+.phone-prefix {
+    padding: 0px 5px;
+    border-right: 1px solid black;
+}
+
+.row-title { /*For title login page*/
+    height: 100px !important;
+}
+
+.cell-fail { /*For error message, login page*/
+    height: 5px !important;
+}
+
