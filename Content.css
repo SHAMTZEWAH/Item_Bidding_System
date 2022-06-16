@@ -25,7 +25,7 @@
     padding-top: 25px;
 }
 
-.content-adjust { /*acc mng page, seller reg page*/
+.content-adjust { /*acc mng page*/
     margin-left: 60px;
     padding-top: 25px;
 }
@@ -49,4 +49,27 @@
     text-align: end;
     margin: 20px 0px;
     margin-left: 5%;
+}
+
+.filter-option { /*container for filter part, manage order page*/
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.filter-content { /*subcontainer for filter part, manage order page*/
+    display: none;
+    border: 1px solid black;
+    margin-left: 45px;
+    margin-top: 10px;
+    padding: 5px;
+    width: fit-content;
+}
+
+.content-subcontainer-adjust{
+    display:flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-items: center;
 }

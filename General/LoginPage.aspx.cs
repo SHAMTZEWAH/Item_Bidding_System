@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -13,5 +14,58 @@ namespace Item_Bidding_System.General
         {
 
         }
+
+        protected void Login1_LoggedIn(object sender, EventArgs e)
+        {
+            TextBox username = (TextBox)Login1.FindControl("UserName");
+
+            if (Login1.RememberMeSet)
+            {
+                FormsAuthentication.SetAuthCookie(username.Text, true);
+                FormsAuthentication.RedirectFromLoginPage(username.Text, true);
+            }
+            else //when the user does not choose remember me 
+            {
+                var authTicket = new FormsAuthenticationTicket(username.Text, true, 1);
+                string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+
+                var cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
+                    encryptedTicket)
+                {
+                    HttpOnly = true,
+                    Secure = FormsAuthentication.RequireSSL,
+                    Path = FormsAuthentication.FormsCookiePath,
+                    Domain = FormsAuthentication.CookieDomain,
+                    Expires = authTicket.Expiration
+                };
+                Response.Cookies.Set(cookie);
+
+                // ***** Here is the fix *****
+                // Do not use FormsAuthentication.SetAuthCookie or RedirectFromLoginPage
+                // if you create own FormsAuthenticationTicket.
+                //direct to the url
+                if (Request.QueryString["ReturnURL"] != null)
+                {
+                    Response.Redirect(Request.QueryString["ReturnURL"]);
+                }
+                else
+                {
+                    Response.Redirect("/Home.aspx");
+                }
+            } 
+        }
+
+        protected void LoginButton_Click(object sender, EventArgs e)
+        {
+            //TextBox username = (TextBox)Login1.FindControl("UserName");
+            //TextBox password = (TextBox)Login1.FindControl("Password");
+
+            //if (Membership.ValidateUser(username.Text, password.Text))
+            //    FormsAuthentication.RedirectFromLoginPage(username.Text, Request.Cookies["loginToken"]!=null);
+            //else
+            //    lblError.Text = "Login failed. Please check your user name and password and try again.";
+        }
+
+        
     }
 }

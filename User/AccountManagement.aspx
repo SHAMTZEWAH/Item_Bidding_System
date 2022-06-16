@@ -34,11 +34,14 @@
                 <tr>
                     <td class="lbl">Mobile Phone No:</td>
                     <td>
-                        <div class="textBox flex-center-center phone-container" style="margin-left: 60px;margin-top:8%;">
-                            <div class="phone-prefix">(601)</div>
-                            <div><asp:TextBox ID="PhoneNo" CssClass="phone-subcontainer textBox-custom" runat="server" placeholder="Phone No" MaxLength="16"></asp:TextBox></div>
-                            <div><asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="PhoneNo" ErrorMessage="Phone No is required.">*</asp:RequiredFieldValidator></div>
+                        <div class="content-adjust">
+                            <div class="textBox flex-center-center phone-container">
+                                <div class="phone-prefix">(601)</div>
+                                <div><asp:TextBox ID="PhoneNo" CssClass="phone-subcontainer textBox-custom" runat="server" placeholder="Phone No" MaxLength="16"></asp:TextBox></div>
+                                <div><asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="PhoneNo" ErrorMessage="Phone No is required.">*</asp:RequiredFieldValidator></div>
+                            </div>
                         </div>
+                        
                     </td>
                 </tr>
                 <tr>

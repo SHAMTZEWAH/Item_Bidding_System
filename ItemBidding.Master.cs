@@ -19,64 +19,110 @@ namespace Item_Bidding_System
             //TopCategory.InnerText = path;
 
             
-
-            //side menu user control
-            if (path.Contains("General") == false)
+            if(path.Contains("General") != false && path.Contains("Product.aspx") != true)
             {
-                //top menu (login part)
-                ctrl_top = Page.LoadControl("/TopMenu.ascx");
+                //sidemenu width = 0
+                
+            }
+
+            string ctrlPathMenu = PageControl_TopLogin(path);
+            if (ctrlPathMenu != string.Empty)
+            {
+                ctrl_top = Page.LoadControl(ctrlPathMenu);
                 TopLoginMenu.Controls.Clear();
                 TopLoginMenu.Controls.Add(ctrl_top);
+            }
 
-                //side menu user control
-                ctrl = Page.LoadControl("/SideMenuUser.ascx"); //if user
-                if (path.Contains("Admin") == true)
-                {
-                    ctrl = Page.LoadControl("/SideMenuAdmin.ascx");
-                }
-                else if (path.Contains("Seller") == true && path.Contains("Registration")==false)
-                {
-                    ctrl = Page.LoadControl("/SideMenuSeller.ascx");
-                }
-                else if (path.Contains("User") == true)
-                {
-                    //top menu category
-                    ctrl_category = Page.LoadControl("/TopMenuCategory.ascx");
-                    TopCategory.Controls.Clear();
-                    TopCategory.Controls.Add(ctrl_category);
-                }
+            string ctrlPathCategory = PageControl_TopCategory(path);
+            if(ctrlPathCategory != string.Empty)
+            {
+                ctrl_category = Page.LoadControl(ctrlPathCategory);
+                TopCategory.Controls.Clear();
+                TopCategory.Controls.Add(ctrl_category);
+
+            }
+
+            string ctrlPathSideMenu = PageControl_SideMenu(path);
+            if(ctrlPathSideMenu != string.Empty)
+            {
+                ctrl = Page.LoadControl(ctrlPathSideMenu);
                 SideMenu.Controls.Clear();
                 SideMenu.Controls.Add(ctrl);
+            }
+        }
+
+        string PageControl_TopLogin(string path)
+        {
+            string ctrlPath = "";
+            if (path.Contains("General") == false)
+            {
+                ctrlPath = "/TopMenu.ascx";
             }
             else if (path.Contains("Product.aspx") == true)
             {
-                //top menu category
-                ctrl_category = Page.LoadControl("/TopMenuCategory.ascx");
-                TopCategory.Controls.Clear();
-                TopCategory.Controls.Add(ctrl_category);
-
-                //top menu (login part)
-                ctrl_top = Page.LoadControl("/TopMenu.ascx");
-                TopLoginMenu.Controls.Clear();
-                TopLoginMenu.Controls.Add(ctrl_top);
-
-                //side menu user control
-                ctrl = Page.LoadControl("/SideMenuFilter.ascx");
-                SideMenu.Controls.Clear();
-                SideMenu.Controls.Add(ctrl);
+                ctrlPath = "/TopMenu.ascx";
             }
-            else
+            else 
             {
-                //top menu category
-                ctrl_category = Page.LoadControl("/TopMenuCategory.ascx");
-                TopCategory.Controls.Clear();
-                TopCategory.Controls.Add(ctrl_category);
-
-                //top menu (login part)
-                ctrl_top = Page.LoadControl("/TopMenuGeneral.ascx");
-                TopLoginMenu.Controls.Clear();
-                TopLoginMenu.Controls.Add(ctrl_top);
+                if ((System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    ctrlPath = "/TopMenu.ascx";
+                }
+                else
+                {
+                    ctrlPath = "/TopMenuGeneral.ascx";
+                }
             }
+            return ctrlPath;
+        }
+
+        string PageControl_TopCategory(string path)
+        {
+            string ctrlPath = "";
+            if (path.Contains("General") == false)
+            {
+                if(path.Contains("User") == true)
+                {
+                    ctrlPath = "/TopMenuCategory.ascx";
+                } 
+            }
+            else if (path.Contains("Product.aspx") == true)
+            {
+                ctrlPath = "/TopMenuCategory.ascx";
+            }
+            else 
+            {
+                ctrlPath = "/TopMenuCategory.ascx";
+
+                SideMenu.Attributes.CssStyle.Add("display", "none");
+                mainContent.Attributes.CssStyle.Add("width", "100%");
+            }
+            return ctrlPath;
+        }
+
+        string PageControl_SideMenu(string path)
+        {
+            string ctrlPath = "";
+            if (path.Contains("General") == false)
+            {
+                if (path.Contains("Admin") == true)
+                {
+                    ctrlPath = "/SideMenuAdmin.ascx";
+                }
+                else if (path.Contains("Seller") == true && path.Contains("Registration") == false)
+                {
+                    ctrlPath = "/SideMenuSeller.ascx";
+                }
+                else if (path.Contains("User") == true)
+                {
+                    ctrlPath = "/SideMenuUser.ascx";
+                }
+            }
+            else if (path.Contains("Product.aspx") == true)
+            {
+                ctrlPath = "/SideMenuFilter.ascx";
+            }
+            return ctrlPath;
         }
     }   
 }

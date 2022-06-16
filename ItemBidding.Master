@@ -38,7 +38,7 @@
         <!--row 3-->
         <div class="master-content-container"><!--Adjust-->
             <div id="SideMenu" class="side-menu" runat="server"></div><!--Adjust-->
-            <div class="main-content-container">
+            <div id="mainContent" class="main-content-container" runat="server">
                 <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
             </div>
             

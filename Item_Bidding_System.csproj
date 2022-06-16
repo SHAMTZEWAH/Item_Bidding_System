@@ -81,6 +81,7 @@
     <Content Include="General\Home.aspx" />
     <Content Include="General\LoginPage.aspx" />
     <Content Include="General\Product.aspx" />
+    <Content Include="General\ProductDetails.aspx" />
     <Content Include="General\SignUpPage.aspx" />
     <Content Include="General\SlideShow.css" />
     <Content Include="MasterCSS.css" />
@@ -159,6 +160,13 @@
     </Compile>
     <Compile Include="General\Product.aspx.designer.cs">
       <DependentUpon>Product.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="General\ProductDetails.aspx.cs">
+      <DependentUpon>ProductDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="General\ProductDetails.aspx.designer.cs">
+      <DependentUpon>ProductDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="General\SignUpPage.aspx.cs">
       <DependentUpon>SignUpPage.aspx</DependentUpon>

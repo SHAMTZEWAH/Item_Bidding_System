@@ -15,7 +15,7 @@
     <form id="form1" runat="server">
         <div class="content-container-signUp">
             <div class="content-subcontainer-signUp">
-                <asp:Login ID="Login1" runat="server">
+                <asp:Login ID="Login1" runat="server" OnLoggedIn="Login1_LoggedIn">
             <LayoutTemplate>
                 <table cellpadding="1" cellspacing="0" style="border-collapse:collapse;">
                     <tr>
@@ -48,7 +48,7 @@
                                 </tr>
                                 <tr class="row-btn">
                                     <td clas="cell-btn" align="center">
-                                        <asp:Button ID="LoginButton" runat="server" CommandName="Login" Text="Log In" ValidationGroup="Login1" CssClass="btn-large-golden btn-login" />
+                                        <asp:Button ID="LoginButton" runat="server" CommandName="Login" Text="Log In" ValidationGroup="Login1" CssClass="btn-large-golden btn-login" OnClick="LoginButton_Click" />
                                     </td>
                                 </tr>
                             </table>
@@ -58,6 +58,9 @@
             </LayoutTemplate>
 
         </asp:Login>
+                <div>
+                    <asp:Label ID="lblError" runat="server" Text="*"></asp:Label>
+                </div>
             </div>
             <div class="image-container-signUp">
                 <div class="larger-image"></div>

@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Item_Bidding_System.Seller
+namespace Item_Bidding_System.General
 {
 
 
-    public partial class SalesSummary
+    public partial class ProductDetails
     {
     }
 }

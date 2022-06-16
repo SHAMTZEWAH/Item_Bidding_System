@@ -15,7 +15,9 @@
         
          <!-- Full-width images with number and caption text -->
   <div class="mySlides fade">
-      <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" />
+      <a href="Product.aspx">
+          <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" />
+      </a>
   </div>
 
   <div class="mySlides fade">

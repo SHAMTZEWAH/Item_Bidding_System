@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -37,6 +38,22 @@ namespace Item_Bidding_System.General
                 //Response.Redirect("/ErrorPage.aspx");
             }
             
+        }
+
+        void getData(string filterDetails)
+        {
+            //create connectionString
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+            con.Open();
+
+            //apply string query
+            String query = "SELECT";
+            SqlCommand cmd = new SqlCommand(query, con);
+
+            //execute query
+
         }
     }
 }

@@ -2,65 +2,26 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css" />
-    <style>
-        .content-title{
-            font-family:'Century Schoolbook';
-            font-size: 25px;
-            font-weight: bold; 
-            margin: 20px 0px;
-            margin-left: 20px;
-        }
-        .filter-option{
-            display:flex;
-            flex-flow: row wrap;
-            justify-content: flex-start;
-            align-items: center;
-        }
-        .filter-content{
-            display: none;
-            border: 1px solid black;
-            margin-left: 45px;
-            margin-top: 10px;
-            padding: 5px;
-            width: fit-content;
-        }
-        .btn-filter, .btn-upload-product, .btnCreateStore{
-            border: 1px solid gray;
-            border-radius: 4px;
-            background-color: white;
-            font-size: 15px;
-            color: black;
-            text-align:center;
-            padding: 10px 0px;
-            cursor: pointer;
-            margin-left: 40px;
-            display:flex;
-            flex-flow: column wrap;
-            justify-content: center;
-            align-items: center;
-            width: 150px;
-        }
-        .btn-filter:hover, .btn-upload-product:hover, .btnCreateStore:hover{
-            opacity: 0.8;
-            background-color:mintcream;
-        }
-    </style>
+    <link type="text/css" rel="stylesheet" href="../MasterCSS.css" />
+    <link type="text/css" rel="stylesheet" href="../Content.css" />
     
     <div class="content-container">
         <div class="top-filter">
-            <div class="content-title">Manage Orders</div>
+            <div class="title2-black-bold content-title">Manage Orders</div>
             <div class="filter-option">
-                <div class="btn-filter">
+                <div class="btn-filter btn-medium-white">
                     <i class="bi bi-funnel-fill"></i>
                     <div class="filter-text">Filter</div>
                 </div>
-                <div class="btn-upload-product">
+                <div class="btn-upload-product btn-medium-white">
                     <i class="bi bi-plus-circle-fill"></i>
                     <div class="filter-text">Upload New Products</div>
                 </div>
-                <div class="btn-create-store">
+                <div id="btnCreateStore" class="btn-create-store btn-medium-white btnCreateStore" runat="server"> <!--Event at C#-->
                     <i class="bi bi-shop"></i>
-                    <asp:Button ID="btnCreateStore" CssClass="btnCreateStore" runat="server" Text="Button" OnClick="btnCreateStore_Click" />
+                    <div class="">
+                        <div>Create New Substore</div>
+                    </div>
                 </div>
             </div>
             <div id="radioContainer" class="filter-content">
@@ -72,7 +33,10 @@
                 </asp:RadioButtonList>
             </div>
             <div id="SubStoreCon" class="substore-container" runat="server">
-                
+               
+            </div>
+            <div class="content-subcontainer">
+
             </div>
         </div>
         

@@ -4,6 +4,8 @@
 
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
+    <link type="text/css" rel="stylesheet" href="MasterCSS.css"/>
+    <link type="text/css" rel="stylesheet" href="Content.css" />
     <style>
         .img-error{
             position:relative;
@@ -19,9 +21,9 @@
         }
     </style>
     
-    <div style="font-size:30px;color:black;text-align:center;position:relative;margin:0 auto;margin-top:5%;">
-           <div>Error 404.</div> 
+    <div class="content-container">
+           <div class="title2-black-bold content-title">Error 404.</div> 
             <div class="img-error"></div>
-           <div>There is error available.</div>
+           <div class="title2-black-bold content-title">There is error available.</div>
     </div>
 </asp:Content>

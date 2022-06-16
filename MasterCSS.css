@@ -31,6 +31,15 @@
     align-items: center;
 }
 
+.flex-around{
+    justify-content: space-around;
+}
+
+.flex-self-end{
+    align-self: flex-end;
+
+}
+
 .flex-subcontainer-top { /*row container top menu master page*/
     display: flex;
     flex-flow: row wrap;
@@ -51,7 +60,7 @@
     width: 100%;
 }
 
-.flex-container-watchlist { /*TopMenu*/
+.flex-container-login { /*TopMenu*/
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-end;
@@ -70,17 +79,13 @@
     position: relative;
 }
 
-.container { /*Signup and login use*/
-}
-
-
 .side-menu { /*Content master page*/
     width: 210px;
     height: 100%;
     margin-left: 10%;
 }
 
-.main-content-container {
+.main-content-container { /*Content master page*/
     width: 75%;
     height: auto;
 }
@@ -124,6 +129,13 @@
     color: black;
 }
 
+.title3-black-bold {
+    font-family: 'Century Schoolbook';
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+}
+
 /*Colour*/
 
 .bg-color {
@@ -159,6 +171,14 @@
     padding-bottom: 20px;
 }
 
+.medium-top-inner-gap{
+    padding-top: 20px;
+}
+
+.small-bottom-inner-gap{
+    padding-bottom: 10px;
+}
+
 .small-left-inner-gap { /*Top Menu padding*/
     padding-left: 3px;
 }
@@ -178,7 +198,9 @@ flex-item:hover { /*Hover red*/
     color: red;
 }
 
-.btn-signUp:hover, .btn-login:hover, .btnSave:hover, .btn-register:hover { /*Hover respond (Sign up page)*/
+.btn-signUp:hover, .btn-login:hover, .btnSave:hover, .btn-register:hover, .btn-filter:hover,
+.btn-filter:hover, .btn-upload-product:hover, .btnCreateStore:hover,
+.btnAddCart:hover, .btnView:hover, .btnRemove:hover{ /*Hover respond (Sign up page)*/
     opacity: 0.8;
 }
 /*Button*/
@@ -258,8 +280,52 @@ flex-item:hover { /*Hover red*/
     margin-top: 5px;
 }
 
-.btn-medium-white{ /*filter button*/
+.btn-medium-white { /*filter button*/
+    border: 1px solid gray;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 15px;
+    color: black;
+    text-align: center;
+    padding: 10px 0px;
+    cursor: pointer;
+    margin-left: 40px;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+}
 
+.btn-medium-white-custom {
+    border: none;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 15px;
+    color: black;
+    text-align: center;
+    padding: 10px 0px;
+    cursor: pointer;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+}
+
+.btn-medium-red { /*Watchlist*/
+    border: 1px solid red;
+    border-radius: 4px;
+    background-color: red;
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    padding: 10px 0px;
+    cursor: pointer;
+    margin: auto;
+    width: 40%;
+    margin-right: 130px;
+    margin-top: 5px;
 }
 
 /*Textbox*/

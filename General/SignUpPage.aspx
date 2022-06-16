@@ -89,7 +89,7 @@
                                         <td class="table-item"><div class="title1 title1-bold">Almost there.</div></td>
                                     </tr>
                                     <tr>
-                                        <td class="table-item" align="center">Check your email for confirmation link.Didn't get one? We can send another. <!--<a href=""></a>--></td>
+                                        <td class="table-item" align="center">Check your email for confirmation link.Didn't get one? We can <asp:LinkButton ID="LinkButton1" runat="server" OnClick="LinkButton1_Click">send</asp:LinkButton> another. </td>
                                     </tr>
                                 </table>
                             </ContentTemplate>
