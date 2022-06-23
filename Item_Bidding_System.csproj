@@ -75,6 +75,7 @@
       <DependentUpon>ItemBidDB.mdf</DependentUpon>
     </Content>
     <Content Include="Content.css" />
+    <Content Include="Dialog.css" />
     <Content Include="ErrorPage.aspx" />
     <Content Include="Footer.ascx" />
     <Content Include="General\General.css" />
@@ -85,6 +86,8 @@
     <Content Include="General\SignUpPage.aspx" />
     <Content Include="General\SlideShow.css" />
     <Content Include="MasterCSS.css" />
+    <Content Include="Seller\EditProduct.aspx" />
+    <Content Include="Seller\EditProductDetails.ascx" />
     <Content Include="Seller\ManageFinance.aspx" />
     <Content Include="Seller\ManageOrder.aspx" />
     <Content Include="Seller\ManageProduct.aspx" />
@@ -183,6 +186,20 @@
       <DependentUpon>ItemBidding.Master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seller\EditProduct.aspx.cs">
+      <DependentUpon>EditProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Seller\EditProduct.aspx.designer.cs">
+      <DependentUpon>EditProduct.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Seller\EditProductDetails.ascx.cs">
+      <DependentUpon>EditProductDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Seller\EditProductDetails.ascx.designer.cs">
+      <DependentUpon>EditProductDetails.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Seller\ManageFinance.aspx.cs">
       <DependentUpon>ManageFinance.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

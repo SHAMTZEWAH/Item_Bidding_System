@@ -7,9 +7,39 @@
     <link type="text/css" rel="stylesheet" href="../Content.css" />
 
     <div class="content-container">
-        <div class="title1-black title1-bold">Results:
-        </div>
-        <div class="content-subcontainer">
+        <div class="title1-black title1-bold">Results:</div>
+        <div class="top-filter">
+            <div class="title2-black-bold content-title">Manage Product</div>
+            <div class="filter-option">
+                <div class="btn-filter btn-medium-white">
+                    <i class="bi bi-funnel-fill"></i>
+                    <div class="filter-text">Filter</div>
+                </div>
+                <div class="btn-upload-product btn-medium-white">
+                    <i class="bi bi-plus-circle-fill"></i>
+                    <div class="filter-text">Upload New Products</div>
+                </div>
+                <div id="btnCreateStore" class="btn-create-store btn-medium-white btnCreateStore" runat="server" Onclick="btnSubStore_Click"> <!--Event at C#-->
+                    <i class="bi bi-shop"></i>
+                    <div class="">
+                        <div>Create New Substore</div>
+                    </div>
+                </div>
+            </div>
+            <div id="radioContainer" class="filter-content">
+                <asp:RadioButtonList ID="RadioButtonList1" runat="server">
+                    <asp:ListItem>All</asp:ListItem>
+                    <asp:ListItem>Pending Orders</asp:ListItem>
+                    <asp:ListItem>ToShipped</asp:ListItem>
+                    <asp:ListItem>Product Received</asp:ListItem>
+                </asp:RadioButtonList>
+            </div>
+             </div>
+        <div id="SubStoreCon" class="substore-container" runat="server">
+               
+            </div>
+        <div class="content-subcontainer-no-marginTop" runat="server">
+            
             <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound">
                 <ItemTemplate>
                 <div class="content-subcontainer content-subcontainer-adjust" >
@@ -23,7 +53,10 @@
                             <div class="flex-row flex-self-end">
                                 <div>Current max bid: RM</div>
                                 <div>
-                                    <asp:Label ID="currentBidPrice" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"maxBid","{0:0.00}") %>' /><!--Text='# Eval("") '-->
+                                    <asp:Label ID="currentBidPrice" runat="server" Visible="false" Text='<%# Eval("Bid") %>'/><!--Text='# Eval("") '-->
+                                    <asp:DropDownList ID="ddlBid" runat="server" CssClass="textBox">
+
+                                    </asp:DropDownList>
                                 </div>
                                 
                             </div>
@@ -42,16 +75,15 @@
                                 </div>
                             </div>
                             <div class="flex-row" style="color: blue;display:none;">
-                                <div>Your bid: RM</div>
+                                <div>Total bid: RM</div>
                                 <div>
-                                    <asp:Label ID="yourBid" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"yourBid","{0:0.00}") %>' Visible="false" /> <!--Text='# Eval("") '-->
+                                    <asp:Label ID="totalBid" runat="server" Visible="false" /> <!--Text='# Eval("") '-->
                                 </div>
                             </div>
                            
                         </div>
                         <div class="flex-column flex-around">
-                            <button class="btn-medium-blue btnView" onclick="/General/Product.aspx?prodName=">View</button> <!--URL need to add-->
-                            <asp:Button ID="btnAddCart" CssClass="btn-medium-golden btnAddCart" runat="server" Text="Add to cart" />
+                            <button class="btn-medium-blue btnHover" onclick="/User/EditProduct.aspx?prodName=">Edit</button> <!--URL need to add-->
                         </div>
                 </div>
                 </ItemTemplate>

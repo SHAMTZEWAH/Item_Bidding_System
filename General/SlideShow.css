@@ -1,4 +1,8 @@
-﻿* {
+﻿:root {
+    --hover-color: rgba(0,0,0,0.8);
+}
+
+* {
     box-sizing: border-box
 }
 
@@ -11,41 +15,52 @@
 }
 
 /* Slideshow big container */
-.slideshow-big-container{
-    width:100%;
-    position:relative;
-    display:flex;
-    flex-flow:column wrap;
+.slideshow-big-container, .slideshow-big-container2 {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-flow: column wrap;
     justify-content: center;
     align-items: center;
-    margin-top:10px;
+    margin-top: 10px;
 }
 
 /* Slideshow container */
-.slideshow-container {
+.slideshow-container, .slideshow-container2 {
     max-width: 1000px;
     height: auto;
     position: relative;
-    margin: auto;
-    margin-left:260px;
-    border:1px solid lightgray;
-}
-
-.slide-only-container{
-    display:flex;
-    flex-flow: row wrap;
+    margin: 0 auto;
+    display: inline-flex;
+    flex-flow: column wrap;
     justify-content: center;
-    align-items:center;
+    align-items: center;
+    border: 1px solid lightgray;
 }
 
-    .slide-only-container:hover ~ .prev, .slide-only-container:hover ~ .next {
-        background-color: rgba(0,0,0,0.8);
+/*outer container of repeater*/
+.slide-only-container, .slide-only-container2 {
+    display: inline-flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    overflow: auto;
+}
+
+    .slide-only-container:hover ~ .prev, .slide-only-container:hover ~ .next,
+    .slide-only-container2:hover ~ .prev, .slide-only-container2:hover ~ .next {
+        background-color: var(--hover-color);
     }
 
-/* Hide the images by default */
-.mySlides, .mySlides2 {
-    display: none;
-    padding: 0 370px;
+/*inner container in repeater*/
+.slide-only-subcontainer, .slide-only-subcontainer2{
+    /*display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;*/
+    display: inline;
+    margin-right: 10px;
 }
   
 /*When image is broken*/
@@ -58,9 +73,11 @@ img::before {
     background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png");
 }
 
-img{
-    width:258px;
-    height:160px;
+/*Image in the slideshow*/
+img, .slideshow-image {
+    width: 258px;
+    height: 160px;
+    cursor: pointer;
 }
 
 /* Next & previous buttons */
@@ -71,12 +88,17 @@ img{
     transform: translateY(-30px);
     width: auto;
     padding: 16px;
-    color: white;
+    color: lightgray;
     font-weight: bold;
     font-size: 18px;
     transition: 0.6s ease;
     border-radius: 0 3px 3px 0;
     user-select: none;
+    border: 1px solid lightgray;
+}
+
+.prev{
+    left: 0;
 }
 
 /* Position the "next button" to the right */
@@ -87,37 +109,29 @@ img{
 
     /* On hover, add a black background color with a little bit see-through */
     .prev:hover, .next:hover {
-        background-color: rgba(0,0,0,0.8);
+        background-color: var(--hover-color);
     }
 
-/* The dots/bullets/indicators */
-.dot1, .dot2 {
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbb;
-    border-radius: 50%;
+
+/*Scroll behavior: https://stackoverflow.com/questions/32269541/how-to-automatically-scroll-horizontally-as-page-width-increase*/
+
+/*transform the prev, next button into up down button*/
+.up,.down {
     display: inline-block;
-    transition: background-color 0.6s ease;
+    width: auto;
+    padding: 20px;
+    color: lightgray;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    border: 1px solid lightgray;
+    text-align: center;
+    position: relative;
+    cursor:pointer;
 }
 
-    .active, .dot:hover {
-        background-color: #717171;
+    .up:hover, .down:hover {
+        background-color: var(--hover-color);
     }
-
-/* Fading animation */
-.fade {
-    animation-name: fade;
-    animation-duration: 1.5s;
-}
-
-@keyframes fade {
-    from {
-        opacity: .4
-    }
-
-    to {
-        opacity: 1
-    }
-}

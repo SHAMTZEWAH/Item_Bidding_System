@@ -11,7 +11,7 @@ namespace Item_Bidding_System.Seller
 {
 
 
-    public partial class UploadProduct
+    public partial class EditProduct
     {
 
         /// <summary>

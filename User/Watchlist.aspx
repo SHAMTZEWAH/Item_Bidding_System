@@ -8,14 +8,24 @@
      <link type="text/css" rel="stylesheet" href="../Content.css" />
 
     <div class="content-container">
-
-        <div class="title1-black title1-bold">Watchlist:</div>
-
-        <div class="btn-medium-white"></div>
-
-        <div class="content-subcontainer">
-            
-            <div class="title1-black title1-bold">Results:</div>
+        <div class="top-filter">
+            <div class="title2-black-bold content-title">Watchlist:</div>
+            <div class="filter-option">
+                <div class="btn-filter btn-medium-white">
+                    <i class="bi bi-funnel-fill"></i>
+                    <div class="filter-text">Filter</div>
+                </div>
+            </div>
+            <div id="radioContainer" class="filter-content">
+                <asp:RadioButtonList ID="RadioButtonList1" runat="server">
+                    <asp:ListItem>All</asp:ListItem>
+                    <asp:ListItem>Pending Orders</asp:ListItem>
+                    <asp:ListItem>ToShipped</asp:ListItem>
+                    <asp:ListItem>Product Received</asp:ListItem>
+                </asp:RadioButtonList>
+            </div>
+         </div>
+        <div>
         <div class="content-subcontainer">
             <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound">
                 <ItemTemplate>
@@ -66,7 +76,6 @@
                 <FooterTemplate>
                     <asp:Label ID="lblNoData" runat="server" Text="No Data To Display" Visible="false"></asp:Label>
                 </FooterTemplate>
-            </asp:Repeater>
             </asp:Repeater>
 
             <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\ItemBidDB.mdf;Integrated Security=True" ProviderName="System.Data.SqlClient" SelectCommand="SELECT * FROM"></asp:SqlDataSource>

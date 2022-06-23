@@ -1,4 +1,7 @@
-﻿/*Components - container*/
+﻿:root{
+    --small-textbox-width: 200px;
+}
+/*Components - container*/
 
 .flex-row {
     display: flex;
@@ -37,7 +40,11 @@
 
 .flex-self-end{
     align-self: flex-end;
+}
 
+.flex-between-center{ /*Page Details*/
+    justify-content:space-between;
+    align-items: center;
 }
 
 .flex-subcontainer-top { /*row container top menu master page*/
@@ -68,6 +75,7 @@
     background-color: #99eeff;
     height: 25px;
     width: 100%;
+    flex: 1 0 auto;
 }
 
 .master-content-container { /*Content container master page*/
@@ -100,6 +108,11 @@
 .flex-item-category { /*TopMenuCategory*/
     padding: 0 15px;
     border-radius: 3px;
+}
+
+/*Components*/
+.displayLess{
+    display:none;
 }
 
 /*Title*/
@@ -136,6 +149,13 @@
     color: black;
 }
 
+.title4-blue-bold {
+    font-family: 'Century Schoolbook';
+    font-size: 18px;
+    font-weight: bold;
+    color: blue;
+}
+
 /*Colour*/
 
 .bg-color {
@@ -147,6 +167,10 @@
 }
 
 /*Size (big to small)*/
+.small-textBox-width{
+    width:var(--small-textbox-width);
+}
+
 .larger-size {
     font-size: 30px;
 }
@@ -159,12 +183,33 @@
     font-size: 18px;
 }
 
+.placeholder-size{
+    font-size: 13px;
+    color: slategray;
+}
+
 .larger-right-gap { /*Top Menu*/
     margin-right: 120px;
 }
 
 .item-gap, .medium-right-gap {
     margin-right: 30px;
+}
+
+.medium-left-gap{
+    margin-left: 30px;
+}
+
+.small-right-gap{
+    margin-right: 10px;
+}
+
+.small-bottom-gap{
+    margin-bottom: 10px;
+}
+
+.small-left-gap{
+    margin-left: 10px;
 }
 
 .medium-bottom-inner-gap {
@@ -181,6 +226,10 @@
 
 .small-left-inner-gap { /*Top Menu padding*/
     padding-left: 3px;
+}
+
+.marginless{
+    margin: 0px !important;
 }
 
 .small-gap{
@@ -200,7 +249,7 @@ flex-item:hover { /*Hover red*/
 
 .btn-signUp:hover, .btn-login:hover, .btnSave:hover, .btn-register:hover, .btn-filter:hover,
 .btn-filter:hover, .btn-upload-product:hover, .btnCreateStore:hover,
-.btnAddCart:hover, .btnView:hover, .btnRemove:hover{ /*Hover respond (Sign up page)*/
+.btnAddCart:hover, .btnView:hover, .btnRemove:hover, .btnHover:hover, .btn-medium-golden-custom:hover{ /*Hover respond (Sign up page)*/
     opacity: 0.8;
 }
 /*Button*/
@@ -228,6 +277,18 @@ flex-item:hover { /*Hover red*/
     width: 40%;
     margin-right: 130px;
     margin-top: 5px;
+}
+
+.btn-medium-golden-custom {
+    border: 1px solid goldenrod;
+    border-radius: 4px;
+    background-color: goldenrod;
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    padding: 10px 0px;
+    cursor: pointer;
+    width: 150px;
 }
 
 .btn-medium-blue { /*product page*/
@@ -338,6 +399,15 @@ flex-item:hover { /*Hover red*/
     font-size: 18px;
 }
 
+.small-textBox {
+    border: 1px solid #F5F5F5;
+    border-radius: 4px;
+    background-color: #F5F5F5;
+    height: 35px;
+    width: var(--small-textbox-width);
+    font-size: 18px;
+}
+
 .textBox-custom {
     border: 1px solid #F5F5F5;
     border-radius: 4px;
@@ -366,6 +436,11 @@ flex-item:hover { /*Hover red*/
     background-position: center;
 }
 
+.medium-large-image {
+    width: 300px;
+    height: 300px;
+}
+
 .medium-image {
     float: left;
     width: 70px;
@@ -373,3 +448,13 @@ flex-item:hover { /*Hover red*/
     padding-right: 10px;
 }
 
+.small-image{
+    width:20px;
+    height:30px;
+    background-color:lightgray;
+}
+
+/*border*/
+.borderless{
+    border: none;
+}

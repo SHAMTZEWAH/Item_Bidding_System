@@ -4,116 +4,145 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
  
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-<link type="text/css" rel="stylesheet" href="SlideShow.css" />
+    <link type="text/css" rel="stylesheet" href="SlideShow.css" />
 
 
 <div class="week-new-text">Today's New</div>
 
-<div class="slideshow-big-container">
-<div class="slideshow-container">
-    <div class="slide-only-container">
-        
-         <!-- Full-width images with number and caption text -->
-  <div class="mySlides fade">
-      <a href="Product.aspx">
-          <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" />
-      </a>
-  </div>
+<div class="slideshow-big-container"> <!--include dot and button -->
+    <div class="slideshow-container"> <!--exclude dot-->
+        <div id="slideSubcontainer" class="slide-only-container"> <!--exclude previous, next button-->
+            <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound" OnItemCommand="Repeater1_ItemCommand" DataSourceID="SqlDataSource1">
+                <ItemTemplate>
+                    <!-- Full-width images with number and price, name -->
+                    <div id="productContainer" class="mySlide slide-only-subcontainer fade" runat="server" CommandName="select" Onclick="productContainer_Click">
+                        <div class="">
+                            <asp:ImageButton ID="ImageButton1" CssClass="slideshow-image" runat="server" ImageUrl='<%# Eval("productPhotoURL") %>' CommandName="select" />
+                        </div>
+                        <div class="">
+                            <asp:Label ID="lblName" runat="server" Text='<%# Eval("productName") %>'></asp:Label>
+                        </div>
+                        <div class="flex-row"> 
+                            <div>Buy Now:RM</div>
+                            <div>
+                                <asp:Label ID="lblPrice" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"productPrice","{0:0.00}") %>'></asp:Label>
+                            </div>
+                        </div>
+                        <div class="flex-row"> <!--If it is auction-->
+                            <div>Current Bid:RM</div>
+                            <div>
+                                <!--<asp:Label ID="lblMaxBid" runat="server" Text= 'DataBinder.Eval(Container.DataItem,"maxBid","{0:0.00}") %>'> </asp:Label>-->
+                            </div>
+                        </div>
+                    </div>
+                </ItemTemplate>
+                <FooterTemplate>
+                    <asp:Label ID="lblNoData" runat="server" Text="No Data To Display" Visible="false"></asp:Label>
+                </FooterTemplate>
+            </asp:Repeater>
+            <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT ProductPhoto.productPhotoURL, ProductDetails.productName, FixedPriceProduct.productPrice, OrderProduct.quantity AS CountSales FROM ProductPhoto INNER JOIN FixedPriceProduct ON ProductPhoto.productId = FixedPriceProduct.productId INNER JOIN Product ON ProductPhoto.productId = Product.productId AND FixedPriceProduct.productId = Product.productId INNER JOIN ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId INNER JOIN OrderProduct ON Product.productId = OrderProduct.productId ORDER BY CountSales
+">
+            </asp:SqlDataSource>
+        </div>
 
-  <div class="mySlides fade">
-      <img src="https://letsenhance.io/static/b8eda2f8914d307d52f725199fb0c5e6/62e7b/MainBefore.jpg" />
-  </div>
-
-  <div class="mySlides fade">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo17BIFmd_BJDrhwy1l_2u9uRAOKHPlghZ21zOeM1_R9-coQV9ROWjImCtJcm-6cThPbo&usqp=CAU" />
-  </div>
+      <!-- Next and previous buttons -->
+      <a class="prev" onclick="move(-1,0)">&#10094;</a>
+      <a class="next" onclick="move(1,0)">&#10095;</a>
     </div>
-
-  <!-- Next and previous buttons -->
-  <a class="prev" onclick="plusSlides(-1,0)">&#10094;</a>
-  <a class="next" onclick="plusSlides(1,0)">&#10095;</a>
-</div>
-<br>
-
-<!-- The dots/circles -->
-<div style="text-align:center">
-  <span class="dot1" onclick="currentSlide(1,0)"></span>
-  <span class="dot1" onclick="currentSlide(2,0)"></span>
-  <span class="dot1" onclick="currentSlide(3,0)"></span>
-</div>
+    <br>
 </div>
 
 <!--Slideshow 2-->
 <div class="week-new-text">Today's Hot</div>
 
-<div class="slideshow-big-container">
-<div class="slideshow-container">
-    <div class="slide-only-container">
-        
-         <!-- Full-width images with number and caption text -->
-  <div class="mySlides2 fade">
-      <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" />
-  </div>
+<div class="slideshow-big-container2"> <!--include dot and button -->
+    <div class="slideshow-container2"> <!--exclude dot-->
+        <div class="slide-only-container2"> <!--exclude previous, next button-->
+            <asp:Repeater ID="Repeater2" runat="server" OnItemDataBound="Repeater2_ItemDataBound" OnItemCommand="Repeater2_ItemCommand" DataSourceID="SqlDataSource2">
+                <ItemTemplate>
+                    <!-- Full-width images with number and price, name -->
+                    <div id="productContainer2" class="mySlide slide-only-subcontainer2 fade" runat="server" CommandName="select" Onclick="productContainer2_Click">
+                        <div class="">
+                            <asp:ImageButton ID="ImageButton2" CssClass="slideshow-image" runat="server" ImageUrl='<%# Eval("productPhotoURL") %>' CommandName="select" />
+                        </div>
+                        <div class="">
+                            <asp:Label ID="lblName2" runat="server" Text='<%# Eval("productName") %>'></asp:Label>
+                        </div>
+                        <div class="flex-row"> 
+                            <div>Buy Now:RM</div>
+                            <div>
+                                <asp:Label ID="lblPrice2" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"productPrice","{0:0.00}") %>'></asp:Label>
+                            </div>
+                        </div>
+                        <div class="flex-row"> <!--If it is auction-->
+                            <div>Current Bid:RM</div>
+                            <div>
+                                <!--<asp:Label ID="lblMaxBid2" runat="server" Text= 'DataBinder.Eval(Container.DataItem,"maxBid","{0:0.00}") %>'> </asp:Label>-->
+                            </div>
+                        </div>
+                    </div>
+                </ItemTemplate>
+                <FooterTemplate>
+                    <asp:Label ID="lblNoData2" runat="server" Text="No Data To Display" Visible="false"></asp:Label>
+                </FooterTemplate>
+            </asp:Repeater>
+            <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT ProductPhoto.productPhotoURL, ProductDetails.productName, FixedPriceProduct.productPrice, OrderProduct.quantity AS CountSales FROM ProductPhoto INNER JOIN FixedPriceProduct ON ProductPhoto.productId = FixedPriceProduct.productId INNER JOIN Product ON ProductPhoto.productId = Product.productId AND FixedPriceProduct.productId = Product.productId INNER JOIN ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId INNER JOIN OrderProduct ON Product.productId = OrderProduct.productId ORDER BY CountSales
+">
+            </asp:SqlDataSource>
+        </div>
 
-  <div class="mySlides2 fade">
-      <img src="https://letsenhance.io/static/b8eda2f8914d307d52f725199fb0c5e6/62e7b/MainBefore.jpg" />
-  </div>
-
-  <div class="mySlides2 fade">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo17BIFmd_BJDrhwy1l_2u9uRAOKHPlghZ21zOeM1_R9-coQV9ROWjImCtJcm-6cThPbo&usqp=CAU" />
-  </div>
+      <!-- Next and previous buttons -->
+      <a class="prev" onclick="move(-1,1)">&#10094;</a>
+      <a class="next" onclick="move(1,1)">&#10095;</a>
     </div>
-
-  <!-- Next and previous buttons -->
-  <a class="prev" onclick="plusSlides(-1,1)">&#10094;</a>
-  <a class="next" onclick="plusSlides(1,1)">&#10095;</a>
-</div>
-<br>
-
-<!-- The dots/circles -->
-<div style="text-align:center">
-  <span class="dot2" onclick="currentSlide(1,1)"></span>
-  <span class="dot2" onclick="currentSlide(2,1)"></span>
-  <span class="dot2" onclick="currentSlide(3,1)"></span>
-</div>
+    <br>
 </div>
 
 <script>
-    let slideIndex = [1,1];
-    let slideCon = ["mySlides", "mySlides2"];
-    let dotCon = ["dot1", "dot2"];
 
-    showSlides(slideIndex[0], 0);
-    showSlides(slideIndex[1], 1);
+    //function for animation
+    function move(value, slideshowNo) {
 
-// Next/previous controls
-function plusSlides(n, slide_no) {
-    showSlides(slideIndex[slide_no] += n, slide_no);
-}
+        var slideshowArr = ["slide-only-container", "slide-only-container2"]
+        var prodArr = ["slide-only-subcontainer", "slide-only-subcontainer2"]
+        var con = document.getElementsByClassName(slideshowArr[slideshowNo])[0];
+        var prodCon = document.getElementsByClassName(prodArr[slideshowNo])[0];
+        var prodStyle = getComputedStyle(prodCon);
 
-// Thumbnail image controls
-function currentSlide(n, slide_no) {
-  showSlides(slideIndex[slide_no] = n, slide_no);
-}
+        //get content width
+        var prodWidth = prodStyle.width;
+        var prodWidthNum = parseInt(prodWidth);
 
-function showSlides(n, slide_no) {
-  let i;
-  let slides = document.getElementsByClassName(slideCon[slide_no]);
-  let dots = document.getElementsByClassName(dotCon[slide_no]);
+        //get content margin right
+        var prodMarginRight = prodStyle.marginRight;
+        var prodMarginRightNum = parseInt(prodMarginRight);
 
-  if (n > slides.length) {slideIndex[slide_no] = 1}
-  if (n < 1) {slideIndex[slide_no] = slides.length }
+        //get total width
+        var totalWidth = prodWidthNum + prodMarginRightNum
+        totalWidth = totalWidth * 3 * value;
 
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
+        //alert(prodWidthNum + " + " + prodMarginRightNum + " = " + totalWidth);
 
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
+        window.setInterval(
+            con.scrollTop += totalWidth, 10
+        ); 
+    }
 
-  slides[slideIndex[slide_no]-1].style.display = "block";
-  dots[slideIndex[slide_no]-1].className += " active";
-}
+    <%--function clickDiv() {
+        if (__doPostBack) {
+            __doPostBack('<%=btnHideToGo.UniqueID %>', '');
+        }
+        else {
+            var theForm = document.forms['aspnetForm'];
+            if (!theForm) {
+                theForm = document.aspnetForm;
+            }
+            if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                    theForm.__EVENTTARGET.value = '<%=btnHideToGo.UniqueID %>';
+                    theForm.__EVENTARGUMENT.value = '';
+                    theForm.submit();
+                }
+            }
+    }--%>
 </script>
 </asp:Content>

@@ -15,15 +15,6 @@ namespace Item_Bidding_System.Seller
     {
 
         /// <summary>
-        /// btnCreateStore control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl btnCreateStore;
-
-        /// <summary>
         /// RadioButtonList1 control.
         /// </summary>
         /// <remarks>
@@ -40,5 +31,14 @@ namespace Item_Bidding_System.Seller
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl SubStoreCon;
+
+        /// <summary>
+        /// Repeater1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater Repeater1;
     }
 }

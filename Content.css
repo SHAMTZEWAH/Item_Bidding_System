@@ -10,6 +10,15 @@
     padding: 5px;
 }
 
+.content-subcontainer-no-marginTop {
+    border: solid 1px black;
+    width: 95%;
+    margin: 5px;
+    height: fit-content;
+    padding: 5px;
+    margin-top: 0px;
+}
+
 .content-title {
     margin: 20px 0px;
     margin-left: 20px;
@@ -72,4 +81,18 @@
     flex-flow: row wrap;
     justify-content: space-evenly;
     align-items: center;
+}
+
+.substore-container{ /*manage product page, */
+    display: flex;
+    flex-flow: row wrap;
+    padding-top:10px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    margin-left: 8px;
+}
+
+.cancel-container{
+    align-self:center;
+    vertical-align: central;
 }
