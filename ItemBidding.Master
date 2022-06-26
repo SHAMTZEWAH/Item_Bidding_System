@@ -1,17 +1,17 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="ItemBidding.master.cs" Inherits="Item_Bidding_System.ItemBidding" %>
-<<%@ Register TagPrefix="Master" TagName="SideMenu" Src="~/SideMenuFilter.ascx" %>
+
 <!DOCTYPE html>
 
 <html>
 <head runat="server">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css" />
     <link type="text/css" rel="stylesheet" href="MasterCSS.css" />
     <link type="text/css" rel="stylesheet" href="SideMenu.css" />
     <title>Item Bidding System</title>
 
-    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -38,7 +38,7 @@
         <!--row 3-->
         <div class="master-content-container"><!--Adjust-->
             <div id="SideMenu" class="side-menu" runat="server">
-                <Master:SideMenu Visible="false" runat="server"/>
+                
             </div><!--Adjust-->
             <div id="mainContent" class="main-content-container" runat="server">
                 <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
