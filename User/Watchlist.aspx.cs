@@ -22,7 +22,7 @@ namespace Item_Bidding_System.User
 
         void getConnection()
         {
-            string username = User.Identity.Name;
+            string username = ""; 
 
             //create connection
             SqlConnection con;
@@ -38,6 +38,10 @@ namespace Item_Bidding_System.User
 
             try
             {
+                //get username 
+                username = User.Identity.Name; 
+
+                //execute query
                 con.Open();
                 cmdRetrieve.Connection = con;
                 cmdRetrieve.Parameters.AddWithValue("@name", username);

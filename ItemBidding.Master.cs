@@ -15,7 +15,7 @@ namespace Item_Bidding_System
             Control ctrl;
             Control ctrl_top;
             Control ctrl_category;
-            string path = Request.Url.LocalPath.ToString();
+            string path = Request.Url.LocalPath.ToString(); //get current path of the page locate at (~/General/Home.aspx)
             //TopCategory.InnerText = path;
 
             
@@ -28,9 +28,9 @@ namespace Item_Bidding_System
             string ctrlPathMenu = PageControl_TopLogin(path);
             if (ctrlPathMenu != string.Empty)
             {
-                ctrl_top = Page.LoadControl(ctrlPathMenu);
+                ctrl_top = Page.LoadControl(ctrlPathMenu); //load the top menu user control and pass to the ctrl_top 
                 TopLoginMenu.Controls.Clear();
-                TopLoginMenu.Controls.Add(ctrl_top);
+                TopLoginMenu.Controls.Add(ctrl_top); //ctrl_top user control pass back to the row display part
             }
 
             string ctrlPathCategory = PageControl_TopCategory(path);
@@ -49,6 +49,23 @@ namespace Item_Bidding_System
                 SideMenu.Controls.Clear();
                 SideMenu.Controls.Add(ctrl);
             }
+
+            //get the user control
+            //pass indexChangedhandler to it
+            //if (ctrlPathSideMenu.Contains("Filter") == true)
+            //{
+            //    UserControl filterControl = (UserControl)Page.LoadControl(ctrlPathSideMenu);
+            //    if (filterControl is SideMenuFilter)
+            //    {
+            //        (filterControl as SideMenuFilter).IndexChangedHandler += new SideMenuFilter.OnIndexChanged(ctrl_IndexChangedHandler);
+            //    }
+            //}
+        }
+
+        void ctrl_IndexChangedHandler(string value) //not used
+        {
+            // change index
+            
         }
 
         string PageControl_TopLogin(string path)

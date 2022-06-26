@@ -26,7 +26,12 @@ namespace Item_Bidding_System.General
             }
             else //when the user does not choose remember me 
             {
-                var authTicket = new FormsAuthenticationTicket(username.Text, true, 1);
+                var authTicket = new FormsAuthenticationTicket(1, 
+                    username.Text, 
+                    DateTime.Now, 
+                    DateTime.Now.AddDays(1), 
+                    true,  
+                    "Application Specific data for this user.");
                 string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
 
                 var cookie = new HttpCookie(FormsAuthentication.FormsCookieName,

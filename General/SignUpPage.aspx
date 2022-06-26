@@ -13,7 +13,7 @@
     <form id="form1" runat="server">
         <div class="content-container-signUp">
             <div class="content-subcontainer-signUp">
-                <asp:CreateUserWizard ID="CreateUserWizard1" runat="server" ContinueDestinationPageUrl="~/General/LoginPage.aspx">
+                <asp:CreateUserWizard ID="CreateUserWizard1" runat="server" ContinueDestinationPageUrl="~/General/LoginPage.aspx" OnCreatingUser="CreateUserWizard1_CreatingUser">
                     <CreateUserButtonStyle CssClass="btn-large-golden btn-signUp" />
                     <WizardSteps>
                         <asp:CreateUserWizardStep ID="CreateUserWizardStep1" runat="server">
@@ -50,6 +50,7 @@
                                         <td class="medium-bottom-inner-gap table-item" align="center">
                                             <asp:TextBox ID="Email" CssClass="textBox" runat="server" placeholder="Email" MaxLength="60"></asp:TextBox>
                                             <asp:RequiredFieldValidator ID="EmailRequired" runat="server" ControlToValidate="Email" ErrorMessage="E-mail is required." ToolTip="E-mail is required." ValidationGroup="CreateUserWizard1">*</asp:RequiredFieldValidator>
+                                            <asp:CustomValidator ID="CustomValidator1" runat="server" ControlToValidate="Email" ErrorMessage="Duplicate email. Please use another email." OnServerValidate="CustomValidator1_ServerValidate"></asp:CustomValidator>
                                         </td>
                                     </tr>
                                     <tr>

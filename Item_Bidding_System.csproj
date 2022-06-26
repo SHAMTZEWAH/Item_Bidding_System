@@ -99,6 +99,7 @@
     <Content Include="SideMenuFilter.ascx" />
     <Content Include="SideMenuSeller.ascx" />
     <Content Include="SideMenuUser.ascx" />
+    <Content Include="Test.aspx" />
     <Content Include="TopMenu.ascx" />
     <Content Include="TopMenuCategory.ascx" />
     <Content Include="TopMenuGeneral.ascx" />
@@ -269,6 +270,13 @@
     </Compile>
     <Compile Include="SideMenuUser.ascx.designer.cs">
       <DependentUpon>SideMenuUser.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Test.aspx.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Test.aspx.designer.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
     </Compile>
     <Compile Include="TopMenu.ascx.cs">
       <DependentUpon>TopMenu.ascx</DependentUpon>
