@@ -3,7 +3,63 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-    <div>
-           
+    <link type="text/css" rel="stylesheet" href="../MasterCSS.css" />
+    <link type="text/css" rel="stylesheet" href="../Content.css" />
+
+    <div class="content-container">
+        <div class="title1-black title1-bold">Results:<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT ProductPhoto.productPhotoURL, ProductDetails.productName, MAX(BidTable.bidPrice) AS maxBid, FixedPriceProduct.productPrice, Product.productStock, MAX(BidTable.bidPrice) AS yourBid FROM ProductPhoto INNER JOIN Product ON ProductPhoto.productId = Product.productId INNER JOIN BidTable ON Product.productId = BidTable.productId INNER JOIN ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId INNER JOIN FixedPriceProduct ON Product.productId = FixedPriceProduct.productId INNER JOIN Account ON BidTable.accId = Account.accId INNER JOIN ProductPhoto AS ProductPhoto_1 ON Product.productId = ProductPhoto.productId GROUP BY ProductPhoto.productPhotoURL, ProductDetails.productName, FixedPriceProduct.productPrice, Product.productStock"></asp:SqlDataSource>
+        </div>
+        <div class="content-subcontainer">
+            <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound">
+                <ItemTemplate>
+                <div class="content-subcontainer content-subcontainer-adjust" >
+                        <div>
+                            <img class="medium-image" alt="" runat="server" src='<%# Eval("productPhotoURL") %>' /> <!--src="# Eval("") "-->
+                        </div>
+                        <div class="flex-column flex-start">
+                            <div>
+                                <asp:Label ID="prodName" CssClass="title3-black-bold" runat="server" Text='<%# Eval("productName") %>'/> <!--Text='# Eval("") '-->
+                            </div>
+                            <div class="flex-row flex-self-end">
+                                <div>Current max bid: RM</div>
+                                <div>
+                                    <asp:Label ID="currentBidPrice" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"maxBid","{0:0.00}") %>' /><!--Text='# Eval("") '-->
+                                </div>
+                                
+                            </div>
+                            <div class="flex-row flex-self-end">
+                                <div>Buy Now: RM</div>
+                                <div>
+                                    <asp:Label ID="fixedPrice" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"productPrice","{0:0.00}") %>' /><!--Text='# Eval("") '-->
+                                </div>
+                            </div>   
+                        </div>
+                        <div class="flex-column flex-around">
+                            <div class="flex-row">
+                                <div>Stock: </div>
+                                <div>
+                                    <asp:Label ID="stock" runat="server" Text='<%# Eval("productStock") %>' /> <!--Text='# Eval("") '-->
+                                </div>
+                            </div>
+                            <div class="flex-row" style="color: blue;display:none;">
+                                <div>Your bid: RM</div>
+                                <div>
+                                    <asp:Label ID="yourBid" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"yourBid","{0:0.00}") %>' Visible="false" /> <!--Text='# Eval("") '-->
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="flex-column flex-around">
+                            <button class="btn-medium-blue btnView" onclick="/General/Product.aspx?prodName=">View</button> <!--URL need to add-->
+                            <asp:Button ID="btnAddCart" CssClass="btn-medium-golden btnAddCart" runat="server" Text="Add to cart" />
+                        </div>
+                </div>
+                </ItemTemplate>
+                <FooterTemplate>
+                    <asp:Label ID="lblNoData" runat="server" Text="No Data To Display" Visible="false"></asp:Label>
+                </FooterTemplate>
+            </asp:Repeater>
+
+        </div> 
     </div>
 </asp:Content>

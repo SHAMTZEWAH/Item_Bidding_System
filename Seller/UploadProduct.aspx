@@ -1,15 +1,14 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="UploadProduct.aspx.cs" Inherits="Item_Bidding_System.Seller.UploadProduct" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/ItemBidding.Master" AutoEventWireup="true" CodeBehind="UploadProduct.aspx.cs" Inherits="Item_Bidding_System.Seller.UploadProduct" %>
+<%@ Register TagPrefix="Upload" TagName="Products" Src="~/Seller/EditProductDetails.ascx" %>
 
-<!DOCTYPE html>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <div>
-        </div>
-    </form>
-</body>
-</html>
+<asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
+    <link type="text/css" rel="stylesheet" href="../MasterCSS.css" />
+    <link type="text/css" rel="stylesheet" href="../Content.css" />
+
+    <div class="content-container" runat="server">
+        <Upload:Products ID="uploadProduct" runat="server"></Upload:Products>
+    </div>
+
+</asp:Content>

@@ -1,0 +1,98 @@
+﻿.content-container {
+    margin-left: 10px;
+}
+
+.content-subcontainer {
+    border: solid 1px black;
+    width: 95%;
+    margin: 5px;
+    height: fit-content;
+    padding: 5px;
+}
+
+.content-subcontainer-no-marginTop {
+    border: solid 1px black;
+    width: 95%;
+    margin: 5px;
+    height: fit-content;
+    padding: 5px;
+    margin-top: 0px;
+}
+
+.content-title {
+    margin: 20px 0px;
+    margin-left: 20px;
+}
+
+.lbl { /*acc mng page, seller reg page*/
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 80%;
+    height: 35px;
+    margin-left: 30px;
+    padding-top: 25px;
+}
+
+.content-adjust { /*acc mng page*/
+    margin-left: 60px;
+    padding-top: 25px;
+}
+
+.image-container { /*acc mng page*/
+    display: flex;
+    flex-flow: column wrap;
+    border: 1px solid black;
+}
+
+.right-container { /*container for change image, acc mng page*/
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    margin-left: 10%;
+    height: 100px;
+}
+
+.btn-container { /*container for save, reg btn, acc mng page, seller reg page*/
+    width: 100%;
+    text-align: end;
+    margin: 20px 0px;
+    margin-left: 5%;
+}
+
+.filter-option { /*container for filter part, manage order page*/
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.filter-content { /*subcontainer for filter part, manage order page*/
+    display: none;
+    border: 1px solid black;
+    margin-left: 45px;
+    margin-top: 10px;
+    padding: 5px;
+    width: fit-content;
+}
+
+.content-subcontainer-adjust{
+    display:flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.substore-container{ /*manage product page, */
+    display: flex;
+    flex-flow: row wrap;
+    padding-top:10px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    margin-left: 8px;
+}
+
+.cancel-container{
+    align-self:center;
+    vertical-align: central;
+}

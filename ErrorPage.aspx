@@ -4,7 +4,26 @@
 
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-    <div style="font-size:large;color:mediumblue;">
-           Error 404. There is error available.
+    <link type="text/css" rel="stylesheet" href="MasterCSS.css"/>
+    <link type="text/css" rel="stylesheet" href="Content.css" />
+    <style>
+        .img-error{
+            position:relative;
+            width: 400px;
+            height: 350px;
+            overflow: visible;
+            aspect-ratio: 1 / 1;
+            background-image: url(https://yellowkazoo.files.wordpress.com/2014/04/oops.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin:0 auto;
+        }
+    </style>
+    
+    <div class="content-container">
+           <div class="title2-black-bold content-title">Error 404.</div> 
+            <div class="img-error"></div>
+           <div class="title2-black-bold content-title">There is error available.</div>
     </div>
 </asp:Content>

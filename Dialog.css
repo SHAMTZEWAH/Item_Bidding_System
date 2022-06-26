@@ -1,0 +1,98 @@
+﻿:root{
+
+    --gap-field: 20px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+    .modal-content th {
+        font-size: 25px;
+        padding-bottom: var(--gap-field);
+    }
+
+/*.modal-content td :not(.textBox-container2){
+    padding-bottom: 10px;
+}*/
+
+#reportTable td{
+    padding-bottom: var(--gap-field);
+}
+
+.modal-container{
+    display:flex;
+    flex-flow: column wrap;
+    align-items: center;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+.field-name{
+    display:table-cell;
+    height: inherit;
+    vertical-align: middle;
+}
+
+.field-name-text{
+    float: right;
+}
+
+/*.textBox-size{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}*/
+
+.textBox-container {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 100%; /*to follow the title field width*/
+}
+
+.textBox-all-container {
+    display: table-cell;
+    height: inherit;
+    vertical-align: middle;
+    width: 300px;
+    margin-bottom: var(--gap-field);
+}
+
+.textBox-title, .textBox-desc{
+    width: 300px;
+}
+
+.textBox-desc{
+    height: 100px;
+}

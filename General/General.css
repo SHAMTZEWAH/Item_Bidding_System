@@ -1,0 +1,218 @@
+﻿:root{
+    --small-image-width: 70px;
+    --small-image-height: 90px;
+    --small-bottom-gap: 10px;
+}
+
+/*Container*/
+.content-container-signUp {
+    height: 75%;
+    width: 75%;
+    margin: 0 auto;
+    margin-top: 5%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+}
+
+.content-subcontainer-signUp {
+    position: relative;
+    width: 48%;
+    height: auto;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start; /*align-self: flex-start*/
+    justify-content: center;
+}
+
+.image-container-signUp {
+    position: relative;
+    width: 50%;
+    padding: 20px 0px;
+    background-color: aliceblue;
+    display: flex;
+    flex-flow: row wrap; /*Change*/
+    justify-content: center;
+    align-items: center;
+}
+
+.table-signUp{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items:center;
+    padding: 0px;
+}
+
+.btn-signUp{
+    margin-right: 130px;
+}
+
+.title1-bold { /*move #signUpTitle,*/
+    font-weight: bold;
+    vertical-align: top;
+    padding: 30px 0px 60px 0px;
+}
+
+::placeholder { /*move*/
+    color: #AAAAAA;
+    text-align: center;
+}
+
+.phone-container{
+    
+}
+
+.phone-subcontainer {
+    width: 185px;
+    height: 30px;
+    margin-left: 5px;
+}
+
+.phone-subcontainer:focus{
+    outline:none;
+}
+
+.phone-prefix {
+    padding: 0px 5px;
+    border-right: 1px solid black;
+}
+
+.row-title { /*For title login page*/
+    height: 100px !important;
+}
+
+.cell-fail { /*For error message, login page*/
+    height: 5px !important;
+}
+
+/*ProductDetails Page container*/
+.container{
+    height: 100%;
+}
+
+/*left part container - ProductDetails Page*/
+.content-subcontainer {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    min-height: 100%;
+    width: 50%;
+    padding-left: 10px;
+    overflow: auto;
+    position: relative;
+}
+
+/*left image slide outer container - ProductDetails Page*/
+.multiple-image-container {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.multiple-image-left-container {
+    display: inline-flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.up-container, .down-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    transform: rotate(90deg);
+}
+
+.repeater-container {
+    width: var(--small-image-width);
+    height: calc(var(--small-image-height) * 3 + var(--small-bottom-gap) * 3 + 10px);
+    border: 1px solid lightgray;
+    overflow: scroll;
+}
+
+.repeater-container::-webkit-scrollbar{
+    display:none;
+}
+
+.small-image-container{
+    margin-bottom: 10px;
+    width: fit-content;
+    height: fit-content;
+    display:flex;
+    flex-flow: column nowrap;
+    padding:0px 5px;
+}
+
+.image-position{
+    display:block;
+}
+
+.image-display {
+    width: 100%;
+    height: 100%;
+    margin-left: 10px;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    border: 1px solid lightgray;
+}
+.desc-container{
+    border: 1px solid lightgray;
+    margin-top: 10px;
+    min-width: 100%;
+    height: auto;
+}
+
+/*right part of product details*/
+.datalist-container{
+    margin-left: 10px;
+}
+
+.cell-name{
+    align-self: flex-start;
+}
+
+.cell-styling{
+    border-bottom: 2px solid black;
+    width: 100%;
+    padding-top: 20px;
+}
+
+.cell-styling2{ /*Style the second col cell that is useless*/
+    width:0%;
+}
+
+/*Row 1*/
+.btn-report{
+    cursor: pointer;
+    color: red;
+    font-size: 20px;
+}
+
+/*Row 3*/
+.view-bid {
+    border: none;
+    background-color: white;
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+}
+
+.bid-table{
+    display: none;
+    position: absolute;
+    left: 450px;
+    top: 80px;
+}
+
+

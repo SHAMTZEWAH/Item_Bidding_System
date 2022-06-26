@@ -5,3 +5,6 @@
     <Master:Side runat="server"></Master:Side>
 
 </asp:Content>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
+    </asp:Content>
