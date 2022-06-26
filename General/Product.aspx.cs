@@ -21,7 +21,6 @@ namespace Item_Bidding_System.General
             {
                 try
                 {
-
                     if (Request.QueryString["category"].ToString() != null)
                     {
                         //show category product when the user click on the category bar below the search bar
@@ -38,14 +37,31 @@ namespace Item_Bidding_System.General
                         loadHotProduct();
                     }
 
+
                 }
                 catch (NullReferenceException ex)
                 {
                     //Show Hot product
                     loadHotProduct();
                 }
+                finally
+                {
+                    ctrl_IndexChangedHandler("");
+                }
             }
             
+        }
+
+        void ctrl_IndexChangedHandler(string value) //not used
+        {
+            //var filterControl = new Control();
+            //filterControl = (SideMenuFilter)Page.Master.NamingContainer.FindControl("SideMenu");
+            //DropDownList ddlSelect = (DropDownList)(filterControl as SideMenuFilter).NamingContainer.FindControl("radioSelect");
+            //// change index
+            //if (ViewState["selection"] != null)
+            //{
+            //    ddlSelect.SelectedValue = ViewState["selection"].ToString();
+            //}
         }
 
         void loadHotProduct()

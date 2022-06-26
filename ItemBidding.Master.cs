@@ -62,12 +62,6 @@ namespace Item_Bidding_System
             //}
         }
 
-        void ctrl_IndexChangedHandler(string value) //not used
-        {
-            // change index
-            
-        }
-
         string PageControl_TopLogin(string path)
         {
             string ctrlPath = "";

@@ -7,14 +7,14 @@
     <div class="filter-title">Filter</div>
     <div class="filter-subcontainer">
         <div class="filter-subtitle">Selection:</div>
-        <asp:RadioButtonList ID="radioSelect" CssClass="filterSelect" runat="server" OnSelectedIndexChanged="radioSelect_SelectedIndexChanged" AutoPostBack="True">
+        <asp:RadioButtonList ID="radioSelect" CssClass="filterSelect" runat="server" OnSelectedIndexChanged="radioSelect_SelectedIndexChanged" AutoPostBack="True" ViewStateMode="Enabled">
             <asp:ListItem>Hots</asp:ListItem>
             <asp:ListItem>Newly Added</asp:ListItem>
         </asp:RadioButtonList>
     </div>
     <div class="filter-subcontainer">
         <div class="filter-subtitle">Category:</div>
-        <asp:CheckBoxList CssClass="filterCategory" ID="chkBoxCategory" runat="server" AutoPostBack="True" OnSelectedIndexChanged="chkBoxCategory_SelectedIndexChanged">
+        <asp:CheckBoxList CssClass="filterCategory" ID="chkBoxCategory" runat="server" AutoPostBack="True" OnSelectedIndexChanged="chkBoxCategory_SelectedIndexChanged" ViewStateMode="Enabled">
             <asp:ListItem>Fashion Apparel</asp:ListItem>
             <asp:ListItem>Artworks</asp:ListItem>
             <asp:ListItem>Modern Collectible</asp:ListItem>

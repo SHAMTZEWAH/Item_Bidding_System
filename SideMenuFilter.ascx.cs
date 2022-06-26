@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -15,9 +16,14 @@ namespace Item_Bidding_System
         //Event Declaration (not used)
         public event OnIndexChanged IndexChangedHandler;
 
+         
+
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if(ViewState["selection"] != null)
+            {
+                radioSelect.SelectedValue = ViewState["selection"].ToString();
+            }
         }
 
         protected void radioSelect_SelectedIndexChanged(object sender, EventArgs e)
@@ -43,6 +49,7 @@ namespace Item_Bidding_System
                     var uriBuilder = new UriBuilder(uri); //build a new uri obj with original value
                     uriBuilder.Query = qs.ToString(); //assign the query with new param
                     var newUri = uriBuilder.Uri.ToString();
+                    ViewState["selection"] = radioSelect.SelectedValue;
                     Response.Redirect(newUri);
                 }
                 else if (Request.RawUrl.ToString().Contains("?"))
@@ -66,12 +73,13 @@ namespace Item_Bidding_System
                 }
             }
             
+            
         }
 
         protected void chkBoxCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
             List<string> selectedCategory = new List<string>();
-            string allQuery = "";
+            StringBuilder allQuery = new StringBuilder();
             try
             { 
                 foreach(ListItem item in chkBoxCategory.Items)
@@ -82,15 +90,17 @@ namespace Item_Bidding_System
                     }
                 }
 
-                if (Request.QueryString["selection"] != null)
+                if (Request.QueryString["category"] != null)
                 {
                     var uri = new Uri(Request.Url.AbsoluteUri.ToString());
                     var qs = HttpUtility.ParseQueryString(uri.Query);
-                    qs.Remove("category");
+
                     foreach (string item in selectedCategory)
                     {
-                        qs.Add("category", item);
+                        allQuery.Append(item + ",");
                     }
+                    allQuery.Replace(",","",allQuery.Length-1,1);
+                    qs.Set("category", allQuery.ToString());
 
                     //build a new uri with diff param value
                     var uriBuilder = new UriBuilder(uri); //build a new uri obj with original value
@@ -100,18 +110,22 @@ namespace Item_Bidding_System
                 }
                 else if (Request.RawUrl.ToString().Contains("?"))
                 {
+                    allQuery.Append("&category=");
                     foreach (string item in selectedCategory)
                     {
-                        allQuery = "&category=" + item;
+                        allQuery.Append(item + ",");
                     }
+                    allQuery.Replace(",", "", allQuery.Length - 1, 1);
                     Response.Redirect(Request.RawUrl + allQuery);
                 }
                 else
                 {
+                    allQuery.Append("?category=");
                     foreach (string item in selectedCategory)
                     {
-                        allQuery = "?category=" + item;
+                        allQuery.Append(item + ",");
                     }
+                    allQuery.Replace(",", "", allQuery.Length - 1, 1);
                     Response.Redirect(Request.RawUrl + allQuery);
                 }
             }
@@ -119,18 +133,22 @@ namespace Item_Bidding_System
             {
                 if (Request.RawUrl.ToString().Contains("?"))
                 {
+                    allQuery.Append("&category=");
                     foreach (string item in selectedCategory)
                     {
-                        allQuery = "&category=" + item;
+                        allQuery.Append(item + ",");
                     }
+                    allQuery.Replace(",", "", allQuery.Length - 1, 1);
                     Response.Redirect(Request.RawUrl + allQuery);
                 }
                 else
-                {   
+                {
+                    allQuery.Append("?category=");
                     foreach (string item in selectedCategory)
                     {
-                        allQuery = "?category=" + item;
+                        allQuery.Append(item + ",");
                     }
+                    allQuery.Replace(",", "", allQuery.Length - 1, 1);
                     Response.Redirect(Request.RawUrl + allQuery);
                 }
             }
