@@ -36,7 +36,7 @@ namespace Item_Bidding_System.General
                     {
                         loadHotProduct();
                     }
-
+                    
 
                 }
                 catch (NullReferenceException ex)
@@ -54,6 +54,7 @@ namespace Item_Bidding_System.General
 
         void ctrl_IndexChangedHandler(string value) //not used
         {
+            //ViewState[];
             //var filterControl = new Control();
             //filterControl = (SideMenuFilter)Page.Master.NamingContainer.FindControl("SideMenu");
             //DropDownList ddlSelect = (DropDownList)(filterControl as SideMenuFilter).NamingContainer.FindControl("radioSelect");
