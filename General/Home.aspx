@@ -54,7 +54,9 @@
 
 <!--Slideshow 2-->
 <div class="week-new-text">Today's Hot</div>
-
+    <div>
+        View More
+    </div>
 <div class="slideshow-big-container2"> <!--include dot and button -->
     <div class="slideshow-container2"> <!--exclude dot-->
         <div class="slide-only-container2"> <!--exclude previous, next button-->
