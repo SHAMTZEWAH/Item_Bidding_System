@@ -96,3 +96,18 @@
     align-self:center;
     vertical-align: central;
 }
+
+/*EditProductDetails Page*/
+.or-text-margin{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/*Manage Finance*/
+.btn-to-link{
+    text-decoration: underline;
+    border: none;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+}

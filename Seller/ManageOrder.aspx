@@ -8,6 +8,9 @@
     <div class="content-container">
         <div class="top-filter">
             <div class="title2-black-bold content-title">Manage Orders</div>
+            <div class="displayLess">
+                <asp:Label ID="lblNoData" runat="server" Text="" Visible="false"></asp:Label>
+            </div>
             <div class="filter-option">
                 <div class="btn-filter btn-medium-white">
                     <i class="bi bi-funnel-fill"></i>
@@ -15,11 +18,11 @@
                 </div>
             </div>
             <div id="radioContainer" class="filter-content">
-                <asp:RadioButtonList ID="RadioButtonList1" runat="server">
+                <asp:RadioButtonList ID="RadioButtonList1" runat="server" OnSelectedIndexChanged="RadioButtonList1_SelectedIndexChanged" AutoPostBack="True">
                     <asp:ListItem>All</asp:ListItem>
-                    <asp:ListItem>Pending Orders</asp:ListItem>
-                    <asp:ListItem>ToShipped</asp:ListItem>
-                    <asp:ListItem>Product Received</asp:ListItem>
+                    <asp:ListItem>Awaiting Payment</asp:ListItem> <!-- yet payemnt, accepted by seller-->
+                    <asp:ListItem>To Shipped</asp:ListItem> <!--payment success-->
+                    <asp:ListItem>Product Received</asp:ListItem> <!-- shipped success-->
                 </asp:RadioButtonList>
             </div>
              </div>
@@ -27,55 +30,144 @@
                
             </div>
             <div class="content-subcontainer">
-                <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound">
-                <ItemTemplate>
-                <div class="content-subcontainer content-subcontainer-adjust" >
+                <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" >
+            <Columns>
+                <asp:TemplateField>
+                    <HeaderTemplate>Order ID</HeaderTemplate>
+                    <ItemTemplate>
                         <div>
-                            <img class="medium-image" alt="" runat="server" src='<%# Eval("productPhotoURL") %>' /> <!--src="# Eval("") "-->
-                        </div>
-                        <div class="flex-column flex-start">
-                            <div>
-                                <asp:Label ID="prodName" CssClass="title3-black-bold" runat="server" Text='<%# Eval("productName") %>'/> <!--Text='# Eval("") '-->
-                            </div>
-                            <div class="flex-row flex-self-end">
-                                <div>Current max bid: RM</div>
+                            <asp:Label ID="lblOrderId" runat="server" Text='<%# Eval("orderId") %>'></asp:Label>
+                        </div><!--Eval-->
+                    </ItemTemplate>
+                    <ControlStyle BorderStyle = "None" />
+                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+                </asp:TemplateField>
+
+                <asp:TemplateField>
+                    <HeaderTemplate>Photos</HeaderTemplate>
+                    <ItemTemplate>
+                        <div>
+                            <asp:Image ID="imgProduct" ImageUrl='<%# Eval("productPhotoURL") %>'  runat="server" />
+                        </div><!--Eval-->
+                    </ItemTemplate>
+                    <ControlStyle BorderStyle = "None" />
+                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+                </asp:TemplateField>
+
+                <asp:TemplateField>
+                    <HeaderTemplate>Product Name</HeaderTemplate>
+                    <ItemTemplate>
+                        <div>
+                            <asp:Label ID="lblProdName" runat="server" Text='<%# Eval("productName") %>'></asp:Label>
+                        </div><!--Eval-->
+                    </ItemTemplate>
+                    <ControlStyle BorderStyle = "None" />
+                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+
+                </asp:TemplateField>
+
+                <asp:TemplateField>
+                    <HeaderTemplate>Brand</HeaderTemplate>
+                    <ItemTemplate>
+                        <div>
+                            <asp:Label ID="lblBrand" runat="server" Text='<%# Eval("productBrand") %>'></asp:Label>
+                        </div><!--Eval-->
+                    </ItemTemplate>
+                    <ControlStyle BorderStyle = "None" />
+                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+
+                </asp:TemplateField>
+
+                <asp:TemplateField>
+                    <HeaderTemplate>Model</HeaderTemplate>
+                    <ItemTemplate>
+                        <div>
+                            <asp:Label ID="lblModel" runat="server" Text='<%# Eval("productModel") %>'></asp:Label>
+                        </div><!--Eval-->
+                    </ItemTemplate>
+                    <ControlStyle BorderStyle = "None" />
+                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+
+                </asp:TemplateField>
+
+                <asp:TemplateField>
+                    <HeaderTemplate>Quantity</HeaderTemplate>
+                    <ItemTemplate>
+                        <div>
+                            <asp:Label ID="lblQty" runat="server" Text='<%#Eval("quantity") %>'></asp:Label>
+                        </div><!--Eval-->
+                    </ItemTemplate>
+                    <ControlStyle BorderStyle = "None" />
+                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+
+                </asp:TemplateField>
+
+                <asp:TemplateField>
+                    <HeaderTemplate>Price</HeaderTemplate>
+                    <ItemTemplate>
+                        <div>
+                            <div class="displayLess" runat="server">
+                                <div>Open Bid:</div>
                                 <div>
-                                    <asp:Label ID="currentBidPrice" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"maxBid","{0:0.00}") %>' /><!--Text='# Eval("") '-->
-                                </div>
-                                
-                            </div>
-                            <div class="flex-row flex-self-end">
-                                <div>Buy Now: RM</div>
-                                <div>
-                                    <asp:Label ID="fixedPrice" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"productPrice","{0:0.00}") %>' /><!--Text='# Eval("") '-->
-                                </div>
-                            </div>   
-                        </div>
-                        <div class="flex-column flex-around">
-                            <div class="flex-row">
-                                <div>Stock: </div>
-                                <div>
-                                    <asp:Label ID="stock" runat="server" Text='<%# Eval("productStock") %>' /> <!--Text='# Eval("") '-->
+                                    <asp:Label ID="lblOpenBid" runat="server" Text='<%# Eval("totalPrice") %>'></asp:Label>
                                 </div>
                             </div>
-                            <div class="flex-row" style="color: blue;display:none;">
-                                <div>Your bid: RM</div>
+                            <div class="displayLess" runat="server">
+                                <div>Fixed Price:</div>
                                 <div>
-                                    <asp:Label ID="yourBid" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"yourBid","{0:0.00}") %>' Visible="false" /> <!--Text='# Eval("") '-->
+                                    <asp:Label ID="lblFixedPrice" runat="server" Text='<%# Eval("totalPrice") %>'></asp:Label>
+                                </div>
+                            </div> <!--If it is not applicable, invisible (display:none)-->
+                            <div class="displayLess" runat="server">
+                                <div>Sealed Bid:</div>
+                                <div>
+                                    <asp:Label ID="lblSealedBid" runat="server" Text='<%# Eval("totalPrice") %>'></asp:Label>
                                 </div>
                             </div>
-                           
-                        </div>
-                        <div class="flex-column flex-around">
-                            <button class="btn-medium-blue btnHover" onclick="/General/Product.aspx?prodName=">Accept Bid</button> <!--URL need to add-->
-                            <asp:Button ID="btnCancel" CssClass="btn-medium-red btnHover" runat="server" Text="Cancel Order" />
-                        </div>
-                </div>
-                </ItemTemplate>
-                <FooterTemplate>
-                    <asp:Label ID="lblNoData" runat="server" Text="No Data To Display" Visible="false"></asp:Label>
-                </FooterTemplate>
-            </asp:Repeater>
+                        </div><!--Eval, Depends on the type of order, if pending then have drop down list, deal with fixed, sealed bid and open bid price -->
+                    </ItemTemplate>
+                    <ControlStyle BorderStyle = "None" />
+                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+
+                </asp:TemplateField>
+
+                <asp:TemplateField>
+                    <HeaderTemplate>Address</HeaderTemplate>
+                    <ItemTemplate>
+                        <div>
+                            <asp:Label ID="lblAddress" runat="server" Text='<%# Eval("street").ToString() + Eval("poscode").ToString() + Eval("city").ToString() + Eval("state").ToString() + Eval("country").ToString() %>'></asp:Label>
+                        </div><!--Eval-->
+                    </ItemTemplate>
+                    <ControlStyle BorderStyle = "None" />
+                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+
+                </asp:TemplateField>
+
+                <asp:TemplateField>
+                    <HeaderTemplate>Date</HeaderTemplate>
+                    <ItemTemplate>
+                        <div>
+                            <asp:Label ID="lblDate" runat="server" Text='<%#Eval("createOrderDateTime") %>'></asp:Label>
+                        </div><!--Eval-->
+                    </ItemTemplate>
+                    <ControlStyle BorderStyle = "None" />
+                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+
+                </asp:TemplateField>
+
+                <asp:TemplateField>
+                    <HeaderTemplate>Status</HeaderTemplate>
+                    <ItemTemplate>
+                        <div>
+                            <asp:Label ID="lblStatus" runat="server" Text='<%# Eval("orderStatus") %>'></asp:Label>
+                        </div><!--Eval-->
+                    </ItemTemplate>
+                    <ControlStyle BorderStyle = "None" />
+                    <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+                </asp:TemplateField>
+            </Columns>
+            
+        </asp:GridView>
             </div>
        
         

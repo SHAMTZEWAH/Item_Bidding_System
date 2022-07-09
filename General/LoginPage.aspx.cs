@@ -44,10 +44,9 @@ namespace Item_Bidding_System.General
                     Expires = authTicket.Expiration
                 };
                 Response.Cookies.Set(cookie);
-
-                // ***** Here is the fix *****
                 // Do not use FormsAuthentication.SetAuthCookie or RedirectFromLoginPage
                 // if you create own FormsAuthenticationTicket.
+
                 //direct to the url
                 if (Request.QueryString["ReturnURL"] != null)
                 {
@@ -55,7 +54,7 @@ namespace Item_Bidding_System.General
                 }
                 else
                 {
-                    Response.Redirect("/Home.aspx");
+                    Response.Redirect("/General/Home.aspx");
                 }
             } 
         }
@@ -71,6 +70,9 @@ namespace Item_Bidding_System.General
             //    lblError.Text = "Login failed. Please check your user name and password and try again.";
         }
 
-        
+        protected void Login1_LoginError(object sender, EventArgs e)
+        {
+            Login1.FailureText = "Your login attempt was not successful. <br /> Please try again.";
+        }
     }
 }

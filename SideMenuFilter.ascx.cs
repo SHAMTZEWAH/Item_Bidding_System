@@ -20,7 +20,7 @@ namespace Item_Bidding_System
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if(ViewState["selection"] != null)
+            if(Session["selection"] != null)
             {
                 radioSelect.SelectedValue = ViewState["selection"].ToString();
             }
@@ -49,6 +49,10 @@ namespace Item_Bidding_System
                     var uriBuilder = new UriBuilder(uri); //build a new uri obj with original value
                     uriBuilder.Query = qs.ToString(); //assign the query with new param
                     var newUri = uriBuilder.Uri.ToString();
+                    if (ViewState["selection"] != null)
+                    {
+                        radioSelect.SelectedValue = ViewState["selection"].ToString();
+                    }
                     ViewState["selection"] = radioSelect.SelectedValue;
                     Response.Redirect(newUri);
                 }

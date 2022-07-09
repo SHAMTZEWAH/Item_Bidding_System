@@ -15,7 +15,7 @@
                 <td class="lbl">Name:</td>
                 <td>
                     <div class="medium-top-inner-gap">
-                        <asp:TextBox ID="TextBox1" CssClass="textBox" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="txtName" CssClass="textBox" runat="server"></asp:TextBox>
                     </div>
                 </td>
                 
@@ -24,7 +24,7 @@
                 <td class="lbl">Email Address:</td>
                 <td>
                     <div class="medium-top-inner-gap">
-                        <asp:TextBox ID="TextBox2" CssClass="textBox" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="txtEmail" CssClass="textBox" runat="server"></asp:TextBox>
                     </div>
                 </td>
             </tr>
@@ -35,20 +35,21 @@
                         <div class="textBox flex-center-center phone-container">
                             <div class="phone-prefix">(601)</div>
                             <div><asp:TextBox ID="PhoneNo" CssClass="phone-subcontainer textBox-custom" runat="server" placeholder="Phone No" MaxLength="16"></asp:TextBox></div>
-                            <div><asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="PhoneNo" ErrorMessage="Phone No is required.">*</asp:RequiredFieldValidator></div>
+                            <div></div>
                         </div>
                     </div>
                     
                 </td>
             </tr>
             <tr>
-                <td class="lbl">Country:</td>
+                <td class="lbl">Country: <asp:Button ID="BtnDefAddress" CssClass="textBox" runat="server" Text="Select default address" Font-Underline="True" OnClick="BtnDefAddress_Click" ViewStateMode="Enabled" /></td>
                 <td>
                     <div class="medium-top-inner-gap">
-                        <asp:DropDownList ID="DropDownList1" CssClass="textBox" runat="server">
+                        <asp:DropDownList ID="ddlCountry" CssClass="textBox" runat="server">
                             <asp:ListItem>--Select Country--</asp:ListItem>
                             <asp:ListItem>Malaysia</asp:ListItem>
                         </asp:DropDownList>
+                        <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToValidate="ddlCountry" ErrorMessage="Please select a country." Operator="NotEqual" ValueToCompare="0"></asp:CompareValidator>
                     </div>
                 </td>
             </tr>
@@ -56,7 +57,7 @@
                 <td class="lbl">State:</td>
                 <td>
                     <div class="medium-top-inner-gap">
-                        <asp:DropDownList ID="DropDownList2" CssClass="textBox" runat="server">
+                        <asp:DropDownList ID="ddlState" CssClass="textBox" runat="server">
                             <asp:ListItem>--Select State--</asp:ListItem>
                             <asp:ListItem>Johor</asp:ListItem>
                             <asp:ListItem>Kedah</asp:ListItem>
@@ -75,6 +76,7 @@
                             <asp:ListItem>Labuan</asp:ListItem>
                             <asp:ListItem>Putrajaya</asp:ListItem>
                         </asp:DropDownList>
+                        <asp:CompareValidator ID="CompareValidator2" runat="server" ControlToValidate="ddlState" ErrorMessage="Please select a state." Operator="NotEqual" ValueToCompare="0"></asp:CompareValidator>
                     </div>
                 </td>
             </tr>
@@ -82,9 +84,10 @@
                 <td class="lbl">City:</td>
                 <td>
                     <div class="medium-top-inner-gap">
-                        <asp:DropDownList ID="DropDownList3" CssClass="textBox" runat="server">
+                        <asp:DropDownList ID="ddlCity" CssClass="textBox" runat="server">
                             <asp:ListItem>--Select City--</asp:ListItem>
                         </asp:DropDownList>
+                        <asp:CompareValidator ID="CompareValidator3" runat="server" ControlToValidate="ddlCity" ErrorMessage="Please select a city." Operator="NotEqual" ValueToCompare="0"></asp:CompareValidator>
                     </div>
                 </td>
             </tr>
@@ -92,7 +95,9 @@
                 <td class="lbl">Zip Code:</td>
                 <td>
                      <div class="medium-top-inner-gap">
-                         <asp:TextBox ID="TextBox4" CssClass="textBox" runat="server"></asp:TextBox>
+                         <asp:TextBox ID="txtZip" CssClass="textBox" runat="server"></asp:TextBox>
+                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtZip" ErrorMessage="Require to fill in."></asp:RequiredFieldValidator>
+                         <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="txtZip" ErrorMessage="Must have 5 digit value" ValidationExpression="\d{5}"></asp:RegularExpressionValidator>
                     </div>
                 </td>
             </tr>
@@ -100,7 +105,8 @@
                 <td class="lbl">Address:</td>
                 <td>
                      <div class="medium-top-inner-gap">
-                         <asp:TextBox ID="TextBox6" CssClass="textBox" runat="server"></asp:TextBox>
+                         <asp:TextBox ID="txtAddress" CssClass="textBox" runat="server"></asp:TextBox>
+                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtAddress" ErrorMessage="Require to fill in."></asp:RequiredFieldValidator>
                     </div>
                 </td>
             </tr>
@@ -108,7 +114,8 @@
                 <td class="lbl">Business/Company Name:</td>
                 <td>
                      <div class="medium-top-inner-gap">
-                         <asp:TextBox ID="TextBox7" CssClass="textBox" runat="server"></asp:TextBox>
+                         <asp:TextBox ID="txtBusiness" CssClass="textBox" runat="server"></asp:TextBox>
+                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtBusiness" ErrorMessage="Require to fill in."></asp:RequiredFieldValidator>
                     </div>
                 </td>
             </tr>
@@ -116,7 +123,7 @@
                 <td class="lbl">Merchant ID (optional):</td>
                 <td>
                      <div class="medium-top-inner-gap">
-                         <asp:TextBox ID="TextBox8" CssClass="textBox" runat="server"></asp:TextBox>
+                         <asp:TextBox ID="txtMerchant" CssClass="textBox" runat="server"></asp:TextBox>
                     </div>
                     
                 </td>
@@ -129,6 +136,9 @@
                 </td>
             </tr>
         </table>
+            <div id="errorMsg" style="display:none" runat="server">
+                    <asp:Label ID="lblErrorMsg" runat="server" Text="" Visible="false"></asp:Label>
+                </div>
         </div>
         
     </div>

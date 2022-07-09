@@ -15,7 +15,7 @@
     <form id="form1" runat="server">
         <div class="content-container-signUp">
             <div class="content-subcontainer-signUp">
-                <asp:Login ID="Login1" runat="server" OnLoggedIn="Login1_LoggedIn">
+                <asp:Login ID="Login1" runat="server" OnLoggedIn="Login1_LoggedIn" OnLoginError="Login1_LoginError">
             <LayoutTemplate>
                 <table cellpadding="1" cellspacing="0" style="border-collapse:collapse;">
                     <tr>
@@ -27,13 +27,13 @@
                                 <tr>
                                     <td class="medium-bottom-inner-gap" align="right">
                                         <asp:TextBox ID="UserName" runat="server" CssClass="textBox" placeholder="  username">  </asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName" ErrorMessage="User Name is required." ToolTip="User Name is required." ValidationGroup="Login1">*</asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName" ErrorMessage="User Name is required." ForeColor="Red" ToolTip="User Name is required." ValidationGroup="Login1">*</asp:RequiredFieldValidator>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="medium-bottom-inner-gap" align="right">
                                         <asp:TextBox ID="Password" runat="server" CssClass="textBox" placeholder="  password" TextMode="Password">  </asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password" ErrorMessage="Password is required." ToolTip="Password is required." ValidationGroup="Login1">*</asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password" ErrorMessage="Password is required." ForeColor="Red" ToolTip="Password is required." ValidationGroup="Login1">*</asp:RequiredFieldValidator>
                                     </td>
                                 </tr>
                                 <tr>

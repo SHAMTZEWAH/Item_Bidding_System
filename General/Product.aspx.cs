@@ -56,7 +56,8 @@ namespace Item_Bidding_System.General
         {
             //ViewState[];
             //var filterControl = new Control();
-            //filterControl = (SideMenuFilter)Page.Master.NamingContainer.FindControl("SideMenu");
+            //filterControl = Page.Master.FindControl("SideMenu");
+            //filterControl = filterControl.FindControl("SideMenuFilter.ascx");
             //DropDownList ddlSelect = (DropDownList)(filterControl as SideMenuFilter).NamingContainer.FindControl("radioSelect");
             //// change index
             //if (ViewState["selection"] != null)

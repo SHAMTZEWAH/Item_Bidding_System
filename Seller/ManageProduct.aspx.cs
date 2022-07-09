@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -19,17 +21,39 @@ namespace Item_Bidding_System.Seller
             if (!IsPostBack)
             {
                 getConnection();
-                btnCreateStore.Attributes["onclick"] = ClientScript.GetPostBackEventReference(this, "clickDiv");
+                
+            }
+            btnCreateStore.Attributes["onclick"] = ClientScript.GetPostBackEventReference(this, "clickDiv");
 
-                int subStoreCount = 0;
-                subStoreCount = getSubStoreCount();
-                for (int i = 1; i <= subStoreCount; i++)
+            DataTable subStore = getActiveSubStore();
+            int subStoreCount = getActiveSubStore().Rows.Count;
+            try
+            {
+                for (int i = 0; i < subStoreCount; i++)
                 {
-                    addBtnControl(i);
+                    string subStoreName = subStore.Rows[i].ItemArray[0].ToString();
+                    subStoreName = subStoreName.Trim();
+                    subStoreName = subStoreName.Replace("SubStore", "");
+
+                    int subStoreNum = 0;
+                    subStoreNum = Convert.ToInt32(subStoreName);
+
+                    addBtnControl(subStoreNum);
                 }
             }
+            catch (Exception ex)
+            {
+                Label lblFooter = (Label)Repeater1.FindControl("lblNoData");
+                if (lblFooter != null)
+                {
+                    lblFooter.Visible = true;
+                    lblFooter.Text = ex.Message.ToString();
+                }
+            }
+                
         }
 
+        //load the product
         void getConnection()
         {
             string username = User.Identity.Name;
@@ -80,6 +104,7 @@ namespace Item_Bidding_System.Seller
             }
         }
 
+        //bid price in product drop down list
         void connectBiddingDDL(string productName, DropDownList ddlBid)
         {
             //create connection
@@ -152,13 +177,41 @@ namespace Item_Bidding_System.Seller
         //Event for create substore button
         protected void btnCreateStore_Click()
         {
-            int subStoreCount = getSubStoreCount();
-            addBtnControl(subStoreCount);
-            updateSubStoreCount(subStoreCount);
+            DataTable dtInactive = getInactiveSubStore(); //dt for inactive
+            string subStoreName = "";
+            int subStoreNum = 0;
+            int totalSubStore = getSubStoreCount();
 
-            for (int i = 1; i <= subStoreCount; i++)
+            if (dtInactive.Rows.Count > 0)
             {
-                addBtnControl(i);
+                //update to active
+                subStoreName = dtInactive.Rows[0].ItemArray[0].ToString();
+                subStoreName = subStoreName.Trim().Replace("SubStore", "");
+                subStoreNum = Convert.ToInt32(subStoreName);
+                updateSubStoreStatus(subStoreNum, "Active");
+            }
+            else
+            {
+                try
+                {
+                    int subStoreCount = getSubStoreCount();
+
+                    //update database
+                    addSubStore(subStoreCount);
+
+                    //add UI control
+                    addBtnControl(subStoreCount + 1);
+                }
+                catch(Exception ex)
+                {
+                    Label lblFooter = (Label)Repeater1.FindControl("lblNoData");
+                    if (lblFooter != null)
+                    {
+                        lblFooter.Visible = true;
+                        lblFooter.Text = ex.Message.ToString();
+                    }
+                }
+                
             }
         }
 
@@ -191,13 +244,16 @@ namespace Item_Bidding_System.Seller
 
             //prepare command
             SqlCommand cmdRetrieve;
-            string query = "SELECT COUNT(SubStore.subStoreId) AS SubStoreCount FROM Seller, Account, SubStore WHERE Account.accId = Seller.accId AND Seller.sellerId = SubStore.sellerId AND Account.username = @username";
+            string query = "SELECT COUNT(SubStore.subStoreId) AS SubStoreCount FROM Seller, Account, SubStore " +
+                "WHERE Account.accId = Seller.accId AND Seller.sellerId = SubStore.sellerId AND Account.username = @username " +
+                "AND Account.email = @email";
 
             try
             {
                 con.Open();
                 cmdRetrieve = new SqlCommand(query, con);
                 cmdRetrieve.Parameters.AddWithValue("@username", User.Identity.Name);
+                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
                 subStoreCount = (int)cmdRetrieve.ExecuteScalar();
             }
             catch (NullReferenceException ex)
@@ -218,7 +274,93 @@ namespace Item_Bidding_System.Seller
             return subStoreCount;
         }
 
-        //get seller id
+        //return substore that is active
+        DataTable getActiveSubStore()
+        {
+            int subStoreCount = 0;
+            DataTable dt = new DataTable(); 
+
+            //create connection
+            SqlConnection con;
+            SqlDataAdapter cmdRetrieve;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command
+            string query = "SELECT SubStore.subStoreName AS SubStoreCount FROM Seller, Account, SubStore " +
+                "WHERE Account.accId = Seller.accId AND Seller.sellerId = SubStore.sellerId AND Account.username = @username AND Account.email = @email " +
+                "AND SubStore.subStoreStatus = 'Active'";
+
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlDataAdapter(query, con);
+                cmdRetrieve.SelectCommand.Parameters.AddWithValue("@username", User.Identity.Name);
+                cmdRetrieve.SelectCommand.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                cmdRetrieve.Fill(dt);
+            }
+            catch (NullReferenceException ex)
+            {
+                Label lblFooter = (Label)Repeater1.FindControl("lblNoData");
+                if (lblFooter != null)
+                {
+                    lblFooter.Visible = true;
+                    lblFooter.Text = ex.Message.ToString();
+                }
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+            return dt;
+        }
+
+        //return substore that is inactive
+        DataTable getInactiveSubStore()
+        {
+            int subStoreCount = 0;
+            DataTable dt = new DataTable();
+
+            //create connection
+            SqlConnection con;
+            SqlDataAdapter cmdRetrieve;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command
+            string query = "SELECT SubStore.subStoreName AS SubStoreCount FROM Seller, Account, SubStore " +
+                "WHERE Account.accId = Seller.accId AND Seller.sellerId = SubStore.sellerId AND Account.username = @username AND Account.email = @email " +
+                "AND SubStore.subStoreStatus = 'Inactive'";
+
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlDataAdapter(query, con);
+                cmdRetrieve.SelectCommand.Parameters.AddWithValue("@username", User.Identity.Name);
+                cmdRetrieve.SelectCommand.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                cmdRetrieve.Fill(dt);
+            }
+            catch (NullReferenceException ex)
+            {
+                Label lblFooter = (Label)Repeater1.FindControl("lblNoData");
+                if (lblFooter != null)
+                {
+                    lblFooter.Visible = true;
+                    lblFooter.Text = ex.Message.ToString();
+                }
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+            return dt;
+        }
+
+        //Get seller id
         string getSellerId()
         {
             string sellerId = "";
@@ -258,8 +400,8 @@ namespace Item_Bidding_System.Seller
             return sellerId;
         }
 
-        //update substore
-        void updateSubStoreCount(int subStoreCount)
+        //Add substore into database
+        void addSubStore(int subStoreCount)
         {
             SqlConnection con;
             string strCon;
@@ -288,8 +430,62 @@ namespace Item_Bidding_System.Seller
                 con.Open();
                 cmdRetrieve = new SqlCommand(query, con);
                 cmdRetrieve.Parameters.AddWithValue("@subStoreId", subStoreId);
-                cmdRetrieve.Parameters.AddWithValue("@subStoreName", "SubStore " + subStoreCount.ToString());
+                cmdRetrieve.Parameters.AddWithValue("@subStoreName", "SubStore" + (subStoreCount+1).ToString());
                 cmdRetrieve.Parameters.AddWithValue("@sellerId", getSellerId());
+                cmdRetrieve.ExecuteNonQuery();
+            }
+            catch (NullReferenceException ex)
+            {
+                Label lblFooter = (Label)Repeater1.FindControl("lblNoData");
+                if (lblFooter != null)
+                {
+                    lblFooter.Visible = true;
+                    lblFooter.Text = ex.Message.ToString();
+                }
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        } //total subStore
+
+        void updateSubStoreStatus(int subStoreNum, string status)
+        {
+            string strCon;
+            SqlConnection con;
+            string subStoreId = "";
+            string subStoreName = "";
+            string username = "";
+            string sellerId = "";
+
+            //create connection
+
+            strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command
+            SqlCommand cmdRetrieve;
+            string queryGetSellerId = "SELECT Seller.sellerId FROM Seller INNER JOIN " +
+                "Account ON Seller.accId = Account.accId " +
+                "WHERE Account.username = @name AND Account.email = @email";
+            //remove one of the substore
+            string query = "UPDATE SubStore SET SubStore.subStoreStatus = @status WHERE SubStore.SubStoreName = @storeName AND SubStore.sellerId = @sellerId";
+
+            try
+            {
+                username = User.Identity.Name;
+                con.Open();
+                cmdRetrieve = new SqlCommand(queryGetSellerId, con);
+                cmdRetrieve.Parameters.AddWithValue("@name", username);
+                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                sellerId = (string)cmdRetrieve.ExecuteScalar();
+
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("status", status);
+                cmdRetrieve.Parameters.AddWithValue("@storeName", ("SubStore"+subStoreNum));
+                cmdRetrieve.Parameters.AddWithValue("@sellerId", sellerId);
                 cmdRetrieve.ExecuteNonQuery();
             }
             catch (NullReferenceException ex)
@@ -312,17 +508,18 @@ namespace Item_Bidding_System.Seller
         //Create substore button
         void addBtnControl(int subStoreCount)
         {
-            //div container
+            //div container for one substore button
             HtmlGenericControl createDiv = new HtmlGenericControl("DIV");
-            createDiv.ID = "createDiv";
+            createDiv.ID = "createDiv" + subStoreCount.ToString();
             createDiv.Attributes["class"] += "flex-row ";
             createDiv.Attributes["class"] += "small-right-gap";
-            SubStoreCon.Controls.Add(createDiv);
+
+            SubStoreCon.Controls.Add(createDiv);         
 
             //substore button
             Button btnSubStore = new Button();
-            btnSubStore.ID = "btnSubStore";
-            btnSubStore.Text = "SubStore " + subStoreCount.ToString();
+            btnSubStore.ID = "btnSubStore" + subStoreCount.ToString();
+            btnSubStore.Text = "SubStore" + subStoreCount.ToString();
             btnSubStore.CssClass += "btn-medium-lightgray ";
             btnSubStore.CssClass += "marginless";
             btnSubStore.Click += (sender, e) =>
@@ -334,7 +531,7 @@ namespace Item_Bidding_System.Seller
 
             //cancel button
             ImageButton btnCancel = new ImageButton();
-            btnCancel.ID = "btnCancel";
+            btnCancel.ID = "btnCancel" + subStoreCount.ToString();
             btnCancel.ImageUrl = "https://cdn.pixabay.com/photo/2012/04/12/20/12/x-30465_960_720.png";
             btnCancel.CssClass += "small-image ";
             btnCancel.CssClass += "cancel-container";
@@ -343,18 +540,107 @@ namespace Item_Bidding_System.Seller
                 btnCancel_Click(sender, e);
             };
             createDiv.Controls.Add(btnCancel);
+
         }
-        
+
 
         //Each substore event
         void btnSubStore_Click(Object sender, EventArgs e)
         {
+            string username = "";
+            string sellerId = "";
+            string subStoreName = "";
+            Button btnSubStore;
 
+            //load database
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+
+            //prepare command
+            SqlCommand cmdRetrieve;
+            string queryGetSellerId = "SELECT Seller.sellerId FROM Seller INNER JOIN " +
+                "Account ON Seller.accId = Account.accId " +
+                "WHERE Account.username = @name AND Account.email = @email";
+            //remove one of the substore
+            string query = "SELECT ProductPhoto.productPhotoURL, ProductDetails.productName, MAX(BidTable.bidPrice) AS Bid, FixedPriceProduct.productPrice, Product.productStock " +
+                "FROM ProductPhoto INNER JOIN " +
+                "Product ON ProductPhoto.productId = Product.productId INNER JOIN " +
+                "BidTable ON Product.productId = BidTable.productId INNER JOIN " +
+                "ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId INNER JOIN " +
+                "FixedPriceProduct ON Product.productId = FixedPriceProduct.productId INNER JOIN " +
+                "SubStore ON Product.subStoreId = SubStore.subStoreId INNER JOIN " +
+                "Seller ON Substore.sellerId = Seller.sellerId INNER JOIN " +
+                "Account ON Account.accId = Seller.accId " +
+                "WHERE Seller.sellerId = @sellerId AND SubStore.subStoreName = @storeName " +
+                "GROUP BY Product.addDateTime, ProductPhoto.productPhotoURL, ProductDetails.productName, FixedPriceProduct.productPrice, Product.productStock " +
+                "ORDER BY Product.addDateTime ";
+
+            //get which substore have been chosen
+            btnSubStore = (Button)sender;
+            subStoreName = btnSubStore.Text;
+
+            try
+            {
+                //get sellerId
+                username = User.Identity.Name;
+                con.Open();
+                cmdRetrieve = new SqlCommand(queryGetSellerId, con);
+                cmdRetrieve.Parameters.AddWithValue("@name", username);
+                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                sellerId = (string)cmdRetrieve.ExecuteScalar();
+
+                //get product
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@sellerId", sellerId);
+                cmdRetrieve.Parameters.AddWithValue("@storeName", subStoreName);
+                SqlDataReader reader = cmdRetrieve.ExecuteReader();
+                Repeater1.DataSource = reader;
+                Repeater1.DataBind();
+                
+            }
+            catch (NullReferenceException ex)
+            {
+                Label lblFooter = (Label)Repeater1.FindControl("lblNoData");
+                if (lblFooter != null)
+                {
+                    lblFooter.Visible = true;
+                    lblFooter.Text = ex.Message.ToString();
+                }
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
         }
 
         //Remove substore event
         void btnCancel_Click(Object sender, EventArgs e)
         {
+            //remove one of the substore from database
+            string username = "";
+            string sellerId = "";
+            string subStoreName = "";
+            int subStoreNum = 0;
+            int subStoreNameLen = 0;
+
+            //get which substore have been chosen
+            ImageButton btnCancel = (ImageButton)sender;
+            string btnCancelId = btnCancel.ClientID;
+            subStoreName = btnCancelId.Trim();
+
+            subStoreNameLen = subStoreName.Length-1;
+            int i = 0;
+            int.TryParse(subStoreName[subStoreNameLen - i].ToString(), out i);
+            subStoreNum = Convert.ToInt32(i);
+            //btnCancel.Parent;
+
+            //update status
+            updateSubStoreStatus(subStoreNum, "Inactive");
 
         }
 

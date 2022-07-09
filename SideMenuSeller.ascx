@@ -14,6 +14,9 @@
             <a class="side-menu" href="">Manage Product</a> <!--Url to monitor product page-->
         </div>
         <div class="side-menu-item">
+            <a class="side-menu" href="">Response Offer</a> <!--Url to monitor product page-->
+        </div>
+        <div class="side-menu-item">
             <a class="side-menu" href="">Sales Summary</a> <!--Url to monitor product page-->
         </div>
         <div class="side-menu-item">

@@ -19,7 +19,7 @@
                     <td class="lbl">Username:</td>
                     <td>
                         <div class="content-adjust">
-                            <asp:TextBox ID="TextBox1" CssClass="textBox" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="txtUsername" CssClass="textBox" runat="server"></asp:TextBox>
                         </div>
                     </td>
                 </tr>
@@ -27,7 +27,7 @@
                     <td class="lbl">Email:</td>
                     <td>
                         <div class="content-adjust">
-                            <asp:TextBox ID="TextBox2" CssClass="textBox" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="txtEmail" CssClass="textBox" runat="server"></asp:TextBox>
                         </div>
                     </td>
                 </tr>
@@ -37,14 +37,14 @@
                         <div class="content-adjust">
                             <div class="textBox flex-center-center phone-container">
                                 <div class="phone-prefix">(601)</div>
-                                <div><asp:TextBox ID="PhoneNo" CssClass="phone-subcontainer textBox-custom" runat="server" placeholder="Phone No" MaxLength="16"></asp:TextBox></div>
-                                <div><asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="PhoneNo" ErrorMessage="Phone No is required.">*</asp:RequiredFieldValidator></div>
+                                <div><asp:TextBox ID="txtPhoneNo" CssClass="phone-subcontainer textBox-custom" runat="server" placeholder="Phone No" MaxLength="16" OnTextChanged="txtPhoneNo_TextChanged"></asp:TextBox></div>
+                                <div><asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtPhoneNo" ErrorMessage="Phone No is required.">*</asp:RequiredFieldValidator></div>
                             </div>
                         </div>
                         
                     </td>
                 </tr>
-                <tr>
+                    <tr>
                     <td class="lbl">Gender:</td>
                     <td>
                         <div class="content-adjust">
@@ -64,17 +64,29 @@
                     </td>
                 </tr>
             </table>
+                <div id="errorMsg" style="display:none" runat="server">
+                    <asp:Label ID="lblErrorMsg" runat="server" Text="" Visible="false"></asp:Label>
+                </div>
             </div>
             <div class="right-container">
                 <div class="image-container">
-                <!--<asp:Image src="" ID="Image1" runat="server" />-->
-                    <asp:Button ID="btnChange" runat="server" CssClass="btn-large-golden" Text="Change Image" />
+                    <div>
+                        <asp:Image src='<% Eval("") %>' ID="Image1" runat="server" />
+                    </div>
+                    <div>
+                        <asp:Button ID="btnChange" runat="server" CssClass="btn-large-golden" Text="Change Image" OnClick="btnChange_Click" />
+                    </div>
+                    <div>Or</div>
+                    <div>
+                        <div><asp:TextBox ID="txtImageUrl" runat="server"></asp:TextBox></div>
+                        <div><asp:Button ID="btnSubmitURL" runat="server" Text="Button" /></div>
+                    </div>
                 </div>
             </div>
             
         </div>
         <div class="btn-container">
-                <asp:Button ID="btnSave" CssClass="btn-small-golden" runat="server" Text="Save" />
+                <asp:Button ID="btnSave" CssClass="btn-small-golden" runat="server" Text="Save" OnClick="btnSave_Click" />
             </div>
     </div>
 </asp:Content>

@@ -15,76 +15,7 @@ namespace Item_Bidding_System.General
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
-        }
-
-        protected void CreateUserWizard1_CreatedUser(object sender, EventArgs e)
-        {
-            //send email to the user
-            sendEmail("Tzewah1234@gmail.com", "Create Account Confirmation", "You have created your account successfully. Please click on the link here for confirmation! ");
-
-            TextBox username = (TextBox)CreateUserWizard1.FindControl("UserName");
-            TextBox password = (TextBox)CreateUserWizard1.FindControl("Password");
-
-            //create a token in cookie
-            HttpCookie loginCookie = new HttpCookie("loginToken");
-            loginCookie.Value = "Login Success";
-            loginCookie.Expires = DateTime.Now.AddDays(1);
-            Response.Cookies.Add(loginCookie);
-
-            loginCookie = new HttpCookie("username");
-            loginCookie.Value = username.Text;
-            loginCookie.Expires = DateTime.Now.AddDays(1);
-            Response.Cookies.Add(loginCookie);
-
-
-            TextBox email = (TextBox)CreateUserWizard1.FindControl("Email");
-            TextBox phoneNo = (TextBox)CreateUserWizard1.FindControl("PhoneNo");
-            createUserAcc(username.Text, email.Text, phoneNo.Text);
-
-            //set cookie authentication
-            //FormsAuthentication.SetAuthCookie(username.Text, true);
-            //FormsAuthentication.RedirectFromLoginPage(username.Text, true);
-        }
-
-        bool checkEmailExistance(string email)
-        {
-            bool exist = false;
-            //create connection
-            SqlConnection con;
-            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            con = new SqlConnection(strCon);
-
-            //prepare command 
-            SqlCommand cmdRetrieve;
-            string query = "SELECT COUNT(Account.accId) FROM Account WHERE Account.email = @email";
-
-            //execute
-            int count = 0;
-            try
-            {
-                con.Open();
-                cmdRetrieve = new SqlCommand(query, con);
-                count = (int)cmdRetrieve.ExecuteScalar();
-                if (count > 0)
-                {
-                    exist = true;
-                }
-
-            }
-            catch (NullReferenceException ex)
-            {
-                string alertMsg = "[!] The action is unable to complete: " + ex.ToString();
-                string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
-            }
-            finally
-            {
-                con.Close();
-                con.Dispose();
-            }
-
-            return exist;
+            
         }
         int getAccCount()
         {
@@ -168,8 +99,8 @@ namespace Item_Bidding_System.General
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string query = "INSERT INTO Account(accId, username, email, phoneNo, createDateTime, accPhotoURL, accStatus, accBalance, userId, addressId) " +
-                "VALUES(@id, @name, @email, @phone, CONVERT(DATETIME, GETDATE(), 120), @photo, @status, @balance, @userId, @addressId)";
+            string query = "INSERT INTO Account(accId, username, email, phoneNo, createDateTime, accPhotoURL, accStatus, accBalance, userId) " +
+                "VALUES(@id, @name, @email, @phone, CONVERT(DATETIME, GETDATE(), 120), @photo, @status, @balance, @userId)";
             
             //execute
             try
@@ -200,7 +131,6 @@ namespace Item_Bidding_System.General
                 cmdRetrieve.Parameters.AddWithValue("@status", "Unconfirm");
                 cmdRetrieve.Parameters.AddWithValue("@balance", 0.00);
                 cmdRetrieve.Parameters.AddWithValue("@userId", userId);
-                cmdRetrieve.Parameters.AddWithValue("@addressId", "");
                 cmdRetrieve.ExecuteNonQuery();
             }
             catch (NullReferenceException ex)
@@ -239,7 +169,7 @@ namespace Item_Bidding_System.General
                         };
                         smtp.EnableSsl = true;
                         smtp.Send(mail);
-
+                        
                     }
                 }
             }
@@ -260,19 +190,101 @@ namespace Item_Bidding_System.General
 
         protected void CreateUserWizard1_CreatingUser(object sender, LoginCancelEventArgs e)
         {
-            var control = (Control)sender;
-            TextBox txtEmail = (TextBox)control.NamingContainer.FindControl("Email");
-            bool emailExist = checkEmailExistance(txtEmail.Text);
-            if(emailExist == true)
-            {
-                CreateUserWizard1.InstructionText = "Duplicate email address. Please use another email.";
-                e.Cancel = true;
-            }
+            
         }
 
-        protected void CustomValidator1_ServerValidate(object source, ServerValidateEventArgs args)
+        protected void CreateUserWizard1_CreatedUser1(object sender, EventArgs e)
+        {
+            //send email to the user
+            sendEmail("Tzewah1234@gmail.com", "Create Account Confirmation", "You have created your account successfully. Please click on the link here for confirmation! ");
+
+            //get username and password text from the user wizard
+            CreateUserWizardStep step = (CreateUserWizardStep)(sender as CreateUserWizard).FindControl("CreateUserWizardStep1");
+            TextBox username = (TextBox)step.ContentTemplateContainer.FindControl("UserName");
+            //TextBox password = (TextBox)step.ContentTemplateContainer.FindControl("Password");
+
+            //create a token in cookie
+            HttpCookie loginCookie = new HttpCookie("loginToken");
+            loginCookie.Value = "Login Success";
+            loginCookie.Expires = DateTime.Now.AddDays(1);
+            Response.Cookies.Add(loginCookie);
+
+            loginCookie = new HttpCookie("username");
+            loginCookie.Value = username.Text;
+            loginCookie.Expires = DateTime.Now.AddDays(1);
+            Response.Cookies.Add(loginCookie);
+
+
+            TextBox email = (TextBox)step.ContentTemplateContainer.FindControl("Email");
+            TextBox phoneNo = (TextBox)step.ContentTemplateContainer.FindControl("PhoneNo");
+            createUserAcc(username.Text, email.Text, phoneNo.Text);
+
+            string wizardUsername = (sender as CreateUserWizard).UserName;
+            Roles.AddUserToRole(wizardUsername, "Customer");
+
+            //string alertMsg = "[!] Error in sending email. Please try again.";
+            //string script = "<script type=\"text/javascript\">alert('" + "created user" + "');</script>";
+            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
+
+            //set cookie authentication
+            //FormsAuthentication.SetAuthCookie(username.Text, true);
+            //FormsAuthentication.RedirectFromLoginPage(username.Text, true);
+        }
+
+        protected void CustomValidator2_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            //check email whether is exist alr
+            try
+            {
+                string username = Membership.GetUserNameByEmail(args.Value.ToString());
+                if (username.Equals(null) == true) //if username is not empty, means email exist, not valid email
+                {
+                    args.IsValid = false; //trigger validator
+                }
+                else //username is empty, means email doesnt exist, valid email
+                {
+                    args.IsValid = true; //does not trigger validator
+                }
+            }
+            catch(Exception ex)
+            {
+                args.IsValid = true;
+            }
+            
+        }
+
+        protected void Email_TextChanged(object sender, EventArgs e)
         {
 
+            
+            
+        }
+
+        bool checkEmailExistance(string email)
+        {
+            bool exist = false;
+            //execute
+
+            try
+            {
+                //Get username by email
+                string username = Membership.GetUserNameByEmail(email);
+
+                //check for email existance
+                if (username != String.Empty)
+                {
+                    exist = true;
+                }
+
+            }
+            catch (NullReferenceException ex)
+            {
+                string alertMsg = "[!] The action is unable to complete: " + ex.ToString();
+                string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
+            }
+
+            return exist;
         }
     }
 }

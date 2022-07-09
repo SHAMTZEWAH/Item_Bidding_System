@@ -70,6 +70,7 @@
     <Content Include="Admin\ManageAccount.aspx" />
     <Content Include="Admin\ManageComplaint.aspx" />
     <Content Include="Admin\ManageProduct.aspx" />
+    <Content Include="Admin\WebCrawler.aspx" />
     <Content Include="App_Data\ItemBidDB.mdf" />
     <Content Include="App_Data\ItemBidDB_log.ldf">
       <DependentUpon>ItemBidDB.mdf</DependentUpon>
@@ -92,6 +93,7 @@
     <Content Include="Seller\ManageOrder.aspx" />
     <Content Include="Seller\ManageProduct.aspx" />
     <Content Include="Seller\OrderList.ascx" />
+    <Content Include="Seller\ResponseOffer.aspx" />
     <Content Include="Seller\SalesSummary.aspx" />
     <Content Include="Seller\UploadProduct.aspx" />
     <Content Include="SideMenu.css" />
@@ -129,6 +131,13 @@
     </Compile>
     <Compile Include="Admin\ManageProduct.aspx.designer.cs">
       <DependentUpon>ManageProduct.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\WebCrawler.aspx.cs">
+      <DependentUpon>WebCrawler.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\WebCrawler.aspx.designer.cs">
+      <DependentUpon>WebCrawler.aspx</DependentUpon>
     </Compile>
     <Compile Include="ErrorPage.aspx.cs">
       <DependentUpon>ErrorPage.aspx</DependentUpon>
@@ -228,6 +237,13 @@
     </Compile>
     <Compile Include="Seller\OrderList.ascx.designer.cs">
       <DependentUpon>OrderList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Seller\ResponseOffer.aspx.cs">
+      <DependentUpon>ResponseOffer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Seller\ResponseOffer.aspx.designer.cs">
+      <DependentUpon>ResponseOffer.aspx</DependentUpon>
     </Compile>
     <Compile Include="Seller\SalesSummary.aspx.cs">
       <DependentUpon>SalesSummary.aspx</DependentUpon>
@@ -331,7 +347,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Themes\Theme1\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
