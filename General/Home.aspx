@@ -8,7 +8,9 @@
 
 
 <div class="week-new-text">Today's New</div>
-
+    <div>
+        View More
+    </div>
 <div class="slideshow-big-container"> <!--include dot and button -->
     <div class="slideshow-container"> <!--exclude dot-->
         <div id="slideSubcontainer" class="slide-only-container"> <!--exclude previous, next button-->
