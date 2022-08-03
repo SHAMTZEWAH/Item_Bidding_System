@@ -105,6 +105,7 @@
     <Content Include="TopMenu.ascx" />
     <Content Include="TopMenuCategory.ascx" />
     <Content Include="TopMenuGeneral.ascx" />
+    <Content Include="TopMenuSeller.ascx" />
     <Content Include="User\AccountManagement.aspx" />
     <Content Include="User\SellerRegistration.aspx" />
     <Content Include="User\Watchlist.aspx" />
@@ -314,6 +315,13 @@
     </Compile>
     <Compile Include="TopMenuGeneral.ascx.designer.cs">
       <DependentUpon>TopMenuGeneral.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="TopMenuSeller.ascx.cs">
+      <DependentUpon>TopMenuSeller.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TopMenuSeller.ascx.designer.cs">
+      <DependentUpon>TopMenuSeller.ascx</DependentUpon>
     </Compile>
     <Compile Include="User\AccountManagement.aspx.cs">
       <DependentUpon>AccountManagement.aspx</DependentUpon>

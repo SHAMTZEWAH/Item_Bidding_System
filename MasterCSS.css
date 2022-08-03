@@ -260,7 +260,8 @@ flex-item:hover { /*Hover red*/
 
 .btn-signUp:hover, .btn-login:hover, .btnSave:hover, .btn-register:hover, .btn-filter:hover,
 .btn-filter:hover, .btn-upload-product:hover, .btnCreateStore:hover,
-.btnAddCart:hover, .btnView:hover, .btnRemove:hover, .btnHover:hover, .btn-medium-golden-custom:hover{ /*Hover respond (Sign up page)*/
+.btnAddCart:hover, .btnView:hover, .btnRemove:hover, .btnHover:hover, .btn-medium-golden-custom:hover
+.btn-small-red-custom:hover, .btn-small-blue-custom:hover{ /*Hover respond (Sign up page)*/
     opacity: 0.8;
 }
 /*Button*/
@@ -347,7 +348,7 @@ flex-item:hover { /*Hover red*/
     margin-top: 5px;
 }
 
-.btn-medium-blue { /*product page*/
+.btn-medium-blue-custom { /*product page*/
     border: 1px solid lightskyblue;
     border-radius: 4px;
     background-color: lightskyblue;
@@ -358,6 +359,34 @@ flex-item:hover { /*Hover red*/
     cursor: pointer;
     margin: auto;
     width: 40%;
+    margin-top: 5px;
+}
+
+.btn-small-blue-custom { /*manage complaint*/
+    border: 1px solid blue;
+    border-radius: 4px;
+    background-color: blue;
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    padding: 10px 5px;
+    cursor: pointer;
+    margin: auto;
+    margin-left: 0px;
+    margin-top: 5px;
+}
+
+.btn-small-red-custom { /*manage account*/
+    border: 1px solid red;
+    border-radius: 4px;
+    background-color: red;
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    padding: 10px 5px;
+    cursor: pointer;
+    margin: auto;
+    margin-left: 0px;
     margin-top: 5px;
 }
 
@@ -494,6 +523,12 @@ flex-item:hover { /*Hover red*/
 
 ::placeholder {
     color: #AAAAAA;
+}
+
+.text-break{
+    max-width: 100px;
+    white-space: pre-line;
+    word-break: break-word;
 }
 
 /*Image*/

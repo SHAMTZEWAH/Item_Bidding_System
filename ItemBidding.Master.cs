@@ -65,6 +65,8 @@ namespace Item_Bidding_System
         string PageControl_TopLogin(string path)
         {
             string ctrlPath = "";
+            string[] roles = Roles.GetRolesForUser();
+
             if (path.Contains("General") == false)
             {
                 ctrlPath = "/TopMenu.ascx";
@@ -75,9 +77,14 @@ namespace Item_Bidding_System
             }
             else 
             {
+                //if the current user is logged in
                 if ((System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
                 {
                     ctrlPath = "/TopMenu.ascx";
+                }
+                else if (roles.Contains("Seller") == true)
+                {
+                    ctrlPath = "/TopMenuSeller.ascx";
                 }
                 else
                 {

@@ -8,10 +8,12 @@
 
 
 <div class="week-new-text">Today's New</div>
-    <div>
-        View More
-    </div>
+    
 <div class="slideshow-big-container"> <!--include dot and button -->
+    <div style="align-self: flex-end;">
+        <a href="Product.aspx?category=Today's Hot">View More</a>
+
+    </div>
     <div class="slideshow-container"> <!--exclude dot-->
         <div id="slideSubcontainer" class="slide-only-container"> <!--exclude previous, next button-->
             <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound" OnItemCommand="Repeater1_ItemCommand" DataSourceID="SqlDataSource1">

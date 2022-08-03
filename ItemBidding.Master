@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="ItemBidding.master.cs" Inherits="Item_Bidding_System.ItemBidding" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="ItemBidding.master.cs" Inherits="Item_Bidding_System.ItemBidding" EnableViewState="True" %>
 
 <!DOCTYPE html>
 
@@ -15,7 +15,8 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div id="TopLoginMenu" runat="server"></div>
+        <div class="bg-color">
+            <div id="TopLoginMenu" runat="server"></div>
         <!--row 1-->
         <div class="flex-container-top flex-subcontainer-top"> 
             <div class="flex-subcontainer-top" onclick="location.href='/General/Home.aspx'">
@@ -34,6 +35,8 @@
         </div>
         <!--row 2-->
         <div id="TopCategory" class="bg-color" runat="server"></div>
+        </div>
+        
 
         <!--row 3-->
         <div class="master-content-container"><!--Adjust-->
