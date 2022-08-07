@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,8 @@ namespace Item_Bidding_System.Admin
 {
     public partial class ManageAccount : System.Web.UI.Page
     {
+        //private DataSet dtSet;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -20,6 +23,8 @@ namespace Item_Bidding_System.Admin
             }
             
         }
+
+        
 
         void loadData()
         {
@@ -45,6 +50,8 @@ namespace Item_Bidding_System.Admin
             try
             {
                 con.Open();
+
+                //get suitable query
                 if(Request.QueryString["filter"] != null)
                 {
                     cmdRetrieve = new SqlCommand(queryFilter, con);
@@ -53,13 +60,13 @@ namespace Item_Bidding_System.Admin
                 }
                 else
                 {
-                   
                     cmdRetrieve = new SqlCommand(query, con);
                 }
-                
-                SqlDataReader reader = cmdRetrieve.ExecuteReader();
-                userGrid.DataSource = reader;
+
+                //execute query 
+                userGrid.DataSource = cmdRetrieve.ExecuteReader();
                 userGrid.DataBind();
+
             }
             catch (NullReferenceException ex)
             {
@@ -74,6 +81,114 @@ namespace Item_Bidding_System.Admin
             }
         }
 
+        string[] getSubStoreId(string username, string email)
+        {
+            string[] subStoreIdList = { };
+            int count = 0;
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT SubStore.subStoreId " +
+                "FROM SubStore INNER JOIN " +
+                "Seller ON SubStore.sellerId = Seller.sellerId INNER JOIN " +
+                "Account ON Account.accId = Seller.accId " +
+                "WHERE Account.username = @username AND Account.email = @email";
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@username", username);
+                cmdRetrieve.Parameters.AddWithValue("@email", email);
+                SqlDataReader reader = cmdRetrieve.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        subStoreIdList[count] = reader["subStoreId"].ToString();
+                        ++count;
+                    }
+                }
+                
+            }
+            catch (NullReferenceException ex)
+            {
+                lblNoData.Visible = true;
+                lblNoData.Text = ex.Message.ToString();
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+            return subStoreIdList;
+        }
+
+        void deactivateProduct(string username, string email)
+        {
+            //deactivate the product
+
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "UPDATE Product SET productStatus = @status WHERE subStoreId = @subStoreId";
+
+            //execute
+            try
+            {
+                con.Open();
+                string[] subStoreList = getSubStoreId(username, email);
+
+                foreach (string subStore in subStoreList)
+                {
+                    cmdRetrieve = new SqlCommand(query, con);
+                    cmdRetrieve.Parameters.AddWithValue("@subStoreId", subStore);
+                    cmdRetrieve.ExecuteNonQuery();
+                }
+            }
+            catch (NullReferenceException ex)
+            {
+                lblNoData.Visible = true;
+                lblNoData.Text = ex.Message.ToString();
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        protected void userGrid_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                //get hidden field that store role
+                var hfRole = (HiddenField)e.Row.FindControl("hfRole");
+
+                //assign roles into the ddlRoles
+                var ddlRoles = e.Row.FindControl("ddlRoles") as DropDownList;
+                ddlRoles.DataSource = Roles.GetAllRoles();
+                ddlRoles.DataBind();
+
+                //update the selected ddlRoles value
+                ddlRoles.SelectedValue = hfRole.Value;
+            }
+        }
+
         protected void RadioButtonList1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (RadioButtonList1.SelectedValue == "accId" ||
@@ -85,52 +200,50 @@ namespace Item_Bidding_System.Admin
             }
         }
 
-        protected void chkHeader_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void RadioButtonList1_SelectedIndexChanged1(object sender, EventArgs e)
-        {
-
-        }
-
         protected void ddlRoles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DropDownList ddlRoles = (DropDownList)sender;
-            int index = ddlRoles.SelectedIndex;
-            string value = ddlRoles.SelectedValue;
-            this.Session["roleName"] = value;
-        }
+            //DataTable dt = dtSet.Tables["Account"];
 
-        protected void userGrid_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
+            //get accId control
+            //var accIdControl = (Label)userGrid.NamingContainer.FindControl("accId");
 
-        }
+            //get username control
+            var usernameControl = ((GridViewRow)((Control)sender).NamingContainer).FindControl("username") as Label;
 
-        protected void userGrid_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
+            //get email control
+            var emailControl = ((GridViewRow)((Control)sender).NamingContainer).FindControl("email") as Label;
 
-        }
+            //get hidden field
+            var hiddenFieldRole = ((GridViewRow)((Control)sender).NamingContainer).FindControl("hfRole") as HiddenField;
 
-        protected void userGrid_RowEditing(object sender, GridViewEditEventArgs e)
-        {
+            //get selected role from (ddlRoles)
+            var ddlRoles = (DropDownList)sender;
 
-        }
 
-        protected void userGrid_RowUpdating(object sender, GridViewUpdateEventArgs e)
-        {
+            try 
+            {
+                string[] roles = Roles.GetRolesForUser(usernameControl.Text);
+                foreach (string role in roles)
+                {
+                    if(role == "Seller")
+                    {
+                        //deactivate all of the product own by this user
+                        deactivateProduct(usernameControl.Text, emailControl.Text);
+                    }
+                }
 
-        }
+                //update to the hidden field
+                hiddenFieldRole.Value = ddlRoles.SelectedValue;
 
-        protected void userGrid_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
-        {
-
-        }
-
-        protected void userGrid_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+                //update database
+                Roles.AddUserToRole(usernameControl.Text, ddlRoles.SelectedValue);
+            }
+            catch(Exception ex)
+            {
+                lblNoData.Visible = true;
+                lblNoData.Text = ex.Message.ToString();
+            }
+            
         }
 
         protected void roleSubmitBtn_Click(object sender, EventArgs e)
@@ -206,5 +319,39 @@ namespace Item_Bidding_System.Admin
                 con.Dispose();
             }
         }
+
+
+        /*Useless Function*/
+        protected void chkHeader_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void userGrid_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+
+        }
+
+        protected void userGrid_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+
+        }
+
+        protected void userGrid_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+
+        }
+
+        protected void userGrid_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+
+        }
+
+        protected void userGrid_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
 }

@@ -27,7 +27,7 @@
                     <asp:ListItem Value="addDateTime">Recently added</asp:ListItem>
                     <asp:ListItem Value="productName">Product Name</asp:ListItem>
                     <asp:ListItem Value="productBrand">Brand</asp:ListItem> 
-                    <asp:ListItem Value="productName">Product Name</asp:ListItem> 
+                    <asp:ListItem Value="productModel">Product Model</asp:ListItem> 
                     <asp:ListItem Value="businessName">BusinessName</asp:ListItem>                     
                 </asp:RadioButtonList>
             </div>
@@ -40,8 +40,7 @@
                 <asp:GridView ID="userGrid" runat="server" class="role-display"  CellPadding="4" ForeColor="Black" GridLines="Horizontal" Width="1250px" AllowSorting="True" AutoGenerateColumns="False" Height="147px" OnRowDataBound="userGrid_RowDataBound" OnRowDeleting="userGrid_RowDeleting" OnRowEditing="userGrid_RowEditing" OnRowUpdating="userGrid_RowUpdating" OnRowCancelingEdit="userGrid_RowCancelingEdit" OnSelectedIndexChanged="userGrid_SelectedIndexChanged">
                 
                 <Columns>
-                    <asp:CommandField ShowEditButton="True" />
-                    <asp:TemplateField Visible = "False">
+                    <asp:TemplateField>
                         <HeaderTemplate>
                             <asp:CheckBox ID = "chkHeader" runat="server" OnCheckedChanged="chkHeader_CheckedChanged"/>
                         </HeaderTemplate>
@@ -57,7 +56,7 @@
                             <asp:Label ID = "lblproductId" runat="server" Text="Product Id"></asp:Label>
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <div><%# Eval("productId") %></div>
+                            <asp:Label ID="lblProductIdContent" runat="server" Text='<%# Eval("productId") %>'></asp:Label>
                         </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
@@ -68,7 +67,9 @@
                         </HeaderTemplate>
                         <ItemTemplate>
                             <div id="productPhoto">
-                                <asp:ImageButton ID="imgProductPhoto" onclick="ImageButton1_Click" runat="server" />
+                                <asp:ImageButton ID="imgProductPhoto" onclick="ImageButton1_Click" runat="server" OnDataBinding="imgProductPhoto_DataBinding" />
+                                <asp:HiddenField ID="hfProductPhotoURL" Value='<%# Eval("productPhotoURL") %>' runat="server" />
+                                <asp:HiddenField ID="hfProductPhoto" Value='<%# Eval("productPhoto") %>' runat="server" />
                             </div>
                         </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
@@ -79,7 +80,7 @@
                             <asp:Label ID = "lblProductName" runat="server" Text="Product Name"></asp:Label>
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <div id="username"><%# Eval("productName") %></div>
+                            <asp:Label ID="lblProductNameContent" runat="server" Text='<%# Eval("productName") %>'></asp:Label>
                         </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
@@ -89,7 +90,7 @@
                             <asp:Label ID = "lblDateTime" runat="server" Text="Added Date Time"></asp:Label>
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <div><%# Eval("addDateTime") %></div>
+                            <asp:Label ID="lblAddDateTimeContent" runat="server" Text='<%# Eval("addDateTime") %>'></asp:Label>
                         </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
@@ -99,7 +100,7 @@
                             <asp:Label ID = "lblProductBrand" runat="server" Text="Brand"></asp:Label>
                         </HeaderTemplate>
                          <ItemTemplate>
-                             <div><%# Eval("productBrand") %></div>
+                             <asp:Label ID="lblBrandContent" runat="server" Text='<%# Eval("productBrand") %>'></asp:Label>
                          </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
@@ -109,7 +110,7 @@
                             <asp:Label ID = "lblProductModel" runat="server" Text="Model"></asp:Label>
                         </HeaderTemplate>
                          <ItemTemplate>
-                             <div><%# Eval("productModel") %></div>
+                             <asp:Label ID="lblModelContent" runat="server" Text='<%# Eval("productModel") %>'></asp:Label>
                          </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
@@ -119,7 +120,7 @@
                             <asp:Label ID = "lblBusinessName" runat="server" Text="Business Name"></asp:Label>
                         </HeaderTemplate>
                          <ItemTemplate>
-                             <div><%# Eval("businessName") %></div>
+                             <asp:Label ID="lblBusinessNameContent" runat="server" Text='<%# Eval("businessName") %>'></asp:Label>
                          </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
@@ -130,24 +131,31 @@
                         </HeaderTemplate>
                         <ItemTemplate>
                             <div>
-                                <asp:Button ID="btnFlag" CssClass="btn-medium-red" runat="server" Text="Flag" onclick="btnFlag_Click"/>
+                                <div>
+                                    <label class="switch" runat="server">
+                                        <asp:CheckBox ID="CheckBox1" type="checkbox" runat="server" OnCheckedChanged="CheckBox1_CheckedChanged" Text="" AutoPostBack="True" Checked="False" ViewStateMode="Inherit" TextAlign="Right" ClientIDMode="Static" EnableViewState="True" />
+                                        <span id="btnToggleRound" class="slider round" runat="server"></span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <div>
+                                        <asp:Label ID="lblProductContent" runat="server" Text='<%#  Eval("productStatus") %>'></asp:Label>
+                                    </div>
+                                </div>
+                                
                             </div>
                         </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
+                    <asp:TemplateField ItemStyle-HorizontalAlign="Right" FooterStyle-HorizontAlalign="Right" FooterStyle-BackColor="Blue" FooterStyle-ForeColor="White">
+                        <FooterTemplate>
+                            <asp:Button ID="btnFlag" CssClass="btn-small-golden" runat="server" Text="Flag" />
+                        </FooterTemplate>
 
-                    <asp:TemplateField>
-                        <HeaderTemplate>
-                            
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <div>
-                                <asp:Button ID="btnUnflag" CssClass="btn-small-blue" runat="server" Text="Unflag" onclick="btnUnflag_Click"/>
-                            </div>
-                        </ItemTemplate>
-                        <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+<FooterStyle HorizontalAlign="Right" BackColor="Blue" ForeColor="White"></FooterStyle>
+
+<ItemStyle HorizontalAlign="Right"></ItemStyle>
                     </asp:TemplateField>
-                    
                 </Columns>
                 
                 <FooterStyle BackColor="#CCCC99" ForeColor="Black" />

@@ -87,6 +87,7 @@
     <Content Include="General\SignUpPage.aspx" />
     <Content Include="General\SlideShow.css" />
     <Content Include="MasterCSS.css" />
+    <Content Include="Seller\CreateProduct.aspx" />
     <Content Include="Seller\EditProduct.aspx" />
     <Content Include="Seller\EditProductDetails.ascx" />
     <Content Include="Seller\ManageFinance.aspx" />
@@ -197,6 +198,13 @@
       <DependentUpon>ItemBidding.Master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seller\CreateProduct.aspx.cs">
+      <DependentUpon>CreateProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Seller\CreateProduct.aspx.designer.cs">
+      <DependentUpon>CreateProduct.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Seller\EditProduct.aspx.cs">
       <DependentUpon>EditProduct.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -238,6 +246,9 @@
     </Compile>
     <Compile Include="Seller\OrderList.ascx.designer.cs">
       <DependentUpon>OrderList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Seller\ProcessPhoto.ashx.cs">
+      <DependentUpon>ProcessPhoto.ashx</DependentUpon>
     </Compile>
     <Compile Include="Seller\ResponseOffer.aspx.cs">
       <DependentUpon>ResponseOffer.aspx</DependentUpon>
@@ -348,6 +359,7 @@
   <ItemGroup>
     <Content Include="ItemBidding.Master" />
     <None Include="packages.config" />
+    <Content Include="Seller\ProcessPhoto.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -357,6 +369,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Themes\Theme1\" />
+    <Folder Include="Images\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

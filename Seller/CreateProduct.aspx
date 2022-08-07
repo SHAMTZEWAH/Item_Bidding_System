@@ -1,5 +1,8 @@
-﻿ <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EditProductDetails.ascx.cs" Inherits="Item_Bidding_System.Seller.EditProductDetails" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/ItemBidding.Master" AutoEventWireup="true" CodeBehind="CreateProduct.aspx.cs" Inherits="Item_Bidding_System.Seller.CreateProduct" %>
 
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
 <link type="text/css" rel="stylesheet" href="../MasterCSS.css" />
 <link type="text/css" rel="stylesheet" href="../Content.css" />
 
@@ -15,7 +18,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:TextBox ID="txtProdName" CssClass="textBox" runat="server" OnTextChanged="txtProdName_TextChanged"></asp:TextBox>
+                            <asp:TextBox ID="txtProdName" CssClass="textBox" runat="server"></asp:TextBox>
                         </div>
                         <div>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="Please enter the product name." ControlToValidate="txtProdName" ValidationGroup="ProductDetails">*</asp:RequiredFieldValidator>
@@ -29,7 +32,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:DropDownList ID="ddlProdCategory" CssClass="textBox" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlProdCategory_SelectedIndexChanged">
+                            <asp:DropDownList ID="ddlProdCategory" CssClass="textBox" runat="server" AutoPostBack="True">
                                 <asp:ListItem Value="-1">--Select Category--</asp:ListItem>
                                 <asp:ListItem Value="Fashion Apparel">Fashion Apparel</asp:ListItem>
                                 <asp:ListItem Value="Artworks">Artworks</asp:ListItem>
@@ -50,7 +53,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:TextBox ID="txtType" CssClass="textBox" runat="server" placeholder="eg. Toys, Watches,..." ToolTip="eg. Watch, Toys, Stamps" OnTextChanged="txtType_TextChanged"></asp:TextBox>
+                            <asp:TextBox ID="txtType" CssClass="textBox" runat="server" placeholder="eg. Toys, Watches,..." ToolTip="eg. Watch, Toys, Stamps"></asp:TextBox>
                         </div>
                         <div>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Please enter the type of the product." ValidationGroup="ProductDetails" Text="*" ControlToValidate="txtType"></asp:RequiredFieldValidator>
@@ -63,7 +66,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:TextBox ID="txtBrand" CssClass="textBox" runat="server" ToolTip='Enter "No Brand" if don&apos;t have' OnTextChanged="txtBrand_TextChanged"></asp:TextBox>
+                            <asp:TextBox ID="txtBrand" CssClass="textBox" runat="server" ToolTip='Enter "No Brand" if don&apos;t have'></asp:TextBox>
                         </div>
                         <div>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="Please enter product brand." Text="*" ValidationGroup="ProductDetails" ControlToValidate="txtBrand"></asp:RequiredFieldValidator>
@@ -76,7 +79,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:TextBox ID="txtModel" CssClass="textBox" runat="server" ToolTip='Enter "No Model" if don&apos;t have' OnTextChanged="txtModel_TextChanged"></asp:TextBox>
+                            <asp:TextBox ID="txtModel" CssClass="textBox" runat="server" ToolTip='Enter "No Model" if don&apos;t have'></asp:TextBox>
                         </div>
                         <div>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="Please enter product model" ControlToValidate="txtModel" Enabled="True" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
@@ -131,6 +134,7 @@
                     
                     <div>
                         <!--display image-->
+                        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
                         <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
                             <ContentTemplate>
                                 <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound">
@@ -145,7 +149,6 @@
                             <Triggers>
                                 <asp:AsyncPostBackTrigger ControlId="btnSubmitPhoto" EventName="Click"/>
                                 <asp:AsyncPostBackTrigger ControlID="btnSubmitURL" EventName="Click" />
-                                <asp:AsyncPostBackTrigger ControlID="btnRemoveImg" EventName="Click" />
                             </Triggers>
                         </asp:UpdatePanel>
                         
@@ -157,7 +160,7 @@
                 <td class="lbl">SubStore:</td>
                 <td>
                     <div class="medium-top-inner-gap">
-                            <asp:DropDownList ID="ddlSubStore" CssClass="textBox" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSubStore_SelectedIndexChanged">
+                            <asp:DropDownList ID="ddlSubStore" CssClass="textBox" runat="server" AutoPostBack="True">
                             </asp:DropDownList>
                     </div>
                     <div>
@@ -169,7 +172,7 @@
                 <td class="lbl">Description:</td>
                 <td>
                      <div class="medium-top-inner-gap">
-                         <asp:TextBox ID="txtDesc" CssClass="textBox" runat="server" OnTextChanged="txtDesc_TextChanged"></asp:TextBox>
+                         <asp:TextBox ID="txtDesc" CssClass="textBox" runat="server"></asp:TextBox>
                     </div>
                 </td>
             </tr>
@@ -182,7 +185,7 @@
                 <td class="lbl">Selling Format:</td>
                 <td>
                     <div class="medium-top-inner-gap">
-                        <asp:CheckBoxList ID="chkSellOption" CssClass="textBox" runat="server" Enabled="False" OnSelectedIndexChanged="chkSellOption_SelectedIndexChanged">
+                        <asp:CheckBoxList ID="chkSellOption" CssClass="textBox" runat="server">
                             <asp:ListItem Value="FixedPrice">Fixed Price</asp:ListItem>
                             <asp:ListItem Value="OpenBidAuction">Open Bid Auction</asp:ListItem>
                             <asp:ListItem Value="SealedBidAuction">Sealed Bid Auction</asp:ListItem>
@@ -196,7 +199,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:DropDownList ID="ddlDuration" CssClass="textBox" runat="server" OnSelectedIndexChanged="ddlDuration_SelectedIndexChanged">
+                            <asp:DropDownList ID="ddlDuration" CssClass="textBox" runat="server">
                                 <asp:ListItem Value="-1 ">--Select Duration--</asp:ListItem>
                                 <asp:ListItem Value="1 ">1 days</asp:ListItem>
                                 <asp:ListItem Value="3 ">3 days</asp:ListItem>
@@ -215,7 +218,7 @@
                 <td class="lbl">Fixed Price:</td>
                 <td>
                     <div class="medium-top-inner-gap">
-                         <asp:TextBox ID="txtFixedPrice" CssClass="textBox" runat="server" ToolTip="The selling price which accepted by the seller" OnTextChanged="txtFixedPrice_TextChanged"></asp:TextBox>
+                         <asp:TextBox ID="txtFixedPrice" CssClass="textBox" runat="server" ToolTip="The selling price which accepted by the seller"></asp:TextBox>
                     </div>
                     <div>
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="Please enter digit and maximum 1 dot only." Enabled="false" ControlToValidate="txtFixedPrice" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
@@ -228,7 +231,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:TextBox ID="txtStartPrice" CssClass="textBox" runat="server" OnTextChanged="txtStartPrice_TextChanged"></asp:TextBox>
+                            <asp:TextBox ID="txtStartPrice" CssClass="textBox" runat="server"></asp:TextBox>
                         </div>
                         <div>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="Please enter digit and maximum 1 dot only." Enabled="false" ControlToValidate="txtStartPrice" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
@@ -241,7 +244,7 @@
                 <td id="reservePriceHeader" class="lbl" style="display:none;" runat="server">Reserve Price:</td>
                 <td>
                     <div id="reservePriceContainer" class="medium-top-inner-gap" style="display:none;" runat="server">
-                        <asp:TextBox ID="txtReservePrice" CssClass="textBox" runat="server" OnTextChanged="txtReservePrice_TextChanged"></asp:TextBox>
+                        <asp:TextBox ID="txtReservePrice" CssClass="textBox" runat="server"></asp:TextBox>
                     </div>
                 </td>
             </tr>
@@ -249,7 +252,7 @@
                 <td class="lbl" style="display:none;">Stock:</td>
                 <td>
                     <div class="medium-top-inner-gap" style="display:none;">
-                        <asp:TextBox ID="txtStock" CssClass="textBox" runat="server" OnTextChanged="txtStock_TextChanged"></asp:TextBox>
+                        <asp:TextBox ID="txtStock" CssClass="textBox" runat="server"></asp:TextBox>
                     </div>
                 </td>
             </tr>
@@ -301,5 +304,5 @@
     }
 
     
-</script>
-    
+    </script>
+    </asp:Content>
