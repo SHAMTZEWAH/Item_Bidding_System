@@ -94,14 +94,14 @@ namespace Item_Bidding_System.Seller
             SqlCommand cmdRetrieve;
             string query = "SELECT ProductPhoto.productPhotoURL, ProductDetails.productName, MAX(BidTable.bidPrice) AS Bid, FixedPriceProduct.productPrice, Product.productStock " +
                 "FROM ProductPhoto INNER JOIN " +
-                "Product ON ProductPhoto.productId = Product.productId INNER JOIN " +
+                "Product ON ProductPhoto.productId = Product.productId FULL JOIN " +
                 "BidTable ON Product.productId = BidTable.productId INNER JOIN " +
                 "ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId INNER JOIN " +
                 "FixedPriceProduct ON Product.productId = FixedPriceProduct.productId INNER JOIN " +
                 "SubStore ON Product.subStoreId = SubStore.subStoreId INNER JOIN " +
                 "Seller ON Substore.sellerId = Seller.sellerId INNER JOIN " +
                 "Account ON Account.accId = Seller.accId " +
-                "WHERE Account.username = @username AND Account.email = @email " +
+                "WHERE Account.username = @username AND Account.email = @email AND photoStatus = 'Main' " +
                 "GROUP BY Product.addDateTime, ProductPhoto.productPhotoURL, ProductDetails.productName, FixedPriceProduct.productPrice, Product.productStock " +
                 "ORDER BY Product.addDateTime ";
             
@@ -169,10 +169,13 @@ namespace Item_Bidding_System.Seller
                 con.Close();
                 con.Dispose();
             }
-            ddlBid.SelectedValue = ddlBid.Items[0].Value;
-            for (int i = 0; i < ddlBid.Items.Count; i++)
+            if (ddlBid.Items.Count > 0)
             {
-                ddlBid.Items[i].Text = String.Format("{0:0.00}",Double.Parse(ddlBid.Items[i].Text.ToString()));
+                ddlBid.SelectedValue = ddlBid.Items[0].Value;
+                for (int i = 0; i < ddlBid.Items.Count; i++)
+                {
+                    ddlBid.Items[i].Text = String.Format("{0:0.00}", Double.Parse(ddlBid.Items[i].Text.ToString()));
+                }
             }
         }
 
@@ -581,14 +584,14 @@ namespace Item_Bidding_System.Seller
             //remove one of the substore
             string query = "SELECT ProductPhoto.productPhotoURL, ProductDetails.productName, MAX(BidTable.bidPrice) AS Bid, FixedPriceProduct.productPrice, Product.productStock " +
                 "FROM ProductPhoto INNER JOIN " +
-                "Product ON ProductPhoto.productId = Product.productId INNER JOIN " +
+                "Product ON ProductPhoto.productId = Product.productId FULL JOIN " +
                 "BidTable ON Product.productId = BidTable.productId INNER JOIN " +
                 "ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId INNER JOIN " +
                 "FixedPriceProduct ON Product.productId = FixedPriceProduct.productId INNER JOIN " +
                 "SubStore ON Product.subStoreId = SubStore.subStoreId INNER JOIN " +
                 "Seller ON Substore.sellerId = Seller.sellerId INNER JOIN " +
                 "Account ON Account.accId = Seller.accId " +
-                "WHERE Seller.sellerId = @sellerId AND SubStore.subStoreName = @storeName " +
+                "WHERE Seller.sellerId = @sellerId AND SubStore.subStoreName = @storeName AND photoStatus = 'Main' " +
                 "GROUP BY Product.addDateTime, ProductPhoto.productPhotoURL, ProductDetails.productName, FixedPriceProduct.productPrice, Product.productStock " +
                 "ORDER BY Product.addDateTime ";
 
