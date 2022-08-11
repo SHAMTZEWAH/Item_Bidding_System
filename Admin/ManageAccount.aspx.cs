@@ -13,7 +13,7 @@ namespace Item_Bidding_System.Admin
 {
     public partial class ManageAccount : System.Web.UI.Page
     {
-        //private DataSet dtSet;
+        private DataSet dtSet;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -24,10 +24,66 @@ namespace Item_Bidding_System.Admin
             
         }
 
-        
+        //to store the photo temporarily before update into database
+
+        void createAccountTable()
+        {
+            DataTable dt = new DataTable("Account");
+            DataColumn dtColumn;
+
+            //create datatable
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "accId";
+            dtColumn.ReadOnly = false;
+            dtColumn.Unique = true;
+            dt.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "username";
+            dtColumn.ReadOnly = false;
+            dtColumn.Unique = true;
+            dt.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "email";
+            dtColumn.ReadOnly = false;
+            dtColumn.Unique = true;
+            dt.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "sellerStatus";
+            dtColumn.ReadOnly = false;
+            dtColumn.Unique = false;
+            dt.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "RoleName";
+            dtColumn.ReadOnly = false;
+            dtColumn.Unique = false;
+            dt.Columns.Add(dtColumn);
+
+            DataColumn[] PrimaryKeyColumns = new DataColumn[1];
+            PrimaryKeyColumns[0] = dt.Columns["accId"];
+            dt.PrimaryKey = PrimaryKeyColumns;
+
+            //create data set
+            dtSet = new DataSet();
+
+            //assign data table into data set
+            dtSet.Tables.Add(dt);
+        }
 
         void loadData()
         {
+            createAccountTable();
+            DataTable dt = dtSet.Tables["Account"];
+            DataColumn dtColumn;
+
             //create connection
             SqlConnection con;
             string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -35,15 +91,17 @@ namespace Item_Bidding_System.Admin
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string query = "SELECT Account.accId, Account.username, Account.email, aspnet_Roles.RoleName " +
+            string query = "SELECT Account.accId, Account.username, Account.email, Seller.sellerStatus, aspnet_Roles.RoleName " +
                 "FROM Account INNER JOIN " +
                 "aspnet_UsersInRoles ON Account.userId = aspnet_UsersInRoles.UserId INNER JOIN " +
-                "aspnet_Roles ON aspnet_Roles.RoleId = aspnet_UsersInRoles.RoleId " +
+                "aspnet_Roles ON aspnet_Roles.RoleId = aspnet_UsersInRoles.RoleId FULL JOIN " +
+                "Seller ON Seller.accId = Account.accId " +
                 "ORDER BY Account.createDateTime";
-            string queryFilter = "SELECT Account.accId, Account.username, Account.email, aspnet_Roles.RoleName " +
+            string queryFilter = "SELECT Account.accId, Account.username, Account.email, Seller.sellerStatus, aspnet_Roles.RoleName " +
                 "FROM Account INNER JOIN " +
                 "aspnet_UsersInRoles ON Account.userId = aspnet_UsersInRoles.UserId INNER JOIN " +
-                "aspnet_Roles ON aspnet_Roles.RoleId = aspnet_UsersInRoles.RoleId " +
+                "aspnet_Roles ON aspnet_Roles.RoleId = aspnet_UsersInRoles.RoleId FULL JOIN " +
+                "Seller ON Seller.accId = Account.accId " +
                 "ORDER BY @filter";
 
             //execute
@@ -64,7 +122,47 @@ namespace Item_Bidding_System.Admin
                 }
 
                 //execute query 
-                userGrid.DataSource = cmdRetrieve.ExecuteReader();
+                SqlDataReader reader = cmdRetrieve.ExecuteReader();
+
+                //remove multiple role acc
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        DataRow row = dt.NewRow();
+                        try
+                        { 
+                            row["accId"] = reader["accId"];
+                            row["username"] = reader["username"];
+                            row["email"] = reader["email"];
+                            row["sellerStatus"] = reader["sellerStatus"];
+                            row["RoleName"] = reader["RoleName"];
+                            dt.Rows.Add(row);
+                        }
+                        catch (Exception ex)
+                        {
+                            //get duplicate role
+                            string duplicateRole = reader["RoleName"].ToString();
+                            //var duplicates = dt.AsEnumerable().GroupBy(r => r[0]).Where(gr => gr.Count() > 1).ToList();
+                            
+                            //replace the role into the current existing row accId
+                            if(duplicateRole != "Customer")
+                            {
+                                for (int i = 0; i < dt.Rows.Count; i++)
+                                {
+                                    if (dt.Rows[i].Field<string>("accId") == reader["accId"].ToString())
+                                    {
+                                        dt.Rows[i].SetField("RoleName", duplicateRole);
+                                    }
+                                }
+                                dt.AcceptChanges();
+                            }
+                        }
+                        
+                    }
+                }
+
+                userGrid.DataSource = dt;
                 userGrid.DataBind();
 
             }
@@ -130,6 +228,246 @@ namespace Item_Bidding_System.Admin
                 con.Dispose();
             }
             return subStoreIdList;
+        }
+        string createSellerId()
+        {
+            string sellerId = "";
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT COUNT(sellerId) FROM Seller";
+            int count = 0;
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                count = (int)cmdRetrieve.ExecuteScalar();
+
+                if(count+1 > 9)
+                {
+                    sellerId = "s_0" + (count + 1);
+                }
+                else
+                {
+                    sellerId = "s_00" + (count + 1);
+                }
+
+            }
+            catch (NullReferenceException ex)
+            {
+                lblNoData.Visible = true;
+                lblNoData.Text = ex.Message.ToString();
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+
+            return sellerId;
+        }
+        string getAccId()
+        {
+            string accId = "";
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT accId FROM Account WHERE Account.username = @username AND Account.email = @email";
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@username", User.Identity.Name);
+                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                SqlDataReader reader = cmdRetrieve.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        accId = (string)reader["accId"];
+                    }
+                }
+
+            }
+            catch (NullReferenceException ex)
+            {
+                lblNoData.Visible = true;
+                lblNoData.Text = ex.Message.ToString();
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+            return accId;
+        }
+
+        int getSubStoreCount()
+        {
+            int subStoreCount = 0;
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT COUNT(subStoreId) FROM SubStore";
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                subStoreCount = (int)cmdRetrieve.ExecuteScalar();
+            }
+            catch (NullReferenceException ex)
+            {
+                lblNoData.Visible = true;
+                lblNoData.Text = ex.Message.ToString();
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+            return subStoreCount;
+        }
+
+        void createSellerData()
+        {
+            string accId = "";
+            int countSeller = 0;
+            string sellerId = "";
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT COUNT(sellerId) FROM Seller INNER JOIN " +
+                "Account ON Seller.accId = Account.accId " +
+                "WHERE Account.username = @username AND Account.email = @email";
+            string queryInsertSellerData = "INSERT INTO Seller(sellerId, limitPayout, merchantId, businessName, sellerStatus, accId) " +
+                "VALUES(@sellerId, 10000.00, NULL, @businessName, 'Confirm', @accId)";
+            string queryActivateSeller = "UPDATE Seller SET sellerStatus = @status WHERE accId = @accId";
+
+
+            //execute
+            try
+            {
+
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@username", User.Identity.Name);
+                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                countSeller = (int)cmdRetrieve.ExecuteScalar();
+                accId = getAccId();
+                sellerId = createSellerId();
+
+                if (countSeller < 1)
+                {
+                    //if dont have previous record, create new data
+                    cmdRetrieve = new SqlCommand(queryInsertSellerData, con);
+                    cmdRetrieve.Parameters.AddWithValue("@sellerId", sellerId);
+                    cmdRetrieve.Parameters.AddWithValue("@accId", accId);
+                    cmdRetrieve.Parameters.AddWithValue("@businessname", (User.Identity.Name + " Sdn. Bhd."));
+                    cmdRetrieve.ExecuteNonQuery();
+
+                    //create subStore
+                    createSubStoreData(sellerId);
+                }
+                else
+                {
+                    //if have previous record, activate it
+                    cmdRetrieve = new SqlCommand(queryActivateSeller, con);
+                    cmdRetrieve.Parameters.AddWithValue("@accId", accId);
+                    cmdRetrieve.ExecuteNonQuery();
+                }
+
+            }
+            catch (NullReferenceException ex)
+            {
+                lblNoData.Visible = true;
+                lblNoData.Text = ex.Message.ToString();
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        void createSubStoreData(string sellerId)
+        {
+            int subStoreCount = getSubStoreCount();
+            string subStoreId = "";
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "INSERT INTO SubStore(subStoreId, subStoreName, subStoreDescription, subStoreStatus, createDateTime, sellerId) " +
+                "VALUES(@subStoreId, @subStoreName, NULL, 'Active', CONVERT(DATETIME, GETDATE(), 120), @sellerId)";
+
+            //execute
+            try
+            {
+                
+
+                if (subStoreCount + 1 > 9)
+                {
+                    subStoreId = "ss_0" + (subStoreCount+1);
+                }
+                else
+                {
+                    subStoreId = "ss_00" + (subStoreCount+1);
+                }
+
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@subStoreId", subStoreId);
+                cmdRetrieve.Parameters.AddWithValue("@subStoreName", ("SubStore" + (subStoreCount+1)));
+                cmdRetrieve.Parameters.AddWithValue("@sellerId", sellerId);
+                cmdRetrieve.ExecuteNonQuery();
+
+            }
+            catch (NullReferenceException ex)
+            {
+                lblNoData.Visible = true;
+                lblNoData.Text = ex.Message.ToString();
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
         }
 
         void deactivateProduct(string username, string email)
@@ -219,16 +557,23 @@ namespace Item_Bidding_System.Admin
             //get selected role from (ddlRoles)
             var ddlRoles = (DropDownList)sender;
 
+            //get the current row index 
+            int index = ((GridViewRow)(ddlRoles.NamingContainer)).RowIndex;
 
             try 
             {
                 string[] roles = Roles.GetRolesForUser(usernameControl.Text);
+
                 foreach (string role in roles)
                 {
-                    if(role == "Seller")
+                    if (role == "Seller")
                     {
                         //deactivate all of the product own by this user
                         deactivateProduct(usernameControl.Text, emailControl.Text);
+                    }
+                    if (role != ddlRoles.SelectedValue)
+                    {
+                        Roles.RemoveUserFromRole(usernameControl.Text, role);
                     }
                 }
 
@@ -237,6 +582,13 @@ namespace Item_Bidding_System.Admin
 
                 //update database
                 Roles.AddUserToRole(usernameControl.Text, ddlRoles.SelectedValue);
+
+                //create seller data if new role is seller
+                if (ddlRoles.SelectedValue == "Seller")
+                {
+                    createSellerData();
+                }
+                loadData();
             }
             catch(Exception ex)
             {

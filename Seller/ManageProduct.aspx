@@ -19,7 +19,7 @@
                     <i class="bi bi-plus-circle-fill"></i>
                     <div class="filter-text">Upload New Products</div>
                 </div>
-                <div id="btnCreateStore" class="btn-create-store btn-medium-white btnCreateStore" runat="server" Onclick="btnSubStore_Click"> <!--Event at C#-->
+                <div id="btnCreateStore" class="btn-create-store btn-medium-white btnCreateStore" runat="server" Onclick="btnCreateStore_Click"> <!--Event at C#-->
                     <i class="bi bi-shop"></i>
                     <div class="">
                         <div>Create New Substore</div>

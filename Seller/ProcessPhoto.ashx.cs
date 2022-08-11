@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -13,14 +15,62 @@ namespace Item_Bidding_System.Seller
 
         public void ProcessRequest(HttpContext context)
         {
-            if(context.Request.QueryString["action"] == "create") //retreive from datatable
-            {
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
 
-            }
-            else if(context.Request.QueryString["action"] == "edit") //retrieve from database
-            {
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string queryAuctionProduct = "SELECT productPhoto FROM TempPhoto WHERE productPhoto IS NOT NULL";
 
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(queryAuctionProduct, con);
+                SqlDataReader reader = cmdRetrieve.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        try
+                        {
+                            if(reader["productPhoto"] != null)
+                            {
+                                context.Response.BinaryWrite((byte[])reader["productPhoto"]);
+                            }
+                            
+                        }
+                        catch (Exception ex)
+                        {
+                            //context.Response.BinaryWrite(new byte[0]);
+                            //context.Response.BinaryWrite();
+                            //HttpContext.Current.ApplicationInstance.CompleteRequest();
+                            continue;
+                        }
+                    }
+                }
+                
             }
+            catch (NullReferenceException ex)
+            {
+                context.Response.Redirect("/ErrorPage.aspx");
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+
+            //if (context.Request.QueryString["action"] == "create") //retreive from datatable
+            //{
+
+            //}
+            //else if(context.Request.QueryString["action"] == "edit") //retrieve from database
+            //{
+
+            //}
+
         }
 
         public bool IsReusable

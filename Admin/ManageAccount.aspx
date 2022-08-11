@@ -53,7 +53,7 @@
                 <asp:GridView ID="userGrid" runat="server" class="role-display"  CellPadding="4" ForeColor="Black" GridLines="Horizontal" Width="1000px" AllowSorting="True" AutoGenerateColumns="False" Height="147px" OnRowDataBound="userGrid_RowDataBound" OnRowDeleting="userGrid_RowDeleting" OnRowEditing="userGrid_RowEditing" OnRowUpdating="userGrid_RowUpdating" OnRowCancelingEdit="userGrid_RowCancelingEdit" OnSelectedIndexChanged="userGrid_SelectedIndexChanged">
                 
                 <Columns>
-                    <asp:CommandField ShowEditButton="True" />
+                    <asp:CommandField />
                     <asp:TemplateField Visible = "False">
                         <HeaderTemplate>
                             <asp:CheckBox ID = "chkHeader" runat="server" OnCheckedChanged="chkHeader_CheckedChanged"/>
@@ -94,6 +94,18 @@
                         </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
+
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <asp:Label ID = "lblSellerRole" runat="server" Text="Seller Registration Status"></asp:Label>
+                        </HeaderTemplate>
+                         <ItemTemplate>
+                             <div>
+                                 <asp:Label ID="sellerRole" runat="server" Text='<%# Eval("sellerStatus") == DBNull.Value?"NULL":Eval("sellerStatus") %>'></asp:Label>
+                             </div>
+                         </ItemTemplate>
+                        <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+                    </asp:TemplateField>
                         
                     <asp:TemplateField>
                         <HeaderTemplate>
@@ -109,7 +121,7 @@
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
 
-                    <asp:TemplateField>
+                    <asp:TemplateField Visible="False"  >
                         <HeaderTemplate>
                             
                         </HeaderTemplate>
@@ -121,7 +133,7 @@
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
 
-                    <asp:TemplateField>
+                    <asp:TemplateField Visible="False">
                         <HeaderTemplate>
                             
                         </HeaderTemplate>

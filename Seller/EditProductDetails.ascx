@@ -3,7 +3,8 @@
 <link type="text/css" rel="stylesheet" href="../MasterCSS.css" />
 <link type="text/css" rel="stylesheet" href="../Content.css" />
 
-
+    <asp:ScriptManager ID="ScriptManager2" runat="server" EnablePartialRendering="true">
+    </asp:ScriptManager>
          <div id="Title" class="title2-black-bold content-title" runat="server">Upload Product</div>
         <div>
             <asp:Label ID="lblMessage" CssClass="filter-content" runat="server" Text="*"></asp:Label></div>
@@ -102,7 +103,7 @@
                         </div>
                     </div>
                      <div id="insertURLContainer" class="displayLess medium-top-inner-gap">
-                         <!--Display upload url-->
+                         <!--Insert upload url-->
                          <div>Paste URL</div>
                          <div class="flex-flow flex-row">
                              <div>
@@ -116,7 +117,7 @@
                      <div id="uploadPhotoContainer" class="displayLess medium-top-inner-gap">
                          <div>Upload Images</div>
                          <div>
-                         <!--Display upload file-->
+                         <!--Insert upload file-->
                              <div>
                                  <asp:FileUpload ID="txtUploadPhoto" runat="server" AllowMultiple="True" />
                              </div>
@@ -133,19 +134,27 @@
                         <!--display image-->
                         <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
                             <ContentTemplate>
-                                <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound">
+                                <asp:DataList ID="DataList1" runat="server" RepeatDirection="Horizontal" RepeatColumns="3" >
                                     <ItemTemplate>
-                                        <div>
-                                            <asp:Image ID="Image1" runat="server" />
-                                            <asp:Button ID="btnRemoveImg" runat="server" Text="Remove" OnClick="btnRemoveImg_Click" />
+                                        <div class="flex-row small-top-gap" runat="server">
+                                            <div id="imgCon1" class="border-black flex-column" runat="server" visible='<%# !Eval("productPhotoURL").Equals(DBNull.Value)?true:false %>'>
+                                                <asp:Image ID="Image1" Width="200px" ImageUrl='<%# Eval("productPhotoURL") %>' runat="server" Height="100px" />
+                                                <asp:Button ID="btnRemoveImg1" cssClass="btn-small-lightgray" Width="110px"  runat="server" Text="Remove" OnClick="btnRemoveImg1_Click" />
+                                            </div>
+                                            <div id="imgCon2" class="border-black flex-column" runat="server" visible='
+                                                <%# !Eval("productPhoto").Equals(DBNull.Value) ?true:false %>'>
+                                                <asp:Image ID="Image2" Width="200px" ImageUrl="~/Seller/ProcessPhoto.ashx" runat="server" Height="100px" />
+                                                <asp:Button ID="btnRemoveImg2" cssClass="btn-small-lightgray" Width="110px"  runat="server" Text="Remove" OnClick="btnRemoveImg2_Click" />
+                                            </div>
+                                            
+                                            <asp:HiddenField ID="hfRow" Value='<%# Eval("productPhotoId") %>' runat="server" />
                                         </div>
                                     </ItemTemplate>
-                                </asp:Repeater>
+                                </asp:DataList>
                             </ContentTemplate>
                             <Triggers>
-                                <asp:AsyncPostBackTrigger ControlId="btnSubmitPhoto" EventName="Click"/>
-                                <asp:AsyncPostBackTrigger ControlID="btnSubmitURL" EventName="Click" />
-                                <asp:AsyncPostBackTrigger ControlID="btnRemoveImg" EventName="Click" />
+                                <asp:AsyncPostBackTrigger ControlId="btnSubmitURL" EventName="Click" />
+                                <asp:AsyncPostBackTrigger ControlId="btnSubmitPhoto" EventName="Click" />
                             </Triggers>
                         </asp:UpdatePanel>
                         
@@ -189,71 +198,81 @@
                         </asp:CheckBoxList>
                     </div>
                 </td>
-                
-            </tr>
-            <tr>
-                <td class="lbl">Selling Duration:</td> <!--Duration Purpose -->
-                <td>
-                    <div>
-                        <div class="medium-top-inner-gap">
-                            <asp:DropDownList ID="ddlDuration" CssClass="textBox" runat="server" OnSelectedIndexChanged="ddlDuration_SelectedIndexChanged">
-                                <asp:ListItem Value="-1 ">--Select Duration--</asp:ListItem>
-                                <asp:ListItem Value="1 ">1 days</asp:ListItem>
-                                <asp:ListItem Value="3 ">3 days</asp:ListItem>
-                                <asp:ListItem Value="5 ">5 days</asp:ListItem>
-                                <asp:ListItem Value="7 ">7 days</asp:ListItem>
-                                <asp:ListItem Value="10 ">10 days</asp:ListItem>
-                            </asp:DropDownList>
-                        </div>
-                        <div>
-                            <asp:CompareValidator ID="CompareValidator2" runat="server" ErrorMessage="Please select a duration" ControlToValidate="ddlDuration" Text="*" ValidationGroup="ProductDetails" Operator="NotEqual" ValueToCompare="-1"></asp:CompareValidator>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="lbl">Fixed Price:</td>
-                <td>
-                    <div class="medium-top-inner-gap">
-                         <asp:TextBox ID="txtFixedPrice" CssClass="textBox" runat="server" ToolTip="The selling price which accepted by the seller" OnTextChanged="txtFixedPrice_TextChanged"></asp:TextBox>
-                    </div>
-                    <div>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="Please enter digit and maximum 1 dot only." Enabled="false" ControlToValidate="txtFixedPrice" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
-                        <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" Enabled="false" ValidationGroup="ProductDetails" Text="*" ValidationExpression="^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\.[0-9]{2}$" ErrorMessage="Please enter digit only." ControlToValidate="txtFixedPrice"></asp:RegularExpressionValidator>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="lbl">Starting Price (for auction only):</td>
-                <td>
-                    <div>
-                        <div class="medium-top-inner-gap">
-                            <asp:TextBox ID="txtStartPrice" CssClass="textBox" runat="server" OnTextChanged="txtStartPrice_TextChanged"></asp:TextBox>
-                        </div>
-                        <div>
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="Please enter digit and maximum 1 dot only." Enabled="false" ControlToValidate="txtStartPrice" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
-                            <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" Enabled="false" ValidationGroup="ProductDetails" Text="*" ValidationExpression="^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\.[0-9]{2}$" ErrorMessage="Please enter digit only." ControlToValidate="txtStartPrice"></asp:RegularExpressionValidator>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-             <tr>
-                <td id="reservePriceHeader" class="lbl" style="display:none;" runat="server">Reserve Price:</td>
-                <td>
-                    <div id="reservePriceContainer" class="medium-top-inner-gap" style="display:none;" runat="server">
-                        <asp:TextBox ID="txtReservePrice" CssClass="textBox" runat="server" OnTextChanged="txtReservePrice_TextChanged"></asp:TextBox>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="lbl" style="display:none;">Stock:</td>
-                <td>
-                    <div class="medium-top-inner-gap" style="display:none;">
-                        <asp:TextBox ID="txtStock" CssClass="textBox" runat="server" OnTextChanged="txtStock_TextChanged"></asp:TextBox>
-                    </div>
-                </td>
             </tr>
         </table>
+            <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                    <Triggers>
+                        <asp:AsyncPostBackTrigger ControlID="chkSellOption" EventName="SelectedIndexChanged" />
+                    </Triggers>
+                    <ContentTemplate>
+                        <asp:Panel ID="Panel1" runat="server">
+                            <table style="width: 72%;">      
+                    <tr>
+                        <td class="lbl">Selling Duration:</td> <!--Duration Purpose -->
+                        <td>
+                            <div id="durationCon" runat="server">
+                                <div class="medium-top-inner-gap">
+                                    <asp:DropDownList ID="ddlDuration" CssClass="textBox" runat="server">
+                                        <asp:ListItem Value="-1 ">--Select Duration--</asp:ListItem>
+                                        <asp:ListItem Value="1 ">1 days</asp:ListItem>
+                                        <asp:ListItem Value="3 ">3 days</asp:ListItem>
+                                        <asp:ListItem Value="5 ">5 days</asp:ListItem>
+                                        <asp:ListItem Value="7 ">7 days</asp:ListItem>
+                                        <asp:ListItem Value="10 ">10 days</asp:ListItem>
+                                    </asp:DropDownList>
+                                </div>
+                                <div>
+                                    <asp:CompareValidator ID="CompareValidator3" runat="server" ErrorMessage="Please select a duration" ControlToValidate="ddlDuration" Text="*" ValidationGroup="ProductDetails" Operator="NotEqual" ValueToCompare="-1"></asp:CompareValidator>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="lbl">Fixed Price:</td>
+                        <td>
+                            <div class="medium-top-inner-gap">
+                                 <asp:TextBox ID="txtFixedPrice" CssClass="textBox" runat="server" ToolTip="The selling price which accepted by the seller"></asp:TextBox>
+                            </div>
+                            <div>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ErrorMessage="Please enter digit and maximum 1 dot only." Enabled="false" ControlToValidate="txtFixedPrice" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator4" runat="server" Enabled="false" ValidationGroup="ProductDetails" Text="*" ValidationExpression="^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\.[0-9]{2}$" ErrorMessage="Please enter digit only." ControlToValidate="txtFixedPrice"></asp:RegularExpressionValidator>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="lbl">Starting Price (for auction only):</td>
+                        <td>
+                            <div>
+                                <div class="medium-top-inner-gap">
+                                    <asp:TextBox ID="txtStartPrice" CssClass="textBox" runat="server"></asp:TextBox>
+                                </div>
+                                <div>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="Please enter digit and maximum 1 dot only." Enabled="false" ControlToValidate="txtStartPrice" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
+                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator5" runat="server" Enabled="false" ValidationGroup="ProductDetails" Text="*" ValidationExpression="^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\.[0-9]{2}$" ErrorMessage="Please enter digit only." ControlToValidate="txtStartPrice"></asp:RegularExpressionValidator>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td id="Td1" class="lbl" style="display:none;" runat="server">Reserve Price:</td>
+                        <td>
+                            <div id="Div1" class="medium-top-inner-gap" style="display:none;" runat="server">
+                                <asp:TextBox ID="txtReservePrice" CssClass="textBox" runat="server"></asp:TextBox>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="lbl" style="display:none;">Stock:</td>
+                        <td>
+                            <div class="medium-top-inner-gap" style="display:none;">
+                                <asp:TextBox ID="txtStock" CssClass="textBox" runat="server"></asp:TextBox>
+                            </div>
+                        </td>
+                    </tr>
+                        </table>
+                        </asp:Panel>
+                        </ContentTemplate>
+                </asp:UpdatePanel>
         </div>
         <div class="btn-container">
                 <asp:Button ID="btnConfirm" CssClass="btn-small-golden" runat="server" Text="Confirm" OnClick="btnConfirm_Click" />

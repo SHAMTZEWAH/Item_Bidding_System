@@ -18,20 +18,60 @@ namespace Item_Bidding_System.Seller
 {
     public partial class CreateProduct : System.Web.UI.Page
     {
-        //private DataSet dtSet;
+        private DataSet dtSet;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                createPhotoTable();
+                //Session["displayPhoto"] = 0;
                 assignSubStoreOption();
+                Panel1.Visible = false;
             }
-            foreach (RepeaterItem item in Repeater1.Items)
-            {
-                Button button = item.FindControl("btnRemoveImg") as Button;
-                ScriptManager.GetCurrent(Page).RegisterPostBackControl(button);
-            }
+            //foreach (RepeaterItem item in DataList1.Items)
+            //{
+            //    Button button = item.FindControl("btnRemoveImg") as Button;
+            //    ScriptManager.GetCurrent(Page).RegisterPostBackControl(button);
+            //}
+        }
 
+        //to store the photo temporarily before update into database
+        void createPhotoTable()
+        {
+            DataTable dt = new DataTable("Photo");
+            DataColumn col;
+
+            //create photoURL column
+            col = new DataColumn();
+            col.DataType = typeof(string);
+            col.ColumnName = "id";
+            col.Caption = "id";
+            col.ReadOnly = false;
+            col.Unique = true;
+            dt.Columns.Add(col);
+
+            //create photoURL column
+            col = new DataColumn();
+            col.DataType = typeof(string);
+            col.ColumnName = "productPhotoURL";
+            col.Caption = "photoURL";
+            col.ReadOnly = false;
+            col.Unique = false;
+            dt.Columns.Add(col);
+
+            //create photo column
+            col = new DataColumn();
+            col.DataType = typeof(byte[]);
+            col.ColumnName = "productPhoto";
+            col.Caption = "photo";
+            col.ReadOnly = false;
+            col.Unique = false;
+            dt.Columns.Add(col);
+
+            ////create data set
+            dtSet = new DataSet();
+
+            //assign data table into data set
+            dtSet.Tables.Add(dt);
         }
 
         void assignSubStoreOption()
@@ -68,7 +108,7 @@ namespace Item_Bidding_System.Seller
             }
             finally
             {
-                ddlSubStore.Items.Insert(0, new ListItem("--Select Category--", "-1"));
+                ddlSubStore.Items.Insert(0, new ListItem("--Select SubStore--", "-1"));
                 con.Close();
                 con.Dispose();
             }
@@ -252,188 +292,268 @@ namespace Item_Bidding_System.Seller
             return status;
         }//ok
 
-        //to store the photo temporarily before update into database
-        void createPhotoTable()
+        //retrieve photo and assign back to the data table
+        void getAllPhoto()
         {
-            DataTable dt = new DataTable("Photo");
-            DataColumn col;
 
-            //create photoURL column
-            col = new DataColumn();
-            col.DataType = typeof(string);
-            col.ColumnName = "photoURL";
-            col.Caption = "photoURL";
-            col.ReadOnly = false;
-            col.Unique = true;
-            dt.Columns.Add(col);
+            //get data table
+            DataTable dt = dtSet.Tables["Photo"];
 
-            //create photo column
-            col = new DataColumn();
-            col.DataType = typeof(byte[]);
-            col.ColumnName = "photo";
-            col.Caption = "photo";
-            col.ReadOnly = false;
-            col.Unique = true;
-            dt.Columns.Add(col);
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
 
-            //create data set
-            dtSet = new DataSet();
-
-            //assign data table into data set
-            dtSet.Tables.Add(dt);
-        }
-
-        //to get the photo URL from data table
-        string[] getAllProductPhotoURL()
-        {
-            string[] productPhotoURLContainer = { };
-            DataTable dt;
-
-            dt = dtSet.Tables["Photo"];
-            for (int i = 0; i < dt.Rows.Count; i++)
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT id,productPhoto, productPhotoURL FROM TempPhoto";
+             
+            //execute
+            try
             {
-                if (dt.Rows[i].Field<string>("photoURL") != null)
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                SqlDataReader reader = cmdRetrieve.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    productPhotoURLContainer[i] = dt.Rows[i].Field<string>("photoURL");
-                }
-            }
-
-            return productPhotoURLContainer;
-        }
-
-        //to get the photo from data table
-        byte[,] getAllProductPhoto()
-        {
-            byte[,] productPhotoContainer = { { } };
-            DataTable dt;
-
-            dt = dtSet.Tables["Photo"];
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                if (dt.Rows[i].Field<byte[]>("photo") != null)
-                {
-                    byte[] productPhoto = dt.Rows[i].Field<byte[]>("photo");
-                    for (int j = 0; j < productPhoto.Length; j++)
+                    while (reader.Read())
                     {
-                        productPhotoContainer[i, j] = productPhoto[j];
+                        DataRow row = dt.NewRow();
+                        row["id"] = reader["id"];
+                        row["productPhoto"] = reader["productPhoto"];
+                        row["productPhotoURL"] = reader["productPhotoURL"];
+                        dt.Rows.Add(row);
+                        dt.AcceptChanges();
                     }
-
                 }
-            }
 
-            return productPhotoContainer;
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
         }
 
-        protected void btnSubmitURL_Click(object sender, EventArgs e)
+        //remove the photo
+        void removePhoto(string id)
         {
-            DataTable dt;
-            DataRow row;
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
 
-            if (dtSet.Tables["Photo"] != null)
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "DELETE FROM TempPhoto WHERE id = @id";
+
+            //execute
+            try
             {
-                dt = dtSet.Tables["Photo"];
-                if (txtInsertURL.Text != null)
-                {
-                    row = dt.NewRow();
-                    row["photoURL"] = txtInsertURL.Text;
-                    dt.Rows.Add(row);
-                    dt.AcceptChanges();
-                    txtInsertURL.Text = "";
-                }
-            }
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@id", id);
+                cmdRetrieve.ExecuteNonQuery();
 
-            //data bind the updated version of data table
-            Repeater1.DataSource = dtSet.Tables["Photo"];
-            Repeater1.DataBind();
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        //remove all photo
+        void removeAllPhoto()
+        {
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "DELETE FROM TempPhoto";
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.ExecuteNonQuery();
+
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        protected void btnSubmitURL_Click(object sender, EventArgs e) //not all column field is initialised, ok?
+        {
+            createPhotoTable();
+            DataTable dt = dtSet.Tables["Photo"];
+
+            //get data from the gvStore
+            try
+            {
+
+                //insert photo into database
+                createPhotoToTempDB(txtInsertURL.Text, null);
+
+                //retrieve data
+                getAllPhoto();
+
+                //set session to determine whether to show the productPhoto (byte)
+                Session["displayPhoto"] = 0;
+
+                //data bind repeater
+                DataList1.DataSource = dt;
+                DataList1.DataBind();
+
+                //empty the url textbox
+                txtInsertURL.Text = "";
+            }
+            catch(Exception ex)
+            {
+                displayErrorMsg(ex);
+            }
 
             //Response.Redirect("ProcessPhoto.ashx?action=create");
         }
 
         protected void btnSubmitPhoto_Click(object sender, EventArgs e)
         {
-            DataTable dt;
-            DataRow row;
+            createPhotoTable();
+            DataTable dt = dtSet.Tables["Photo"];
 
-            if (txtUploadPhoto.HasFiles)
+            //get data from the gvStore
+            try
             {
-                //get the posted file 
-                foreach (HttpPostedFile postedFile in txtUploadPhoto.PostedFiles)
-                {
-                    string filename = Path.GetFileName(postedFile.FileName);
-                    string contentType = postedFile.ContentType;
-                    using (Stream fs = postedFile.InputStream)
-                    {
-                        using (BinaryReader br = new BinaryReader(fs))
-                        {
-                            //serialise the photo
-                            byte[] bytes = br.ReadBytes((Int32)fs.Length);
 
-                            //assign into data table 
-                            dt = dtSet.Tables["Photo"];
-                            row = dt.NewRow();
-                            row["photoURL"] = bytes;
-                            dt.Rows.Add(row);
-                            dt.AcceptChanges();
-                            //dispose the photo inside file upload
-                            txtUploadPhoto.Dispose();
+                if (txtUploadPhoto.HasFiles)
+                {
+                    //get the posted file 
+                    foreach (HttpPostedFile postedFile in txtUploadPhoto.PostedFiles)
+                    {
+                        string filename = Path.GetFileName(postedFile.FileName);
+                        string contentType = postedFile.ContentType;
+                        using (Stream fs = postedFile.InputStream)
+                        {
+                            using (BinaryReader br = new BinaryReader(fs))
+                            {
+                                //serialise the photo
+                                byte[] bytes = br.ReadBytes((Int32)fs.Length);
+
+                                //insert photo into database
+                                createPhotoToTempDB(null, bytes);
+                            }
                         }
                     }
                 }
+
+                //retrieve data
+                getAllPhoto();
+
+                //display the product photo 
+                Session["displayPhoto"] = 1;
+
+                //update the updated version of data table
+                DataList1.DataSource = dt;
+                DataList1.DataBind();
+
+                //dispose the photo inside file upload
+                txtUploadPhoto.Dispose();
             }
-
-            //update the updated version of data table
-            Repeater1.DataSource = dtSet.Tables["Photo"];
-            Repeater1.DataBind();
-
-            //Response.Redirect("ProcessPhoto.ashx?action=create");
-        }
-
-        protected void btnRemoveImg_Click(object sender, EventArgs e)
-        {
-            DataTable dt;
-            
-            //get current row image
-            var btnRemove = (Button)sender;
-            var imgBtn = (System.Web.UI.WebControls.Image)btnRemove.NamingContainer.FindControl("Image1");
-
-            //get data table
-            dt = dtSet.Tables["Photo"];
-
-            for (int i=0; i<dt.Rows.Count; i++)
+            catch (Exception ex)
             {
-                try
-                {
-                    //get data table url
-                    var photoURL = (string)dt.Rows[i].Field<string>(imgBtn.ImageUrl);
-                    if (photoURL == imgBtn.ImageUrl)
-                    {
-                        dt.Rows[i].Delete();
-                    }
-                    var photoByte = (byte[])dt.Rows[i].Field<byte[]>(imgBtn.ImageUrl);
-                    var photo = (string)convertPhotoIntoURL(photoByte);
-                    if (photo == imgBtn.ImageUrl)
-                    {
-                        dt.Rows[i].Delete();
-                    }
-                }
-                catch(Exception ex)
-                {
-                    continue;
-                }
-                
+                displayErrorMsg(ex);
             }
-            dt.AcceptChanges();
-
-            Repeater1.DataSource = dt;
-            Repeater1.DataBind();
         }
 
-        protected void btnConfirm_Click(object sender, EventArgs e)
+        protected void btnRemoveImg1_Click(object sender, EventArgs e)
+        {
+            createPhotoTable();
+            DataTable dt = dtSet.Tables["Photo"];
+
+            //get current row item
+            var btnRemove = (Button)sender;
+            var img1 = (System.Web.UI.WebControls.Image)btnRemove.NamingContainer.FindControl("Image1");
+            var hfRow = (HiddenField)btnRemove.NamingContainer.FindControl("hfRow");
+
+            //get data from the gvStore
+            try
+            {
+                //delete the selected photo
+                removePhoto(hfRow.Value);
+
+                //retrieve the remaining photo
+                getAllPhoto();
+
+                //Bind the data with repeater
+                DataList1.DataSource = dt;
+                DataList1.DataBind();
+            }
+            catch (Exception ex)
+            {
+                displayErrorMsg(ex);
+            }
+        }
+
+        protected void btnRemoveImg2_Click(object sender, EventArgs e)
+        {
+            createPhotoTable();
+            DataTable dt = dtSet.Tables["Photo"];
+
+            byte[] bytes = { };
+
+            //get current row item
+            var btnRemove = (Button)sender;
+            var img2 = (System.Web.UI.WebControls.Image)btnRemove.NamingContainer.FindControl("Image2");
+            var hfRow = (HiddenField)btnRemove.NamingContainer.FindControl("hfRow");
+            
+
+            //get data from the gvStore
+            try
+            {
+                //delete the selected photo
+                removePhoto(hfRow.Value);
+
+                //retrieve the remaining photo
+                getAllPhoto();
+
+                //Bind the data with repeater
+                DataList1.DataSource = dt;
+                DataList1.DataBind();
+            }
+            catch (Exception ex)
+            {
+                displayErrorMsg(ex);
+            }
+            
+        }//no row used, ok?
+
+        protected void btnConfirm_Click(object sender, EventArgs e) //ok?
         {
             string[] sellingFormat = { };
             int count = 0;
 
-            //create product details in database
             //retrieve value from multiple checkbox
             for (int i = 0; i < chkSellOption.Items.Count; i++)
             {
@@ -443,9 +563,12 @@ namespace Item_Bidding_System.Seller
                     count++;
                 }
             }
+
+            //create product details in database
             insertAllDataToDB(sellingFormat);
 
-            //update the product details into the database
+            //delete the temporary table
+            removeAllPhoto();
 
         }
         void displayErrorMsg(Exception ex)
@@ -458,6 +581,50 @@ namespace Item_Bidding_System.Seller
                 lblErrorMsg.Text = ex.Message.ToString();
             }
         }//ok
+
+        void createPhotoToTempDB(string productPhotoURL, byte[] prouductPhoto)
+        {
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string queryURL = "INSERT INTO TempPhoto(productPhotoURL) " +
+                 "VALUES(@productPhotoURL)";
+
+            string queryPhoto = "INSERT INTO TempPhoto(productPhoto) " +
+                 "VALUES(@productPhoto)";
+
+            //execute
+            try
+            {
+                con.Open();
+                if(productPhotoURL != null)
+                {
+                    cmdRetrieve = new SqlCommand(queryURL, con);
+                    cmdRetrieve.Parameters.AddWithValue("@productPhotoURL", productPhotoURL);
+                }
+                else
+                {
+                    cmdRetrieve = new SqlCommand(queryPhoto, con);
+                    cmdRetrieve.Parameters.AddWithValue("@productPhoto", prouductPhoto);
+                }
+                cmdRetrieve.ExecuteNonQuery();
+
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
 
         void createProductDetailsToDB(string productDetailsId)
         {
@@ -633,8 +800,10 @@ namespace Item_Bidding_System.Seller
 
             int flag = 0; //signal for the first photo has been retrieve
             StringBuilder sb = new StringBuilder();
-            DataTable dt;
 
+            //create data table
+            createPhotoTable();
+            DataTable dt = dtSet.Tables["Photo"];
 
             //execute
             try
@@ -652,11 +821,8 @@ namespace Item_Bidding_System.Seller
                 createProductDetailsToDB(productDetailsId);
                 createProductToDB(productId, subStoreId, productDetailsId);
 
-                //get data table
-                dt = dtSet.Tables["Photo"];
-
                 //get photoURL or photo
-                foreach(DataRow dr in dt.Rows)
+                foreach (DataRow dr in dt.Rows)
                 {
                     try
                     {
@@ -702,6 +868,18 @@ namespace Item_Bidding_System.Seller
             }
         } //update all the product
 
+        protected void chkSellOption_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (ListItem item in chkSellOption.Items)
+            {
+                if (item.Selected && (item.Value == "OpenBidAuction" || item.Value == "SealedBidAuction"))
+                {
+                    Panel1.Visible = true;
+                    break;
+                }
+            }
+        }
+
         string convertPhotoIntoURL(byte[] imgBytes)
         {
             StringBuilder imgURL = new StringBuilder();
@@ -715,41 +893,109 @@ namespace Item_Bidding_System.Seller
 
             return imgURL.ToString();
         }//ok
-        protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            var repeater = (Repeater)sender;
-            var imageHolder = (System.Web.UI.WebControls.Image)repeater.NamingContainer.FindControl("Image1");
-            DataTable dt;
 
-            //get existing value from repeater1 and assign into the data table
-            if (e.Item.ItemType == ListItemType.AlternatingItem || e.Item.ItemType == ListItemType.Item)
+        byte[] convertURLToPhoto(string url)
+        {
+            StringBuilder imgURL = new StringBuilder();
+            byte[] imgBytes = { };
+
+            //based on url, get image
+
+            //convert to the byte[]
+
+            // If you want convert url to bitmap file 
+            imgURL = imgURL.Append(url);
+            imgURL.Replace("data:image/Bmp;base64,\"", "");
+            imgBytes = Convert.FromBase64String(imgURL.ToString());
+            
+            return imgBytes;
+        }
+        protected void DataList1_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+
+        }
+
+        protected void userGrid_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+
+        }
+
+        //retrieve data and assign back to the data table
+        string[] getAllProductPhotoURL()
+        {
+            string[] productPhotoURLContainer = { };
+            int count = 0;
+            DataTable dt = dtSet.Tables["Product"];
+
+            //from the gvStore, get the URL
+
+
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT COUNT(productPhotoId) FROM ProductPhoto WHERE ProductPhoto.productId = @productPhotoId";
+
+            //execute
+            try
             {
-                dt = dtSet.Tables["Photo"];
-                foreach (DataRow dr in dt.Rows)
-                {
-                    byte[] imgBytes = (byte[])dr["photo"];
-                    if (imgBytes.Length != 0)
-                    {
-                        //Set the source with data:image/bmp
-                        imageHolder.ImageUrl = convertPhotoIntoURL(imgBytes);
-                    }
-                    else
-                    {
-                        string url = (string)dr["photoURL"];
-                        if (url != String.Empty)
-                        {
-                            //Set the source with url
-                            imageHolder.ImageUrl = url;
-                        }
-                    }
-                }
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                count = (int)cmdRetrieve.ExecuteScalar();
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
 
             }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
 
-            //add new value into the data table
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i].Field<string>("photoURL") != null)
+                {
+                    productPhotoURLContainer[i] = dt.Rows[i].Field<string>("photoURL");
+                }
+            }
 
+            return productPhotoURLContainer;
+        }
 
-            //data bind the new data table into the repeater1
+        //to get the photo from data table
+        byte[,] getAllProductPhoto()
+        {
+            byte[,] productPhotoContainer = { { } };
+            DataTable dt;
+
+            dt = dtSet.Tables["Photo"];
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i].Field<byte[]>("photo") != null)
+                {
+                    byte[] productPhoto = dt.Rows[i].Field<byte[]>("photo");
+                    for (int j = 0; j < productPhoto.Length; j++)
+                    {
+                        productPhotoContainer[i, j] = productPhoto[j];
+                    }
+
+                }
+            }
+
+            return productPhotoContainer;
+        }
+
+        protected void UpdatePanel1_DataBinding(object sender, EventArgs e)
+        {
+
         }
 
     }

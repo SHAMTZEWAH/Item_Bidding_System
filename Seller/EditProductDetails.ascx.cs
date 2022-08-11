@@ -23,171 +23,15 @@ namespace Item_Bidding_System.Seller
         {
             if (!IsPostBack)
             {
-                createDataTable();
+                //createDataTable();
                 assignSubStoreOption();
                 loadData();
             }
 
         }
 
-        void assignSubStoreOption()
-        {
-            //create connection
-            SqlConnection con;
-            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            con = new SqlConnection(strCon);
-
-            //prepare command 
-            SqlCommand cmdRetrieve;
-            string query = "SELECT SubStore.subStoreId, SubStore.subStoreName " +
-                "FROM SubStore INNER JOIN " +
-                "Seller ON SubStore.sellerId = Seller.sellerId INNER JOIN " +
-                "Account ON Account.accId = Seller.accId " +
-                "WHERE Account.email = @email";
-
-            //execute
-            try
-            {
-                con.Open();
-                cmdRetrieve = new SqlCommand(query, con);
-                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
-                ddlSubStore.DataSource = cmdRetrieve.ExecuteReader();
-                ddlSubStore.DataBind();
-                ddlSubStore.DataTextField = "subStoreName";
-                ddlSubStore.DataValueField = "subStoreId";
-                ddlSubStore.DataBind();
-            }
-            catch (NullReferenceException ex)
-            {
-                displayErrorMsg(ex);
-
-            }
-            finally
-            {
-                ddlSubStore.Items.Insert(0, new ListItem("--Select Category--", "-1"));
-                con.Close();
-                con.Dispose();
-            }
-        }//ok
-
-        string getProductDetailsId(string prodName)
-        {
-            string productDetailsId = "";
-
-            //create connection
-            SqlConnection con;
-            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            con = new SqlConnection(strCon);
-
-            //prepare command 
-            SqlCommand cmdRetrieve;
-            string query = "SELECT productDetailsId FROM ProductDetails WHERE productName = @prodName";
-
-            //execute
-            try
-            {
-                con.Open();
-                cmdRetrieve = new SqlCommand(query, con);
-                cmdRetrieve.Parameters.AddWithValue("@prodName",prodName);
-                productDetailsId = (string)cmdRetrieve.ExecuteScalar();
-            }
-            catch (NullReferenceException ex)
-            {
-                displayErrorMsg(ex);
-
-            }
-            finally
-            {
-                con.Close();
-                con.Dispose();
-            }
-
-            return productDetailsId;
-        } //ok
-
-        string getProductId()
-        {
-            string productId = "";
-            int count = 0;
-
-            //create connection
-            SqlConnection con;
-            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            con = new SqlConnection(strCon);
-
-            //prepare command 
-            SqlCommand cmdRetrieve;
-            string query = "SELECT productId FROM Product WHERE productDetailsId = @prodDetailsId";
-
-            //execute
-            try
-            {
-                con.Open();
-                cmdRetrieve = new SqlCommand(query, con);
-                cmdRetrieve.Parameters.AddWithValue("@prodDetailsId", getProductDetailsId(Request.QueryString["prodName"]));
-                productId = (string)cmdRetrieve.ExecuteScalar();
-
-            }
-            catch (NullReferenceException ex)
-            {
-                displayErrorMsg(ex);
-
-            }
-            finally
-            {
-                con.Close();
-                con.Dispose();
-            }
-
-            return productId;
-        }//ok
-
-        string getPhotoStatus(string productId) //ok
-        {
-            string status = "";
-            int count = 0;
-
-            //create connection
-            SqlConnection con;
-            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            con = new SqlConnection(strCon);
-
-            //prepare command 
-            SqlCommand cmdRetrieve;
-            string query = "SELECT COUNT(productPhotoId) FROM ProductPhoto WHERE ProductPhoto.productId = @productPhotoId";
-
-            //execute
-            try
-            {
-                con.Open();
-                cmdRetrieve = new SqlCommand(query, con);
-                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
-                count = (int)cmdRetrieve.ExecuteScalar();
-
-                if (count > 0)
-                {
-                    status = "Sub";
-                }
-                else
-                {
-                    status = "Main";
-                }
-            }
-            catch (NullReferenceException ex)
-            {
-                displayErrorMsg(ex);
-
-            }
-            finally
-            {
-                con.Close();
-                con.Dispose();
-            }
-
-            return status;
-        }//not ok
-
         //to store the photo temporarily before update into database
+
         void createDataTable()
         {
             DataTable dt = new DataTable("Photo");
@@ -332,6 +176,15 @@ namespace Item_Bidding_System.Seller
             //create photoURL column
             col = new DataColumn();
             col.DataType = typeof(string);
+            col.ColumnName = "id";
+            col.Caption = "id";
+            col.ReadOnly = false;
+            col.Unique = true;
+            dt.Columns.Add(col);
+
+            //create photoURL column
+            col = new DataColumn();
+            col.DataType = typeof(string);
             col.ColumnName = "photoURL";
             col.Caption = "photoURL";
             col.ReadOnly = false;
@@ -374,56 +227,359 @@ namespace Item_Bidding_System.Seller
                 }
                 dr.AcceptChanges();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 displayErrorMsg(ex);
             }
         }//query string is needed to edit product details
 
-        //to get the photo URL from data table
-        string[] getAllProductPhotoURL()
+        void assignSubStoreOption()
         {
-            string[] productPhotoURLContainer = { };
-            DataTable dt;
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
 
-            dt = dtSet.Tables["Photo"];
-            for (int i = 0; i < dt.Rows.Count; i++)
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT SubStore.subStoreId, SubStore.subStoreName " +
+                "FROM SubStore INNER JOIN " +
+                "Seller ON SubStore.sellerId = Seller.sellerId INNER JOIN " +
+                "Account ON Account.accId = Seller.accId " +
+                "WHERE Account.email = @email";
+
+            //execute
+            try
             {
-                if (dt.Rows[i].Field<string>("photoURL") != null)
-                {
-                    productPhotoURLContainer[i] = dt.Rows[i].Field<string>("photoURL");
-                }
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                ddlSubStore.DataSource = cmdRetrieve.ExecuteReader();
+                ddlSubStore.DataBind();
+                ddlSubStore.DataTextField = "subStoreName";
+                ddlSubStore.DataValueField = "subStoreId";
+                ddlSubStore.DataBind();
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+
+            }
+            finally
+            {
+                ddlSubStore.Items.Insert(0, new ListItem("--Select Category--", "-1"));
+                con.Close();
+                con.Dispose();
+            }
+        }//ok
+
+        string getProductDetailsId(string prodName)
+        {
+            string productDetailsId = "";
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT productDetailsId FROM ProductDetails WHERE productName = @prodName";
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@prodName", prodName);
+                productDetailsId = (string)cmdRetrieve.ExecuteScalar();
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
             }
 
-            return productPhotoURLContainer;
+            return productDetailsId;
+        } //ok
+
+        string getProductId()
+        {
+            string productId = "";
+            int count = 0;
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT productId FROM Product WHERE productDetailsId = @prodDetailsId";
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@prodDetailsId", getProductDetailsId(Request.QueryString["prodName"]));
+                productId = (string)cmdRetrieve.ExecuteScalar();
+
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+
+            return productId;
+        }//ok
+
+        string getProductPhotoId()
+        {
+            string productPhotoId = "";
+            int count = 0;
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT COUNT(productPhotoId) FROM ProductPhoto";
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                count = (int)cmdRetrieve.ExecuteScalar();
+
+                if (count + 1 > 9)
+                {
+                    productPhotoId = "ppi_0" + (count + 1);
+                }
+                else
+                {
+                    productPhotoId = "ppi_00" + (count + 1);
+                }
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+
+            return productPhotoId;
+        }//ok
+
+        string getPhotoStatus(string productId) //ok
+        {
+            string status = "";
+            int count = 0;
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT COUNT(productPhotoId) FROM ProductPhoto WHERE ProductPhoto.productId = @productPhotoId";
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                count = (int)cmdRetrieve.ExecuteScalar();
+
+                if (count > 0)
+                {
+                    status = "Sub";
+                }
+                else
+                {
+                    status = "Main";
+                }
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+
+            return status;
+        }//not ok
+
+        void updatePhotoStatus(string id, string status)
+        {
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "UPDATE ProductPhoto SET photoStatus = @status WHERE productPhotoId = @id";
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@id", id);
+                cmdRetrieve.Parameters.AddWithValue("@status", status);
+                cmdRetrieve.ExecuteNonQuery();
+                
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
         }
 
-        //to get the photo from data table
-        byte[,] getAllProductPhoto()
+        void getAllPhoto()
         {
-            byte[,] productPhotoContainer = { { } };
-            DataTable dt;
 
-            dt = dtSet.Tables["Photo"];
-            for (int i = 0; i < dt.Rows.Count; i++)
+            //get data table
+            DataTable dt = dtSet.Tables["Photo"];
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT id,productPhoto, productPhotoURL FROM TempPhoto";
+
+            //execute
+            try
             {
-                if (dt.Rows[i].Field<byte[]>("photo") != null)
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                SqlDataReader reader = cmdRetrieve.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    byte[] productPhoto = dt.Rows[i].Field<byte[]>("photo");
-                    for (int j = 0; j < productPhoto.Length; j++)
+                    while (reader.Read())
                     {
-                        productPhotoContainer[i, j] = productPhoto[j];
+                        DataRow row = dt.NewRow();
+                        row["id"] = reader["id"];
+                        row["productPhoto"] = reader["productPhoto"];
+                        row["productPhotoURL"] = reader["productPhotoURL"];
+                        dt.Rows.Add(row);
+                        dt.AcceptChanges();
+                    }
+                }
+
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        //remove the photo
+        void removePhoto(string photoId)
+        {
+            string status = "";
+            string photoId2 = "";
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string queryRemove = "UPDATE ProductPhoto SET productPhoto = NULL, productPhotoURL = NULL, photoStatus = 'Sub' WHERE productPhotoId = @id";
+            string queryGetPhoto = "SELECT productPhotoId FROM ProductPhoto WHERE productId = @prodId AND (productPhoto IS NOT NULL OR productPhotoURL IS NOT NULL)";
+
+            //execute
+            try
+            {
+                con.Open();
+
+                //get photo status
+                status = getPhotoStatus(getProductId());
+
+                //remove the product photo from the DB
+                cmdRetrieve = new SqlCommand(queryRemove, con);
+                cmdRetrieve.Parameters.AddWithValue("@id", photoId);
+                cmdRetrieve.ExecuteNonQuery();
+
+                if (status == "Main")
+                {
+                    //get second photo
+                    cmdRetrieve = new SqlCommand(queryGetPhoto, con);
+                    cmdRetrieve.Parameters.AddWithValue("@prodId",getProductId());
+                    SqlDataReader reader = cmdRetrieve.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while(reader.Read())
+                        {
+                            photoId2 = (string)reader["productPhotoId"];
+                            break;
+                        }                    
                     }
 
+                    //update second photo status to 'Main'
+                    updatePhotoStatus(photoId2, "Main");
                 }
+                
             }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
 
-            return productPhotoContainer;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
         }
 
         protected void btnSubmitURL_Click(object sender, EventArgs e)
         {
-            DataTable dt;
+            createDataTable();
+            DataTable dt = dtSet.Tables["Photo"];
             DataRow row;
 
             if (dtSet.Tables["Photo"] != null)
@@ -440,16 +596,21 @@ namespace Item_Bidding_System.Seller
             }
 
             //data bind the updated version of data table
-            Repeater1.DataSource = dtSet.Tables["Photo"];
-            Repeater1.DataBind();
+             DataList1.DataSource = dt;
+             DataList1.DataBind();
+
+            //create photo database
+            createProductPhotoToDB(getProductId(),null, txtInsertURL.Text);
 
             //Response.Redirect("ProcessPhoto.ashx?action=create");
         }
 
         protected void btnSubmitPhoto_Click(object sender, EventArgs e)
         {
-            DataTable dt;
+            createDataTable();
+            DataTable dt = dtSet.Tables["Photo"];
             DataRow row;
+            byte[] bytes = { };
 
             if (txtUploadPhoto.HasFiles)
             {
@@ -463,12 +624,11 @@ namespace Item_Bidding_System.Seller
                         using (BinaryReader br = new BinaryReader(fs))
                         {
                             //serialise the photo
-                            byte[] bytes = br.ReadBytes((Int32)fs.Length);
+                            bytes = br.ReadBytes((Int32)fs.Length);
 
                             //assign into data table 
-                            dt = dtSet.Tables["Photo"];
                             row = dt.NewRow();
-                            row["photoURL"] = bytes;
+                            row["photo"] = bytes;
                             dt.Rows.Add(row);
                             dt.AcceptChanges();
                             //dispose the photo inside file upload
@@ -479,50 +639,74 @@ namespace Item_Bidding_System.Seller
             }
 
             //update the updated version of data table
-            Repeater1.DataSource = dtSet.Tables["Photo"];
-            Repeater1.DataBind();
+             DataList1.DataSource = dt;
+             DataList1.DataBind();
+
+            //insert photo into database
+            createProductPhotoToDB(getProductId(), bytes, null);
 
             //Response.Redirect("ProcessPhoto.ashx?action=create");
         }
 
-        protected void btnRemoveImg_Click(object sender, EventArgs e)
+        protected void btnRemoveImg1_Click(object sender, EventArgs e)
         {
-            DataTable dt;
+            createDataTable();
+            DataTable dt = dtSet.Tables["Photo"];
 
-            //get current row image
+            //get current row item
             var btnRemove = (Button)sender;
-            var imgBtn = (System.Web.UI.WebControls.Image)btnRemove.NamingContainer.FindControl("Image1");
+            //var img1 = (System.Web.UI.WebControls.Image)btnRemove.NamingContainer.FindControl("Image1");
+            var hfRow = (HiddenField)btnRemove.NamingContainer.FindControl("hfRow");
 
-            //get data table
-            dt = dtSet.Tables["Photo"];
-
-            for (int i = 0; i < dt.Rows.Count; i++)
+            //get data from the gvStore
+            try
             {
-                try
-                {
-                    //get data table url
-                    var photoURL = (string)dt.Rows[i].Field<string>(imgBtn.ImageUrl);
-                    if (photoURL == imgBtn.ImageUrl)
-                    {
-                        dt.Rows[i].Delete();
-                    }
-                    var photoByte = (byte[])dt.Rows[i].Field<byte[]>(imgBtn.ImageUrl);
-                    var photo = (string)convertPhotoIntoURL(photoByte);
-                    if (photo == imgBtn.ImageUrl)
-                    {
-                        dt.Rows[i].Delete();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    continue;
-                }
+                //delete the selected photo
+                removePhoto(hfRow.Value);
 
+                //retrieve the remaining photo
+                getAllPhoto();
+
+                //Bind the data with repeater
+                DataList1.DataSource = dt;
+                DataList1.DataBind();
             }
-            dt.AcceptChanges();
+            catch (Exception ex)
+            {
+                displayErrorMsg(ex);
+            }
+        }
 
-            Repeater1.DataSource = dt;
-            Repeater1.DataBind();
+        protected void btnRemoveImg2_Click(object sender, EventArgs e)
+        {
+            createDataTable();
+            DataTable dt = dtSet.Tables["Photo"];
+
+            byte[] bytes = { };
+
+            //get current row item
+            var btnRemove = (Button)sender;
+            //var img2 = (System.Web.UI.WebControls.Image)btnRemove.NamingContainer.FindControl("Image2");
+            var hfRow = (HiddenField)btnRemove.NamingContainer.FindControl("hfRow");
+
+
+            //get data from the gvStore
+            try
+            {
+                //delete the selected photo
+                removePhoto(hfRow.Value);
+
+                //retrieve the remaining photo
+                getAllPhoto();
+
+                //Bind the data with repeater
+                DataList1.DataSource = dt;
+                DataList1.DataBind();
+            }
+            catch (Exception ex)
+            {
+                displayErrorMsg(ex);
+            }
         }
 
         protected void btnConfirm_Click(object sender, EventArgs e)
@@ -566,8 +750,8 @@ namespace Item_Bidding_System.Seller
             int sealedAvailable = 0;
             int auctionDuration = 0;
 
-            DataTable dt;
-            dt = dtSet.Tables["Photo"];
+            createDataTable();
+            DataTable dt = dtSet.Tables["Photo"];
             DataRow dr;
 
             //create connection
@@ -643,17 +827,19 @@ namespace Item_Bidding_System.Seller
                     }
                 }
                 //bind with repeater
-                Repeater1.DataSource = dt;
-                Repeater1.DataBind();
+                 DataList1.DataSource = dt;
+                 DataList1.DataBind();
 
                 //add data into product
+                createDataTable();
                 DataTable dt1 = dtSet.Tables["Product"];
                 dr = dt1.NewRow();
                 dr["prodName"] = Request.QueryString["prodName"];
                 dt1.AcceptChanges();
 
                 //prepare second query
-               //selling format, selling end date, fixed price, start price, stock parameter into the second query
+                //selling format, selling end date, fixed price, start price, stock parameter into the second query
+               
                cmdRetrieve = new SqlCommand(queryAuction, con);
                cmdRetrieve.Parameters.AddWithValue("@prodId", prodId);
                SqlDataReader sellingReader = cmdRetrieve.ExecuteReader();
@@ -785,7 +971,7 @@ namespace Item_Bidding_System.Seller
             }
         }
 
-        void updateProductPhotoToDB(string productId, byte[] bytes, string photoURL)
+        void createProductPhotoToDB(string productId, byte[] bytes, string photoURL)
         {
             //create connection
             SqlConnection con;
@@ -794,11 +980,13 @@ namespace Item_Bidding_System.Seller
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string queryProductPhoto = "UPDATE ProductPhoto SET productPhotoURL = @productPhotoURL, productPhoto = @productPhoto, photoStatus = @status WHERE productId = @productId";
+            string queryProductPhoto = "INSERT INTO ProductPhoto(productPhotoId, productPhotoURL, productPhoto, photoStatus, productId) " +
+                "VALUES(@productPhotoId, @productPhotoURL, @productPhoto, @status, @productId)";
 
             try
             {
                 cmdRetrieve = new SqlCommand(queryProductPhoto, con);
+                cmdRetrieve.Parameters.AddWithValue("@productPhotoId", getProductPhotoId());
                 cmdRetrieve.Parameters.AddWithValue("productPhotoURL", photoURL);
                 cmdRetrieve.Parameters.AddWithValue("@productPhoto", bytes);
                 cmdRetrieve.Parameters.AddWithValue("@status", getPhotoStatus(productId));
@@ -814,7 +1002,7 @@ namespace Item_Bidding_System.Seller
                 con.Close();
                 con.Dispose();
             }
-        } //ok
+        } //ok, created current productId
 
         void updateFixedPriceProductToDB(string productId)
         {
@@ -912,31 +1100,31 @@ namespace Item_Bidding_System.Seller
                 dt = dtSet.Tables["Photo"];
 
                 //get photoURL or photo
-                foreach (DataRow dr in dt.Rows)
-                {
-                    try
-                    {
-                        productPhotoURL = (string)dr["photoURL"];
-                        if (productPhotoURL != null)
-                        {
-                            //insert the product photo into the database
-                            updateProductPhotoToDB(productId, null, productPhotoURL);
-                        }
-                        else
-                        {
-                            productPhoto = (byte[])dr["photo"];
-                            if (productPhoto.Length != 0)
-                            {
-                                updateProductPhotoToDB(productId, productPhoto, String.Empty);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        continue;
-                    }
+                //foreach (DataRow dr in dt.Rows)
+                //{
+                //    try
+                //    {
+                //        productPhotoURL = (string)dr["photoURL"];
+                //        if (productPhotoURL != null)
+                //        {
+                //            //insert the product photo into the database
+                //            updateProductPhotoToDB(productId, null, productPhotoURL);
+                //        }
+                //        else
+                //        {
+                //            productPhoto = (byte[])dr["photo"];
+                //            if (productPhoto.Length != 0)
+                //            {
+                //                updateProductPhotoToDB(productId, productPhoto, String.Empty);
+                //            }
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        continue;
+                //    }
 
-                }
+                //}
 
                 //insert the fixed price product into DB
                 updateFixedPriceProductToDB(productId);
@@ -958,6 +1146,7 @@ namespace Item_Bidding_System.Seller
             }
         } //update all the product
 
+        /*Useless function*/
         string convertPhotoIntoURL(byte[] imgBytes)
         {
             StringBuilder imgURL = new StringBuilder();
@@ -971,127 +1160,99 @@ namespace Item_Bidding_System.Seller
 
             return imgURL.ToString();
         }
-        protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        protected void DataList1_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            var repeater = (Repeater)sender;
-            var imageHolder = (System.Web.UI.WebControls.Image)repeater.NamingContainer.FindControl("Image1");
-            DataTable dt;
 
-            //get existing value from repeater1 and assign into the data table
-            if (e.Item.ItemType == ListItemType.AlternatingItem || e.Item.ItemType == ListItemType.Item)
-            {
-                dt = dtSet.Tables["Photo"];
-                foreach (DataRow dr in dt.Rows)
-                {
-                    byte[] imgBytes = (byte[])dr["photo"];
-                    if (imgBytes.Length != 0)
-                    {
-                        //Set the source with data:image/bmp
-                        imageHolder.ImageUrl = convertPhotoIntoURL(imgBytes);
-                    }
-                    else
-                    {
-                        string url = (string)dr["photoURL"];
-                        if (url != String.Empty)
-                        {
-                            //Set the source with url
-                            imageHolder.ImageUrl = url;
-                        }
-                    }
-                }
-
-            }
         }
-
         protected void txtProdName_TextChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["prodName"] = txtProdName.Text;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["prodName"] = txtProdName.Text;
+            //dr.AcceptChanges();
         }
 
         protected void ddlProdCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["prodCategory"] = ddlProdCategory.SelectedValue;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["prodCategory"] = ddlProdCategory.SelectedValue;
+            //dr.AcceptChanges();
         }
 
         protected void txtType_TextChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["prodType"] = txtType.Text;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["prodType"] = txtType.Text;
+            //dr.AcceptChanges();
         }
 
         protected void txtBrand_TextChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["prodBrand"] = txtBrand.Text;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["prodBrand"] = txtBrand.Text;
+            //dr.AcceptChanges();
         }
 
         protected void txtModel_TextChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["prodModel"] = txtModel.Text;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["prodModel"] = txtModel.Text;
+            //dr.AcceptChanges();
         }
 
         protected void ddlSubStore_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["subStoreId"] = ddlSubStore.SelectedValue;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["subStoreId"] = ddlSubStore.SelectedValue;
+            //dr.AcceptChanges();
         }
 
         protected void txtDesc_TextChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["prodDesc"] = txtDesc.Text;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["prodDesc"] = txtDesc.Text;
+            //dr.AcceptChanges();
         }
 
         protected void chkSellOption_SelectedIndexChanged(object sender, EventArgs e)
@@ -1101,67 +1262,98 @@ namespace Item_Bidding_System.Seller
 
         protected void ddlDuration_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["auctionDuration"] = ddlDuration.SelectedValue;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["auctionDuration"] = ddlDuration.SelectedValue;
+            //dr.AcceptChanges();
         }
 
         protected void txtFixedPrice_TextChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["fixedPrice"] = txtFixedPrice.Text;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["fixedPrice"] = txtFixedPrice.Text;
+            //dr.AcceptChanges();
         }
 
         protected void txtStartPrice_TextChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["startPrice"] = txtStartPrice.Text;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["startPrice"] = txtStartPrice.Text;
+            //dr.AcceptChanges();
         }
 
         protected void txtReservePrice_TextChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["reservePrice"] = txtReservePrice.Text;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["reservePrice"] = txtReservePrice.Text;
+            //dr.AcceptChanges();
         }
 
         protected void txtStock_TextChanged(object sender, EventArgs e)
         {
-            DataRow dr;
-            DataTable dt = dtSet.Tables["Product"];
+            //DataRow dr;
+            //DataTable dt = dtSet.Tables["Product"];
 
-            //get the first row of data table (the data table of "Product" has one row only)
-            dr = dt.Rows[0];
+            ////get the first row of data table (the data table of "Product" has one row only)
+            //dr = dt.Rows[0];
 
-            //update the data table "prodName" col value
-            dr["prodStock"] = txtStock.Text;
-            dr.AcceptChanges();
+            ////update the data table "prodName" col value
+            //dr["prodStock"] = txtStock.Text;
+            //dr.AcceptChanges();
         }
+
+        void updateProductPhotoToDB(string productId, byte[] bytes, string photoURL)
+        {
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string queryProductPhoto = "UPDATE ProductPhoto SET productPhotoURL = @productPhotoURL, productPhoto = @productPhoto, photoStatus = @status WHERE productId = @productId";
+
+            try
+            {
+                cmdRetrieve = new SqlCommand(queryProductPhoto, con);
+                cmdRetrieve.Parameters.AddWithValue("productPhotoURL", photoURL);
+                cmdRetrieve.Parameters.AddWithValue("@productPhoto", bytes);
+                cmdRetrieve.Parameters.AddWithValue("@status", getPhotoStatus(productId));
+                cmdRetrieve.Parameters.AddWithValue("@productId", productId);
+                cmdRetrieve.ExecuteNonQuery();
+            }
+            catch (NullReferenceException ex)
+            {
+                displayErrorMsg(ex);
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        } //ok
     }
 }
