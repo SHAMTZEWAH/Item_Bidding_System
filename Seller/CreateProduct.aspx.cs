@@ -19,25 +19,61 @@ namespace Item_Bidding_System.Seller
     public partial class CreateProduct : System.Web.UI.Page
     {
         private DataSet dtSet;
-        protected void Page_Load(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e) 
         {
             if (!IsPostBack)
             {
                 //Session["displayPhoto"] = 0;
                 assignSubStoreOption();
                 Panel1.Visible = false;
+                txtStock.Visible = true;
+                lblStock.Visible = true;
             }
-            //foreach (RepeaterItem item in DataList1.Items)
-            //{
-            //    Button button = item.FindControl("btnRemoveImg") as Button;
-            //    ScriptManager.GetCurrent(Page).RegisterPostBackControl(button);
-            //}
         }
 
         //to store the photo temporarily before update into database
         void createPhotoTable()
         {
             DataTable dt = new DataTable("Photo");
+            DataColumn col;
+
+            //create photoURL column
+            col = new DataColumn();
+            col.DataType = typeof(string);
+            col.ColumnName = "id";
+            col.Caption = "id";
+            col.ReadOnly = false;
+            col.Unique = true;
+            dt.Columns.Add(col);
+
+            //create photoURL column
+            col = new DataColumn();
+            col.DataType = typeof(string);
+            col.ColumnName = "productPhotoURL";
+            col.Caption = "photoURL";
+            col.ReadOnly = false;
+            col.Unique = false;
+            dt.Columns.Add(col);
+
+            //create photo column
+            col = new DataColumn();
+            col.DataType = typeof(byte[]);
+            col.ColumnName = "productPhoto";
+            col.Caption = "photo";
+            col.ReadOnly = false;
+            col.Unique = false;
+            dt.Columns.Add(col);
+
+            ////create data set
+            dtSet = new DataSet();
+
+            //assign data table into data set
+            dtSet.Tables.Add(dt);
+        }
+
+        void createTable(string tableName)
+        {
+            DataTable dt = new DataTable(tableName);
             DataColumn col;
 
             //create photoURL column
@@ -96,7 +132,6 @@ namespace Item_Bidding_System.Seller
                 cmdRetrieve = new SqlCommand(query, con);
                 cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
                 ddlSubStore.DataSource = cmdRetrieve.ExecuteReader();
-                ddlSubStore.DataBind();
                 ddlSubStore.DataTextField = "subStoreName";
                 ddlSubStore.DataValueField = "subStoreId";
                 ddlSubStore.DataBind();
@@ -259,14 +294,14 @@ namespace Item_Bidding_System.Seller
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string query = "SELECT COUNT(productPhotoId) FROM ProductPhoto WHERE ProductPhoto.productId = @productPhotoId";
+            string query = "SELECT COUNT(productPhotoId) FROM ProductPhoto WHERE ProductPhoto.productId = @productId";
 
             //execute
             try
             {
                 con.Open();
                 cmdRetrieve = new SqlCommand(query, con);
-                cmdRetrieve.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                cmdRetrieve.Parameters.AddWithValue("@productId", productId);
                 count = (int)cmdRetrieve.ExecuteScalar();
 
                 if (count > 0)
@@ -428,7 +463,7 @@ namespace Item_Bidding_System.Seller
                 DataList1.DataBind();
 
                 //empty the url textbox
-                txtInsertURL.Text = "";
+                txtInsertURL.Text = string.Empty;
             }
             catch(Exception ex)
             {
@@ -551,18 +586,18 @@ namespace Item_Bidding_System.Seller
 
         protected void btnConfirm_Click(object sender, EventArgs e) //ok?
         {
+            List<string> formatList = new List<string>();
             string[] sellingFormat = { };
-            int count = 0;
 
             //retrieve value from multiple checkbox
             for (int i = 0; i < chkSellOption.Items.Count; i++)
             {
                 if (chkSellOption.Items[i].Selected == true)
                 {
-                    sellingFormat[count] = chkSellOption.Items[i].Value;
-                    count++;
+                    formatList.Add(chkSellOption.Items[i].Value);
                 }
             }
+            sellingFormat = formatList.ToArray<string>();
 
             //create product details in database
             insertAllDataToDB(sellingFormat);
@@ -640,6 +675,7 @@ namespace Item_Bidding_System.Seller
 
             try
             {
+                con.Open();
                 cmdRetrieve = new SqlCommand(queryProductDetails, con);
                 cmdRetrieve.Parameters.AddWithValue("@productDetailsId", productDetailsId);
                 cmdRetrieve.Parameters.AddWithValue("@productName", txtProdName.Text);
@@ -674,6 +710,7 @@ namespace Item_Bidding_System.Seller
 
             try
             {
+                con.Open();
                 cmdRetrieve = new SqlCommand(queryProduct, con);
                 cmdRetrieve.Parameters.AddWithValue("@productId", productId);
                 cmdRetrieve.Parameters.AddWithValue("@desc", txtDesc.Text);
@@ -701,16 +738,29 @@ namespace Item_Bidding_System.Seller
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string queryProductPhoto = "INSERT INTO ProductPhoto(productPhotoId, productPhotoURL, productPhoto, photoStatus, productId) " +
-                "VALUES(@productPhotoId, @productPhotoURL, @productPhoto, @status, @productId)";
+            string queryProductPhotoURL = "INSERT INTO ProductPhoto(productPhotoId, productPhotoURL, photoStatus, productId) " +
+                "VALUES(@productPhotoId, @productPhotoURL, @status, @productId)";
+            string queryProductPhoto = "INSERT INTO ProductPhoto(productPhotoId, productPhoto, photoStatus, productId) " +
+                "VALUES(@productPhotoId, @productPhoto, @status, @productId)";
 
             try
             {
-                cmdRetrieve = new SqlCommand(queryProductPhoto, con);
-                cmdRetrieve.Parameters.AddWithValue("@productPhotoId", getProductPhotoId());
-                cmdRetrieve.Parameters.AddWithValue("productPhotoURL", photoURL);
-                cmdRetrieve.Parameters.AddWithValue("@productPhoto", bytes);
-                cmdRetrieve.Parameters.AddWithValue("@status", getPhotoStatus(productId));
+                string productPhotoId = getProductPhotoId();
+                string status = getPhotoStatus(productId);
+                con.Open();
+                if(bytes == null)
+                {
+                    cmdRetrieve = new SqlCommand(queryProductPhotoURL, con);
+                    cmdRetrieve.Parameters.AddWithValue("productPhotoURL", photoURL);
+                }
+                else
+                {
+                    cmdRetrieve = new SqlCommand(queryProductPhoto, con);
+                    cmdRetrieve.Parameters.AddWithValue("@productPhoto", bytes);
+                }
+                
+                cmdRetrieve.Parameters.AddWithValue("@productPhotoId", productPhotoId);
+                cmdRetrieve.Parameters.AddWithValue("@status", status);
                 cmdRetrieve.Parameters.AddWithValue("@productId", productId);
                 cmdRetrieve.ExecuteNonQuery();
             }
@@ -739,6 +789,7 @@ namespace Item_Bidding_System.Seller
 
             try
             {
+                con.Open();
                 cmdRetrieve = new SqlCommand(queryFixedPriceProduct, con);
                 cmdRetrieve.Parameters.AddWithValue("@productId", productId);
                 cmdRetrieve.Parameters.AddWithValue("@productPrice", txtFixedPrice.Text);
@@ -769,6 +820,7 @@ namespace Item_Bidding_System.Seller
 
             try
             {
+                con.Open();
                 cmdRetrieve = new SqlCommand(queryAuctionProduct, con);
                 cmdRetrieve.Parameters.AddWithValue("@productId", productId);
                 cmdRetrieve.Parameters.AddWithValue("@reservePrice", txtReservePrice.Text);
@@ -822,11 +874,12 @@ namespace Item_Bidding_System.Seller
                 createProductToDB(productId, subStoreId, productDetailsId);
 
                 //get photoURL or photo
+                getAllPhoto();
                 foreach (DataRow dr in dt.Rows)
                 {
                     try
                     {
-                        productPhotoURL = (string)dr["photoURL"];
+                        productPhotoURL = (string)dr["productPhotoURL"];
                         if (productPhotoURL != null)
                         {
                             //insert the product photo into the database
@@ -834,7 +887,7 @@ namespace Item_Bidding_System.Seller
                         }
                         else
                         {
-                            productPhoto = (byte[])dr["photo"];
+                            productPhoto = (byte[])dr["productPhoto"];
                             if (productPhoto.Length != 0)
                             {
                                 createProductPhotoToDB(productId, productPhoto, String.Empty);
@@ -859,6 +912,25 @@ namespace Item_Bidding_System.Seller
                     }
                 }
 
+                //empty all text field
+                txtProdName.Text = "";
+                ddlProdCategory.SelectedValue = "-1";
+                txtType.Text = "";
+                txtBrand.Text = "";
+                txtModel.Text = "";
+                createTable("EmptyTable");
+                DataList1.DataSource = dtSet.Tables["EmptyTable"];
+                DataList1.DataBind();
+                ddlSubStore.SelectedValue = "-1";
+                txtDesc.Text = "";
+                chkSellOption.ClearSelection();
+                ddlDuration.ClearSelection();
+                txtFixedPrice.Text = "";
+                txtStartPrice.Text = "";
+                txtReservePrice.Text = "";
+                txtStock.Text = "";
+                stockRow.Visible = true;
+                UpdatePanel2.Visible = false;
 
             }
             catch (NullReferenceException ex)
@@ -870,14 +942,28 @@ namespace Item_Bidding_System.Seller
 
         protected void chkSellOption_SelectedIndexChanged(object sender, EventArgs e)
         {
+            int visibleStock = 0;
+
             foreach (ListItem item in chkSellOption.Items)
             {
                 if (item.Selected && (item.Value == "OpenBidAuction" || item.Value == "SealedBidAuction"))
                 {
                     Panel1.Visible = true;
+                    stockRow.Visible = false;
                     break;
                 }
+                else
+                {
+                    visibleStock++;
+                }
+
             }
+            if(visibleStock == 3)
+            {
+                Panel1.Visible = false;
+                stockRow.Visible = true;
+            }
+            UpdatePanel2.Update();
         }
 
         string convertPhotoIntoURL(byte[] imgBytes)

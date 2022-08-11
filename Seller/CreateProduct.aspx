@@ -133,7 +133,12 @@
                             </div>
                         </div>
                      </div>
-                    <div class="small-top-gap">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="small-top-gap flex-center-center">
                         <!--display image-->
                         <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional" OnDataBinding="UpdatePanel1_DataBinding">
                             <ContentTemplate>
@@ -161,7 +166,6 @@
                             </Triggers>
                         </asp:UpdatePanel>
                         
-                    </div>
                     </div>
                 </td>
             </tr>
@@ -202,10 +206,21 @@
                     </div>
                 </td>
             </tr>
+                <tr id="stockRow" runat="server">
+                        <td>
+                            <asp:Label ID="lblStock" CssClass="lbl" runat="server" Text="Stock:"></asp:Label>
+                        </td>
+                        <td>
+                            <div class="medium-top-inner-gap">
+                                <asp:TextBox ID="txtStock" CssClass="textBox" runat="server"></asp:TextBox>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
-                <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+
+                <asp:UpdatePanel ID="UpdatePanel2" runat="server" UpdateMode="Conditional">
                     <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="chkSellOption" EventName="SelectedIndexChanged" />
+                        <asp:PostBackTrigger ControlID="chkSellOption" />
                     </Triggers>
                     <ContentTemplate>
                         <asp:Panel ID="Panel1" runat="server">
@@ -257,18 +272,10 @@
                         </td>
                     </tr>
                      <tr>
-                        <td id="reservePriceHeader" class="lbl" style="display:none;" runat="server">Reserve Price:</td>
+                        <td id="reservePriceHeader" class="lbl" runat="server">Reserve Price:</td>
                         <td>
-                            <div id="reservePriceContainer" class="medium-top-inner-gap" style="display:none;" runat="server">
+                            <div id="reservePriceContainer" class="medium-top-inner-gap" runat="server">
                                 <asp:TextBox ID="txtReservePrice" CssClass="textBox" runat="server"></asp:TextBox>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="lbl" style="display:none;">Stock:</td>
-                        <td>
-                            <div class="medium-top-inner-gap" style="display:none;">
-                                <asp:TextBox ID="txtStock" CssClass="textBox" runat="server"></asp:TextBox>
                             </div>
                         </td>
                     </tr>

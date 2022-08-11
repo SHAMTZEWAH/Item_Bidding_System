@@ -22,14 +22,9 @@ namespace Item_Bidding_System.Seller
             if (!IsPostBack)
             {
                 getConnection();
-                generateSubStore();
             }
             btnCreateStore.Attributes["onclick"] = ClientScript.GetPostBackEventReference(this, "clickDiv");
-            SubStoreCon.Attributes[""]
-            var htmlCtrl = SubStoreCon.FindControl("createDiv");
-
-            if ()
-            
+            generateSubStore();
             //DataTable subStore = getActiveSubStore();
             //int subStoreCount = getActiveSubStore().Rows.Count;
         }
@@ -562,7 +557,7 @@ namespace Item_Bidding_System.Seller
             btnCancel.Click += new ImageClickEventHandler(btnCancel_Click);
             createDiv.Controls.Add(btnCancel);
 
-            SubStoreCon.Controls.Add(createDiv);
+            Panel1.Controls.Add(createDiv);
 
         }
 
@@ -603,6 +598,7 @@ namespace Item_Bidding_System.Seller
 
             try
             {
+                con.Open();
                 //get sellerId
                 sellerId = getSellerId();
 
@@ -616,7 +612,7 @@ namespace Item_Bidding_System.Seller
                 Repeater1.DataBind();
 
                 //dynamic control still exist
-                generateSubStore();
+                //generateSubStore();
             }
             catch (NullReferenceException ex)
             {
@@ -660,7 +656,7 @@ namespace Item_Bidding_System.Seller
             updateSubStoreStatus(subStoreNum, "Inactive");
 
             //dynamically display the subStore button
-            generateSubStore();
+            //generateSubStore();
 
         }
 

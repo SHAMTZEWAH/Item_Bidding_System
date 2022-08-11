@@ -35,8 +35,11 @@
                 </asp:RadioButtonList>
             </div>
              </div>
+        
         <div id="SubStoreCon" class="substore-container" runat="server">
-               
+               <asp:Panel ID="Panel1" CssClass="substore-container" runat="server">
+
+               </asp:Panel>
             </div>
         <div class="content-subcontainer-no-marginTop" runat="server">
             
