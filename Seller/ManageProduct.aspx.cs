@@ -669,5 +669,11 @@ namespace Item_Bidding_System.Seller
             Response.Write(Server.GetLastError().Message + "<br />");
             Server.ClearError();
         }
+        protected void btnEdit_Click(object sender, EventArgs e)
+        {
+            var btnEdit = (Button)sender;
+            var lblProdName = btnEdit.NamingContainer.FindControl("prodName") as Label;
+            Response.Redirect("/Seller/EditProduct.aspx?prodName="+ lblProdName.Text);
+        }
     }
 }

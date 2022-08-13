@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Web;
@@ -32,7 +33,8 @@ namespace Item_Bidding_System.User
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string query = "SELECT Account.username, Account.email FROM Account WHERE Account.username = @name AND Account.email = @email";
+            string query = "SELECT Account.accId, Account.username, Account.email, Account.phoneNo, Account.gender, Account.dateOfBirth, Account.accPhotoURL, Account.accPhoto " +
+                "FROM Account WHERE Account.username = @name AND Account.email = @email";
 
             //execute
             try
@@ -46,8 +48,29 @@ namespace Item_Bidding_System.User
                 {
                     while (reader.Read())
                     {
-                        txtUsername.Text = reader["Account.username"].ToString();
-                        txtEmail.Text = reader["Account.email"].ToString();
+                        txtUsername.Text = reader["username"].ToString();
+                        txtEmail.Text = reader["email"].ToString();
+                        hfRowAccId.Value = (string)reader["accId"];
+                        if (reader["phoneNo"] != DBNull.Value)
+                        {
+                            txtPhoneNo.Text = (string)reader["phoneNo"];
+                        }
+                        if (reader["gender"] != DBNull.Value)
+                        {
+                            radioGender.SelectedValue = (string)reader["gender"];
+                        }
+                        if (reader["dateOfBirth"] != DBNull.Value)
+                        {
+                            Calendar1.SelectedDate = (DateTime)reader["dateOfBirth"];
+                        }
+                        if(reader["accPhotoURL"] == DBNull.Value && reader["accPhoto"] == DBNull.Value)
+                        {
+                            continue;
+                        }
+                        else if (reader["accPhotoURL"] != DBNull.Value)
+                        {
+                            Image1.ImageUrl = (string)reader["accPhotoURL"];
+                        }
                     }
                 }
             }
@@ -71,6 +94,8 @@ namespace Item_Bidding_System.User
 
         void insertData()
         {
+            byte[] bytes = { };
+
             //create connection
             SqlConnection con;
             string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -100,9 +125,29 @@ namespace Item_Bidding_System.User
                 cmdRetrieve.Parameters.AddWithValue("@name", txtUsername.Text);
                 cmdRetrieve.Parameters.AddWithValue("@email", txtEmail.Text);
                 cmdRetrieve.Parameters.AddWithValue("@phoneNo", txtPhoneNo.Text);
-                cmdRetrieve.Parameters.AddWithValue("@photoURL", "");
-                cmdRetrieve.Parameters.AddWithValue("@photo", "");
-                cmdRetrieve.Parameters.AddWithValue("@gender", RadioButtonList1.SelectedValue);
+                cmdRetrieve.Parameters.AddWithValue("@photoURL", txtImageUrl.Text);
+
+                //get the posted file 
+                if (txtUploadPhoto.HasFiles)
+                {
+                    foreach (HttpPostedFile postedFile in txtUploadPhoto.PostedFiles)
+                    {
+                        string filename = Path.GetFileName(postedFile.FileName);
+                        string contentType = postedFile.ContentType;
+                        using (Stream fs = postedFile.InputStream)
+                        {
+                            using (BinaryReader br = new BinaryReader(fs))
+                            {
+                                //serialise the photo
+                                bytes = br.ReadBytes((Int32)fs.Length);
+
+                            }
+                        }
+                    }
+                }    
+
+                cmdRetrieve.Parameters.AddWithValue("@photo", bytes);
+                cmdRetrieve.Parameters.AddWithValue("@gender", radioGender.SelectedValue);
 
                 Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
                 cmdRetrieve.Parameters.AddWithValue("@dateBirth", Calendar1.SelectedDate.ToShortDateString());
@@ -139,11 +184,6 @@ namespace Item_Bidding_System.User
             }
         }
 
-        protected void btnChange_Click(object sender, EventArgs e)
-        {
-            //get image url
-            //update into database
-        }
         protected void btnSave_Click(object sender, EventArgs e)
         {
             insertData();
@@ -154,6 +194,14 @@ namespace Item_Bidding_System.User
 
         }
 
-        
+        protected void btnSubmitPhoto_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnSubmitURL_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

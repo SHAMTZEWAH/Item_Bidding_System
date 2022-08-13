@@ -151,7 +151,7 @@
                                             </div>
                                             <div id="imgCon2" class="border-black flex-column" runat="server" visible='
                                                 <%# !Eval("productPhoto").Equals(DBNull.Value) ?true:false %>'>
-                                                <asp:Image ID="Image2" Width="200px" ImageUrl="~/Seller/ProcessPhoto.ashx" runat="server" Height="100px" />
+                                                <asp:Image ID="Image2" Width="200px" ImageUrl='<%# String.Concat("~/Seller/ProcessPhoto.ashx?photoId=",Eval("id")) %>' runat="server" Height="100px" />
                                                 <asp:Button ID="btnRemoveImg2" cssClass="btn-small-lightgray" Width="110px"  runat="server" Text="Remove" OnClick="btnRemoveImg2_Click" />
                                             </div>
                                             

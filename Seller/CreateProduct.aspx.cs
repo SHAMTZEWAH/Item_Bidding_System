@@ -355,6 +355,10 @@ namespace Item_Bidding_System.Seller
                     {
                         DataRow row = dt.NewRow();
                         row["id"] = reader["id"];
+                        if(reader["productPhoto"]==DBNull.Value && reader["productPhotoURL"] == DBNull.Value)
+                        {
+                            continue;
+                        }
                         row["productPhoto"] = reader["productPhoto"];
                         row["productPhotoURL"] = reader["productPhotoURL"];
                         dt.Rows.Add(row);
@@ -477,11 +481,11 @@ namespace Item_Bidding_System.Seller
         {
             createPhotoTable();
             DataTable dt = dtSet.Tables["Photo"];
+            byte[] bytes = { };
 
             //get data from the gvStore
             try
             {
-
                 if (txtUploadPhoto.HasFiles)
                 {
                     //get the posted file 
@@ -494,10 +498,12 @@ namespace Item_Bidding_System.Seller
                             using (BinaryReader br = new BinaryReader(fs))
                             {
                                 //serialise the photo
-                                byte[] bytes = br.ReadBytes((Int32)fs.Length);
+                                bytes = br.ReadBytes((Int32)fs.Length);
 
                                 //insert photo into database
                                 createPhotoToTempDB(null, bytes);
+                                Array.Clear(bytes, 0, bytes.Length);
+
                             }
                         }
                     }

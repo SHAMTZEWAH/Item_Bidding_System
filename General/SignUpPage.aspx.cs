@@ -99,8 +99,8 @@ namespace Item_Bidding_System.General
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string query = "INSERT INTO Account(accId, username, email, phoneNo, createDateTime, accPhotoURL, accStatus, accBalance, userId) " +
-                "VALUES(@id, @name, @email, @phone, CONVERT(DATETIME, GETDATE(), 120), @photo, @status, @balance, @userId)";
+            string query = "INSERT INTO Account(accId, username, email, phoneNo, createDateTime, accStatus, accBalance, userId) " +
+                "VALUES(@id, @name, @email, @phone, CONVERT(DATETIME, GETDATE(), 120), @status, @balance, @userId)";
             
             //execute
             try
@@ -127,7 +127,6 @@ namespace Item_Bidding_System.General
                 cmdRetrieve.Parameters.AddWithValue("@name", username);
                 cmdRetrieve.Parameters.AddWithValue("@email", email);
                 cmdRetrieve.Parameters.AddWithValue("@phone", phoneNo);
-                cmdRetrieve.Parameters.AddWithValue("@photo", "");
                 cmdRetrieve.Parameters.AddWithValue("@status", "Unconfirm");
                 cmdRetrieve.Parameters.AddWithValue("@balance", 0.00);
                 cmdRetrieve.Parameters.AddWithValue("@userId", userId);

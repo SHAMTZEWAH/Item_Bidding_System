@@ -5,18 +5,16 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-namespace Item_Bidding_System.Seller
+namespace Item_Bidding_System.User
 {
     /// <summary>
-    /// Summary description for ProcessPhoto (Temporarily not used)
+    /// Summary description for ProcessPhoto
     /// </summary>
     public class ProcessPhoto : IHttpHandler
     {
 
         public void ProcessRequest(HttpContext context)
         {
-            string id = "";
-
             //create connection
             SqlConnection con;
             string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -24,26 +22,18 @@ namespace Item_Bidding_System.Seller
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string queryAuctionProduct = "SELECT productPhoto FROM TempPhoto WHERE productPhoto IS NOT NULL AND id = @id";
-            string queryEditProduct = "SELECT productPhoto FROM ProductPhoto WHERE productPhoto IS NOT NULL AND productId = @productId AND productPhotoId = @id";
+            string queryAccPhoto = "SELECT accPhoto FROM Account WHERE accPhoto IS NOT NULL AND accId = @accId";
             try
             {
                 con.Open();
-                if(context.Request.QueryString["prodId"] != null) //determine whether it is from edit product page (as productId has been available in db)
+                if (context.Request.QueryString["accId"] != null)
                 {
-                    var prodId = context.Request.QueryString["prodId"];
-                    cmdRetrieve = new SqlCommand(queryEditProduct, con);
-                    cmdRetrieve.Parameters.AddWithValue("@productId", prodId);
-                }
-                else
-                {
-                    cmdRetrieve = new SqlCommand(queryAuctionProduct, con);
-                }
-                if (context.Request.QueryString["photoId"] != null)
-                {
-                    id = context.Request.QueryString["photoId"];
-                    cmdRetrieve.Parameters.AddWithValue("@id", id);
+                    var accId = context.Request.QueryString["accId"];
+
+                    cmdRetrieve = new SqlCommand(queryAccPhoto, con);
+                    cmdRetrieve.Parameters.AddWithValue("@accId",accId);
                     SqlDataReader reader = cmdRetrieve.ExecuteReader();
+
                     if (reader.HasRows)
                     {
                         while (reader.Read())
@@ -52,20 +42,16 @@ namespace Item_Bidding_System.Seller
                             {
                                 if (reader["productPhoto"] != null)
                                 {
-                                    context.Response.BinaryWrite((byte[])reader["productPhoto"]);
+                                    context.Response.BinaryWrite((byte[])reader["accPhoto"]);
                                 }
 
                             }
                             catch (Exception ex)
                             {
-                                //context.Response.BinaryWrite(new byte[0]);
-                                //context.Response.BinaryWrite();
-                                //HttpContext.Current.ApplicationInstance.CompleteRequest();
                                 continue;
                             }
                         }
                     }
-
                 }
             }
             catch (NullReferenceException ex)

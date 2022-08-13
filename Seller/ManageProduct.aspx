@@ -86,7 +86,7 @@
                            
                         </div>
                         <div class="flex-column flex-around">
-                            <button class="btn-medium-blue btnHover" onclick="/User/EditProduct.aspx?prodName=">Edit</button> <!--URL need to add-->
+                            <asp:Button ID="btnEdit" CssClass="btn-medium-blue btnHover" runat="server" Text="Edit" onclick="btnEdit_Click"/>
                         </div>
                 </div>
                 </ItemTemplate>

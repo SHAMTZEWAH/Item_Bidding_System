@@ -93,10 +93,8 @@
     <Content Include="Seller\ManageFinance.aspx" />
     <Content Include="Seller\ManageOrder.aspx" />
     <Content Include="Seller\ManageProduct.aspx" />
-    <Content Include="Seller\OrderList.ascx" />
     <Content Include="Seller\ResponseOffer.aspx" />
     <Content Include="Seller\SalesSummary.aspx" />
-    <Content Include="Seller\UploadProduct.aspx" />
     <Content Include="SideMenu.css" />
     <Content Include="SideMenuAdmin.ascx" />
     <Content Include="SideMenuFilter.ascx" />
@@ -240,13 +238,6 @@
     <Compile Include="Seller\ManageProduct.aspx.designer.cs">
       <DependentUpon>ManageProduct.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Seller\OrderList.ascx.cs">
-      <DependentUpon>OrderList.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Seller\OrderList.ascx.designer.cs">
-      <DependentUpon>OrderList.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Seller\ProcessPhoto.ashx.cs">
       <DependentUpon>ProcessPhoto.ashx</DependentUpon>
     </Compile>
@@ -263,13 +254,6 @@
     </Compile>
     <Compile Include="Seller\SalesSummary.aspx.designer.cs">
       <DependentUpon>SalesSummary.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Seller\UploadProduct.aspx.cs">
-      <DependentUpon>UploadProduct.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Seller\UploadProduct.aspx.designer.cs">
-      <DependentUpon>UploadProduct.aspx</DependentUpon>
     </Compile>
     <Compile Include="SideMenuAdmin.ascx.cs">
       <DependentUpon>SideMenuAdmin.ascx</DependentUpon>
@@ -341,6 +325,9 @@
     <Compile Include="User\AccountManagement.aspx.designer.cs">
       <DependentUpon>AccountManagement.aspx</DependentUpon>
     </Compile>
+    <Compile Include="User\ProcessPhoto.ashx.cs">
+      <DependentUpon>ProcessPhoto.ashx</DependentUpon>
+    </Compile>
     <Compile Include="User\SellerRegistration.aspx.cs">
       <DependentUpon>SellerRegistration.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -360,6 +347,7 @@
     <Content Include="ItemBidding.Master" />
     <None Include="packages.config" />
     <Content Include="Seller\ProcessPhoto.ashx" />
+    <Content Include="User\ProcessPhoto.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

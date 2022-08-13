@@ -122,31 +122,35 @@
                                  <asp:FileUpload ID="txtUploadPhoto" runat="server" AllowMultiple="True" />
                              </div>
                              <div>
-                                 <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ErrorMessage="Only .jpg, .png, bitmap image is supported" Text="*" ValidationExpression="/^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w].*))+(.jpeg|.JPEG|.gif|.GIF|.png|.PNG|.JPG|.jpg|.bitmap|.BITMAP)$/"></asp:RegularExpressionValidator>
+                                 <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ErrorMessage="Only .jpg, .png, bitmap image is supported" Text="*" ValidationExpression="/^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w].*))+(.jpeg|.JPEG|.gif|.GIF|.png|.PNG|.JPG|.jpg|.bitmap|.BITMAP)$/" ControlToValidate="txtUploadPhoto" ValidationGroup="photoValidate"></asp:RegularExpressionValidator>
                              </div>
                             <div>
                                 <asp:Button ID="btnSubmitPhoto" runat="server" Text="Submit Photo" OnClick="btnSubmitPhoto_Click" /> <!--Submit URL and display preview image-->
                             </div>
                         </div>
                      </div>
-                    
-                    <div>
+                    </div>
+                </td>
+            </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="small-top-gap flex-center-center">
                         <!--display image-->
                         <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
                             <ContentTemplate>
                                 <asp:DataList ID="DataList1" runat="server" RepeatDirection="Horizontal" RepeatColumns="3" >
                                     <ItemTemplate>
-                                        <div class="flex-row small-top-gap" runat="server">
+                                        <div class="flex-row small-top-gap" visible='<%# !Eval("productPhotoURL").Equals(DBNull.Value) || !Eval("productPhoto").Equals(DBNull.Value)?true:false %>' runat="server">
                                             <div id="imgCon1" class="border-black flex-column" runat="server" visible='<%# !Eval("productPhotoURL").Equals(DBNull.Value)?true:false %>'>
                                                 <asp:Image ID="Image1" Width="200px" ImageUrl='<%# Eval("productPhotoURL") %>' runat="server" Height="100px" />
                                                 <asp:Button ID="btnRemoveImg1" cssClass="btn-small-lightgray" Width="110px"  runat="server" Text="Remove" OnClick="btnRemoveImg1_Click" />
                                             </div>
                                             <div id="imgCon2" class="border-black flex-column" runat="server" visible='
                                                 <%# !Eval("productPhoto").Equals(DBNull.Value) ?true:false %>'>
-                                                <asp:Image ID="Image2" Width="200px" ImageUrl="~/Seller/ProcessPhoto.ashx" runat="server" Height="100px" />
+                                                <asp:Image ID="Image2" ImageUrl='<%# String.Concat("~/Seller/ProcessPhoto.ashx?prodId=",Eval("productId"),"&photoId=",Eval("productPhotoId")) %>' Width="200px" runat="server" Height="100px" />
                                                 <asp:Button ID="btnRemoveImg2" cssClass="btn-small-lightgray" Width="110px"  runat="server" Text="Remove" OnClick="btnRemoveImg2_Click" />
                                             </div>
-                                            
+                                            <asp:HiddenField ID="hfRowProdId" Value='<%# Eval("productId") %>' runat="server" />
                                             <asp:HiddenField ID="hfRow" Value='<%# Eval("productPhotoId") %>' runat="server" />
                                         </div>
                                     </ItemTemplate>
@@ -154,14 +158,13 @@
                             </ContentTemplate>
                             <Triggers>
                                 <asp:AsyncPostBackTrigger ControlId="btnSubmitURL" EventName="Click" />
-                                <asp:AsyncPostBackTrigger ControlId="btnSubmitPhoto" EventName="Click" />
+                                <asp:PostBackTrigger ControlId="btnSubmitPhoto" />
                             </Triggers>
                         </asp:UpdatePanel>
                         
                     </div>
-                    </div>
-                </td>
-            </tr>
+                    </td>
+                </tr>
             <tr>
                 <td class="lbl">SubStore:</td>
                 <td>
@@ -213,12 +216,12 @@
                             <div id="durationCon" runat="server">
                                 <div class="medium-top-inner-gap">
                                     <asp:DropDownList ID="ddlDuration" CssClass="textBox" runat="server">
-                                        <asp:ListItem Value="-1 ">--Select Duration--</asp:ListItem>
-                                        <asp:ListItem Value="1 ">1 days</asp:ListItem>
-                                        <asp:ListItem Value="3 ">3 days</asp:ListItem>
-                                        <asp:ListItem Value="5 ">5 days</asp:ListItem>
-                                        <asp:ListItem Value="7 ">7 days</asp:ListItem>
-                                        <asp:ListItem Value="10 ">10 days</asp:ListItem>
+                                        <asp:ListItem Value="-1">--Select Duration--</asp:ListItem>
+                                        <asp:ListItem Value="1">1 days</asp:ListItem>
+                                        <asp:ListItem Value="3">3 days</asp:ListItem>
+                                        <asp:ListItem Value="5">5 days</asp:ListItem>
+                                        <asp:ListItem Value="7">7 days</asp:ListItem>
+                                        <asp:ListItem Value="10">10 days</asp:ListItem>
                                     </asp:DropDownList>
                                 </div>
                                 <div>
