@@ -121,27 +121,24 @@
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
 
-                    <asp:TemplateField Visible="False"  >
+                    <asp:TemplateField>
                         <HeaderTemplate>
-                            
+                            <asp:Label ID = "lblStatus" runat="server" Text="Status"></asp:Label>
                         </HeaderTemplate>
-                        <ItemTemplate>
-                            <div>
-                                <asp:Button ID="btnFlag" CssClass="btn-medium-red" runat="server" Text="Flag" onclick="btnFlag_Click"/>
-                            </div>
-                        </ItemTemplate>
-                        <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
-                    </asp:TemplateField>
-
-                    <asp:TemplateField Visible="False">
-                        <HeaderTemplate>
-                            
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <div>
-                                <asp:Button ID="btnUnflag" CssClass="btn-small-blue" runat="server" Text="Unflag" onclick="btnUnflag_Click"/>
-                            </div>
-                        </ItemTemplate>
+                         <ItemTemplate>
+                             <div>
+                                 <div>
+                                <label class="switch" runat="server">
+                                    <asp:CheckBox ID="CheckBox1" type="checkbox" runat="server" OnCheckedChanged="CheckBox1_CheckedChanged" Text="" AutoPostBack="True" Checked="False" ViewStateMode="Inherit" TextAlign="Right" ClientIDMode="Static" EnableViewState="True" />
+                                    <span id="btnToggleRound" class="slider round" style="--transformValue:0px;" runat="server"></span>
+                                </label>
+                                </div>
+                                 <div>
+                                     <asp:Label ID="lblStatusContent" runat="server" Text='<%#  Eval("accStatus") %>'></asp:Label>
+                                 </div>
+                             </div>
+                             <asp:HiddenField ID="hfRowNo" Value='<%# Container.DataItemIndex %>' runat="server" />
+                         </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
                     

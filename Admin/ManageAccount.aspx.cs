@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace Item_Bidding_System.Admin
@@ -17,9 +18,17 @@ namespace Item_Bidding_System.Admin
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            List<CheckBox> checkBox1;
             if (!IsPostBack)
             {
                 loadData();
+                checkBox1 = checkBoxContainer();
+                //retrieve all the checkbox which is checked
+                foreach (CheckBox checkbox in checkBox1)
+                {
+                    GridViewRow gvr = (GridViewRow)checkbox.NamingContainer;
+                    displayToggle(checkbox,gvr.RowIndex);
+                }
             }
             
         }
@@ -55,6 +64,13 @@ namespace Item_Bidding_System.Admin
 
             dtColumn = new DataColumn();
             dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "accStatus";
+            dtColumn.ReadOnly = false;
+            dtColumn.Unique = false;
+            dt.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
             dtColumn.ColumnName = "sellerStatus";
             dtColumn.ReadOnly = false;
             dtColumn.Unique = false;
@@ -82,7 +98,6 @@ namespace Item_Bidding_System.Admin
         {
             createAccountTable();
             DataTable dt = dtSet.Tables["Account"];
-            DataColumn dtColumn;
 
             //create connection
             SqlConnection con;
@@ -91,13 +106,13 @@ namespace Item_Bidding_System.Admin
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string query = "SELECT Account.accId, Account.username, Account.email, Seller.sellerStatus, aspnet_Roles.RoleName " +
+            string query = "SELECT Account.accId, Account.username, Account.email, Account.accStatus, Seller.sellerStatus, aspnet_Roles.RoleName " +
                 "FROM Account INNER JOIN " +
                 "aspnet_UsersInRoles ON Account.userId = aspnet_UsersInRoles.UserId INNER JOIN " +
                 "aspnet_Roles ON aspnet_Roles.RoleId = aspnet_UsersInRoles.RoleId FULL JOIN " +
                 "Seller ON Seller.accId = Account.accId " +
                 "ORDER BY Account.createDateTime";
-            string queryFilter = "SELECT Account.accId, Account.username, Account.email, Seller.sellerStatus, aspnet_Roles.RoleName " +
+            string queryFilter = "SELECT Account.accId, Account.username, Account.email, Account.accStatus, Seller.sellerStatus, aspnet_Roles.RoleName " +
                 "FROM Account INNER JOIN " +
                 "aspnet_UsersInRoles ON Account.userId = aspnet_UsersInRoles.UserId INNER JOIN " +
                 "aspnet_Roles ON aspnet_Roles.RoleId = aspnet_UsersInRoles.RoleId FULL JOIN " +
@@ -135,6 +150,7 @@ namespace Item_Bidding_System.Admin
                             row["accId"] = reader["accId"];
                             row["username"] = reader["username"];
                             row["email"] = reader["email"];
+                            row["accStatus"] = reader["accStatus"];
                             row["sellerStatus"] = reader["sellerStatus"];
                             row["RoleName"] = reader["RoleName"];
                             dt.Rows.Add(row);
@@ -155,13 +171,12 @@ namespace Item_Bidding_System.Admin
                                         dt.Rows[i].SetField("RoleName", duplicateRole);
                                     }
                                 }
-                                dt.AcceptChanges();
                             }
                         }
                         
                     }
                 }
-
+                dt.AcceptChanges();
                 userGrid.DataSource = dt;
                 userGrid.DataBind();
 
@@ -672,6 +687,175 @@ namespace Item_Bidding_System.Admin
             }
         }
 
+        /*Toggle function*/
+        List<CheckBox> checkBoxContainer()
+        {
+            List<CheckBox> chkBoxContainer = new List<CheckBox>();
+            CheckBox chk = new CheckBox();
+
+            foreach (GridViewRow row in userGrid.Rows)
+            {
+                Control control = row.FindControl("CheckBox1");
+                Control controlStatus = row.FindControl("lblStatusContent");
+                if (control is CheckBox)
+                {
+                    chk = control as CheckBox;
+                }
+                if (controlStatus is Label)
+                {
+                    Label ctrlStatus = controlStatus as Label;
+                    if (ctrlStatus.Text.Trim().Equals("Flagged"))
+                    {
+                        chkBoxContainer.Add(chk);
+                    }
+                }
+            }
+
+            return chkBoxContainer;
+        }
+
+        void updateAccStatus(string accId, string status)
+        {
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //apply string query
+            SqlCommand cmdRetrieve;
+            //string getSellerId = "SELECT sellerId FROM Seller INNER JOIN Account ON Account.accId = Seller.accId WHERE Account.username = @username AND Account.email = @email";
+            string query = "UPDATE Account SET accStatus = @status WHERE accId = @accId"; //
+
+            //execute query
+            try
+            {
+                //execute query
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@status", status);
+                cmdRetrieve.Parameters.AddWithValue("@accId", accId);
+                cmdRetrieve.ExecuteNonQuery();
+            }
+            catch (NullReferenceException exDB)
+            {
+                if (lblNoData != null)
+                {
+                    lblNoData.Visible = true;
+                    lblNoData.Text = exDB.Message.ToString();
+                }
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        void displayToggle(Control sender, int rowNo)
+        {
+            var chkBox = (CheckBox)sender;
+
+            //add new class
+            string sliderFocus = "slider-focus"; //just some decoration purpose in shadow
+            string sliderChecked = "slider-checked"; //when the slider is checked
+            //string sliderBeforeChecked = "slider-before-checked";
+
+            //get the span element
+            //var control = chkBox.Parent.Controls.OfType<HtmlGenericControl>().LastOrDefault(); //the flag is always place at the end of the column
+            var control = userGrid.Rows[rowNo].FindControl("btnToggleRound") as HtmlGenericControl;
+
+            string classes = ((HtmlGenericControl)control).Attributes["class"];
+            string dataStyle = ((HtmlGenericControl)control).Attributes["style"];
+            //get status
+            //GridViewRow grvRow = (GridViewRow)chkBox.NamingContainer;
+            //Label statusControl = (Label)grvRow.FindControl("lblStatusContent");
+            Label statusControl = userGrid.Rows[rowNo].FindControl("lblStatusContent") as Label;
+            string status = statusControl.Text;
+
+            //change toggle
+            if (status.Trim().Equals("Flagged"))
+            {
+                //toggle round button move to right
+                //string script = "<script type=\"text/javascript\">" +
+                //    "document.querySelector('.slider').style.setProperty('--transformValue', '26px');" +
+                //    "</script>";
+
+                //RegisterStartupScript vs RegisterClientScriptBlock
+                //one is run before end of form tag, another one is after start of form tag
+                //run the script to make css transformation (toggle go left or right)
+                //ClientScript.RegisterStartupScript(this.GetType(), "transform", script);
+                chkBox.Checked = true;
+                dataStyle += (dataStyle == "--transformValue:0px;") ? "--transformValue:26px;" : "--transformValue:0px;"; 
+                classes += (classes == "") ? sliderFocus : " " + sliderFocus; //add into the class string
+                classes += (classes == "") ? sliderChecked : " " + sliderChecked;
+            }
+            else
+            {
+                chkBox.Checked = false;
+                dataStyle = dataStyle.Replace("--transformValue:26px;", "--transformValue:0px;");
+                classes = classes.Replace(sliderFocus, "");
+                classes = classes.Replace(sliderChecked, "");
+            }
+            control.Attributes.Add("class", classes); //add the class attribute back to the control
+            control.Attributes.Add("style", dataStyle);
+        }
+
+        void updateStatusText(Object sender, string complaintStatus, int rowNo)
+        {
+            //var chkBox = (CheckBox)sender;
+            //GridViewRow grvRow = (GridViewRow)chkBox.NamingContainer;
+            //Label lblReportStatus = (Label)grvRow.FindControl("lblStatusContent");
+
+            Label lblReportStatus = userGrid.Rows[rowNo].FindControl("lblStatusContent") as Label;
+            lblReportStatus.Text = complaintStatus;
+        }
+
+        //the main method to load the data (status) and toggle
+        void updateAccStatusUI(Object sender, int rowNo)
+        {
+            var chkBox = (CheckBox)sender;
+            string accId = "";
+            string accStatus = "";
+
+            //get complaint id
+            GridViewRow grvRow = (GridViewRow)chkBox.NamingContainer;
+            Label accIdControl = (Label)grvRow.FindControl("accId");
+            accId = accIdControl.Text;
+
+            try
+            {
+                if (chkBox.Checked == true)
+                {
+                    accStatus = "Flagged";
+                }
+                else
+                {
+                    accStatus = "Unflagged";
+                }
+                //update into database
+                updateAccStatus(accId, accStatus);
+
+                //update the label status text
+                updateStatusText(sender, accStatus, rowNo);
+
+                //update the toggle (at left or right)
+                displayToggle((Control)sender, rowNo);
+            }
+            catch (Exception ex)
+            {
+                string alertMsg = "[!] The action is unable to complete: " + ex.ToString();
+                string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
+            }
+        }
+
+        protected void CheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            var chkBox = (CheckBox)sender;
+            var hfRowNo = chkBox.NamingContainer.FindControl("hfRowNo") as HiddenField;
+            updateAccStatusUI(sender,Convert.ToInt32(hfRowNo.Value));
+        }
+
 
         /*Useless Function*/
         protected void chkHeader_CheckedChanged(object sender, EventArgs e)
@@ -703,7 +887,5 @@ namespace Item_Bidding_System.Admin
         {
 
         }
-
-        
     }
 }

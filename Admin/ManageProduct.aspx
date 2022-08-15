@@ -33,14 +33,11 @@
             </div>
              </div>
 
-            <div id="SubStoreCon" class="substore-container" runat="server">
-               
-            </div>
-            <div class="content-subcontainer">
-                <asp:GridView ID="userGrid" runat="server" class="role-display"  CellPadding="4" ForeColor="Black" GridLines="Horizontal" Width="1250px" AllowSorting="True" AutoGenerateColumns="False" Height="147px" OnRowDataBound="userGrid_RowDataBound" OnRowDeleting="userGrid_RowDeleting" OnRowEditing="userGrid_RowEditing" OnRowUpdating="userGrid_RowUpdating" OnRowCancelingEdit="userGrid_RowCancelingEdit" OnSelectedIndexChanged="userGrid_SelectedIndexChanged">
+            <div class="content-subcontainer" style="border:none;">
+                <asp:GridView ID="userGrid" runat="server" class="role-display"  CellPadding="4" ForeColor="Black" GridLines="Horizontal" Width="1000px" AllowSorting="True" AutoGenerateColumns="False" Height="147px" OnRowDataBound="userGrid_RowDataBound" OnRowDeleting="userGrid_RowDeleting" OnRowEditing="userGrid_RowEditing" OnRowUpdating="userGrid_RowUpdating" OnRowCancelingEdit="userGrid_RowCancelingEdit" OnSelectedIndexChanged="userGrid_SelectedIndexChanged">
                 
                 <Columns>
-                    <asp:TemplateField>
+                    <asp:TemplateField Visible="False">
                         <HeaderTemplate>
                             <asp:CheckBox ID = "chkHeader" runat="server" OnCheckedChanged="chkHeader_CheckedChanged"/>
                         </HeaderTemplate>
@@ -67,7 +64,18 @@
                         </HeaderTemplate>
                         <ItemTemplate>
                             <div id="productPhoto">
-                                <asp:ImageButton ID="imgProductPhoto" onclick="ImageButton1_Click" runat="server" OnDataBinding="imgProductPhoto_DataBinding" />
+                                <!--display image-->
+                                <div class="flex-column small-top-gap" visible='<%# !Eval("productPhotoURL").Equals(DBNull.Value) || !Eval("productPhoto").Equals(DBNull.Value)?true:false %>' runat="server">
+                                    <div id="imgCon1" class="border-black flex-column" runat="server" visible='<%# !Eval("productPhotoURL").Equals(DBNull.Value)?true:false %>'>
+                                        <asp:Image ID="Image1" Width="200px" ImageUrl='<%# Eval("productPhotoURL") %>' runat="server" Height="100px" />
+                                    </div>
+                                    <div id="imgCon2" class="border-black flex-column" runat="server" visible='
+                                    <%# !Eval("productPhoto").Equals(DBNull.Value) ?true:false %>'>
+                                        <asp:Image ID="Image2" ImageUrl='<%# String.Concat("~/User/ProcessPhoto.ashx?prodId=",Eval("productId")) %>' Width="200px" runat="server" Height="100px" />
+                                    </div>
+                                    <asp:HiddenField ID="hfRowAccId" Value='<%# Eval("productId") %>' runat="server" />
+                                 </div>
+
                                 <asp:HiddenField ID="hfProductPhotoURL" Value='<%# Eval("productPhotoURL") %>' runat="server" />
                                 <asp:HiddenField ID="hfProductPhoto" Value='<%# Eval("productPhoto") %>' runat="server" />
                             </div>
@@ -133,13 +141,13 @@
                             <div>
                                 <div>
                                     <label class="switch" runat="server">
-                                        <asp:CheckBox ID="CheckBox1" type="checkbox" runat="server" OnCheckedChanged="CheckBox1_CheckedChanged" Text="" AutoPostBack="True" Checked="False" ViewStateMode="Inherit" TextAlign="Right" ClientIDMode="Static" EnableViewState="True" />
+                                        <asp:CheckBox ID="CheckBox1" type="checkbox" runat="server" OnCheckedChanged="CheckBox1_CheckedChanged1" Text="" AutoPostBack="True" Checked="False" ViewStateMode="Inherit" TextAlign="Right" ClientIDMode="Static" EnableViewState="True" />
                                         <span id="btnToggleRound" class="slider round" runat="server"></span>
                                     </label>
                                 </div>
                                 <div>
                                     <div>
-                                        <asp:Label ID="lblProductContent" runat="server" Text='<%#  Eval("productStatus") %>'></asp:Label>
+                                        <asp:Label ID="lblStatusContent" runat="server" Text='<%#  Eval("productStatus") %>'></asp:Label>
                                     </div>
                                 </div>
                                 

@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-namespace Item_Bidding_System.User
+namespace Item_Bidding_System.General
 {
     /// <summary>
     /// Summary description for ProcessPhoto
@@ -15,6 +15,8 @@ namespace Item_Bidding_System.User
 
         public void ProcessRequest(HttpContext context)
         {
+            string id = "";
+
             //create connection
             SqlConnection con;
             string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -22,41 +24,44 @@ namespace Item_Bidding_System.User
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string queryAccPhoto = "SELECT accPhoto FROM Account WHERE accPhoto IS NOT NULL AND accId = @accId";
+            string queryAuctionProduct = "SELECT productPhoto FROM ProductPhoto WHERE productPhoto IS NOT NULL AND photoStatus='Main' AND productPhotoId = @id";
             try
             {
                 con.Open();
-                if (context.Request.QueryString["accId"] != null)
+                cmdRetrieve = new SqlCommand(queryAuctionProduct, con);
+                
+                if (context.Request.QueryString["photoId"] != null)
                 {
-                    var accId = context.Request.QueryString["accId"];
-
-                    cmdRetrieve = new SqlCommand(queryAccPhoto, con);
-                    cmdRetrieve.Parameters.AddWithValue("@accId",accId);
+                    id = context.Request.QueryString["photoId"];
+                    cmdRetrieve.Parameters.AddWithValue("@id", id);
                     SqlDataReader reader = cmdRetrieve.ExecuteReader();
-
                     if (reader.HasRows)
                     {
                         while (reader.Read())
                         {
                             try
                             {
-                                if (reader["accPhoto"] != null)
+                                if (reader["productPhoto"] != null)
                                 {
-                                    context.Response.BinaryWrite((byte[])reader["accPhoto"]);
+                                    context.Response.BinaryWrite((byte[])reader["productPhoto"]);
                                 }
 
                             }
                             catch (Exception ex)
                             {
+                                //context.Response.BinaryWrite(new byte[0]);
+                                //context.Response.BinaryWrite();
+                                //HttpContext.Current.ApplicationInstance.CompleteRequest();
                                 continue;
                             }
                         }
                     }
+
                 }
             }
-            catch (Exception ex)
+            catch (NullReferenceException ex)
             {
-                context.Response.Redirect("/ErrorPage.aspx?message="+ex.Message);
+                context.Response.Redirect("/ErrorPage.aspx");
             }
             finally
             {
@@ -69,7 +74,7 @@ namespace Item_Bidding_System.User
         {
             get
             {
-                return true;
+                return false;
             }
         }
     }

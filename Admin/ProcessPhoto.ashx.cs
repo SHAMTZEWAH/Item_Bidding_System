@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-namespace Item_Bidding_System.User
+namespace Item_Bidding_System.Admin
 {
     /// <summary>
     /// Summary description for ProcessPhoto
@@ -22,16 +22,16 @@ namespace Item_Bidding_System.User
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string queryAccPhoto = "SELECT accPhoto FROM Account WHERE accPhoto IS NOT NULL AND accId = @accId";
+            string queryAccPhoto = "SELECT productPhoto FROM ProductPhoto WHERE productPhoto = 'Main' AND productId = @productId";
             try
             {
                 con.Open();
-                if (context.Request.QueryString["accId"] != null)
+                if (context.Request.QueryString["prodId"] != null)
                 {
-                    var accId = context.Request.QueryString["accId"];
+                    var prodId = context.Request.QueryString["prodId"];
 
                     cmdRetrieve = new SqlCommand(queryAccPhoto, con);
-                    cmdRetrieve.Parameters.AddWithValue("@accId",accId);
+                    cmdRetrieve.Parameters.AddWithValue("@productId", prodId);
                     SqlDataReader reader = cmdRetrieve.ExecuteReader();
 
                     if (reader.HasRows)
@@ -40,9 +40,9 @@ namespace Item_Bidding_System.User
                         {
                             try
                             {
-                                if (reader["accPhoto"] != null)
+                                if (reader["productPhoto"] != null)
                                 {
-                                    context.Response.BinaryWrite((byte[])reader["accPhoto"]);
+                                    context.Response.BinaryWrite((byte[])reader["productPhoto"]);
                                 }
 
                             }
@@ -56,7 +56,7 @@ namespace Item_Bidding_System.User
             }
             catch (Exception ex)
             {
-                context.Response.Redirect("/ErrorPage.aspx?message="+ex.Message);
+                context.Response.Redirect("/ErrorPage.aspx?message=" + ex.Message);
             }
             finally
             {
@@ -69,7 +69,7 @@ namespace Item_Bidding_System.User
         {
             get
             {
-                return true;
+                return false;
             }
         }
     }

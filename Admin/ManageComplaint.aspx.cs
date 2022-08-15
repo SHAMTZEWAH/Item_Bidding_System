@@ -15,8 +15,6 @@ namespace Item_Bidding_System.Admin
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
-
             // Manually register the event-handling method for the   
             // CheckedChanged event of the CheckBox control.
             List<CheckBox> checkBox1;
@@ -32,8 +30,6 @@ namespace Item_Bidding_System.Admin
                 }
                 
             }
-            
-
             //checkBox1.CheckedChanged += new EventHandler(this.CheckBox1_CheckedChanged);
         }
 
@@ -141,53 +137,7 @@ namespace Item_Bidding_System.Admin
             }
         }
 
-        protected void userGrid_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void userGrid_RowUpdating(object sender, GridViewUpdateEventArgs e)
-        {
-
-        }
-
-        protected void userGrid_RowEditing(object sender, GridViewEditEventArgs e)
-        {
-
-        }
-
-        protected void userGrid_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-
-        }
-
-        protected void userGrid_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
-        {
-
-        }
-
-        protected void userGrid_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-
-            // Checking the RowType of the Row
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                ////get complaint status
-                //var lblComplaintStatus = (Label)e.Row.FindControl("lblStatusContent");
-                //string status = lblComplaintStatus.Text;
-
-                //get toggle status
-                //var chkBoxStatus = (CheckBox)e.Row.FindControl("CheckBox1");
-                //displayToggle(chkBoxStatus);
-                //Session["chkBox" + e.Row.RowIndex] = chkBoxStatus.Checked;
-            }
-        }
-
-        protected void chkAccAll_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        //when user choose to filter the product
         protected void RadioButtonList1_SelectedIndexChanged1(object sender, EventArgs e)
         {
             Response.Redirect("ManageComplaint.aspx?filter="+ RadioButtonList1.SelectedValue);
@@ -235,12 +185,12 @@ namespace Item_Bidding_System.Admin
             var chkBox = (CheckBox)sender;
 
             //add new class
-            string sliderFocus = "slider-focus";
-            string sliderChecked = "slider-checked";
+            string sliderFocus = "slider-focus"; //just some decoration purpose in shadow
+            string sliderChecked = "slider-checked"; //when the slider is checked
             //string sliderBeforeChecked = "slider-before-checked";
 
             //get the span element
-            var control = chkBox.Parent.Controls.OfType<HtmlGenericControl>().LastOrDefault();
+            var control = chkBox.Parent.Controls.OfType<HtmlGenericControl>().LastOrDefault(); //the flag is always place at the end of the column
 
             string classes = ((HtmlGenericControl)control).Attributes["class"];
 
@@ -259,9 +209,10 @@ namespace Item_Bidding_System.Admin
 
                 //RegisterStartupScript vs RegisterClientScriptBlock
                 //one is run before end of form tag, another one is after start of form tag
+                //run the script to make css transformation (toggle go left or right)
                 ClientScript.RegisterStartupScript(this.GetType(), "transform", script);
                 chkBox.Checked = true;
-                classes += (classes == "") ? sliderFocus : " " + sliderFocus;
+                classes += (classes == "") ? sliderFocus : " " + sliderFocus; //add into the class string
                 classes += (classes == "") ? sliderChecked : " " + sliderChecked;
             }
             else
@@ -270,7 +221,7 @@ namespace Item_Bidding_System.Admin
                 classes = classes.Replace(sliderFocus, "");
                 classes = classes.Replace(sliderChecked, "");
             }
-            control.Attributes.Add("class", classes);
+            control.Attributes.Add("class", classes); //add the class attribute back to the control
         }
 
         void updateStatusText(Object sender, string complaintStatus)
@@ -282,6 +233,7 @@ namespace Item_Bidding_System.Admin
             lblReportStatus.Text = complaintStatus;
         }
 
+        //the main method to load the data (status) and toggle
         void updateComplaintStatusUI(Object sender)
         {
             var chkBox = (CheckBox)sender;
@@ -303,8 +255,13 @@ namespace Item_Bidding_System.Admin
                 {
                     complaintStatus = "Pending";
                 }
+                //update into database
                 updateComplaintStatus(complaintId, complaintStatus);
+
+                //update the label status text
                 updateStatusText(sender, complaintStatus);
+
+                //update the toggle (at left or right)
                 displayToggle((Control)sender);
             }
             catch (Exception ex)
@@ -326,6 +283,54 @@ namespace Item_Bidding_System.Admin
             //    ViewState.Remove(checkbox.UniqueID);
             //}
             updateComplaintStatusUI(sender);
+        }
+
+        /*Useless function*/
+        protected void userGrid_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void userGrid_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+
+        }
+
+        protected void userGrid_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+
+        }
+
+        protected void userGrid_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+
+        }
+
+        protected void userGrid_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+
+        }
+
+        protected void userGrid_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+
+            // Checking the RowType of the Row
+            //if (e.Row.RowType == DataControlRowType.DataRow)
+            //{
+            //    ////get complaint status
+            //    //var lblComplaintStatus = (Label)e.Row.FindControl("lblStatusContent");
+            //    //string status = lblComplaintStatus.Text;
+
+            //    //get toggle status
+            //    //var chkBoxStatus = (CheckBox)e.Row.FindControl("CheckBox1");
+            //    //displayToggle(chkBoxStatus);
+            //    //Session["chkBox" + e.Row.RowIndex] = chkBoxStatus.Checked;
+            //}
+        }
+
+        protected void chkAccAll_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
 
         protected void CheckBox1_Load(object sender, EventArgs e)

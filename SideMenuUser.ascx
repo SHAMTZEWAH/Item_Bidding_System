@@ -6,8 +6,23 @@
     <div class="side-menu-container">
 
         <div class="side-menu-item menu-top side-menu-top">
-            <img id="profilePic" src=""/> <!--Url for profile pic-->
-            <div id="username">Username</div>
+            <asp:DataList ID="DataList1" runat="server" RepeatDirection="Horizontal" RepeatColumns="1" >
+                <ItemTemplate>
+                    <div class="flex-row small-top-gap" visible='<%# !Eval("accPhotoURL").Equals(DBNull.Value) || !Eval("accPhoto").Equals(DBNull.Value)?true:false %>' runat="server">
+                        <div id="imgCon1" class="border-black flex-column" runat="server" visible='<%# !Eval("accPhotoURL").Equals(DBNull.Value)?true:false %>'>
+                            <asp:Image ID="Image1" Width="200px" ImageUrl='<%# Eval("accPhotoURL") %>' runat="server" Height="100px" />
+                        </div>
+                        <div id="imgCon2" class="border-black flex-column" runat="server" visible='
+                        <%# Convert.ToBase64String((byte[])Eval("accPhoto")).Trim() != string.Empty ?true:false %>'>
+                            <asp:Image ID="Image2" ImageUrl='<%# String.Concat("~/User/ProcessPhoto.ashx?accId=",Eval("accId")) %>' Width="200px" runat="server" Height="100px" />
+                        </div>
+                        <asp:HiddenField ID="hfRowAccId" Value='<%# Eval("accId") %>' runat="server" />
+                    </div>
+                    <div id="username">
+                        <asp:Label ID="lblUsername" runat="server" Text='<%# Eval("username") %>'></asp:Label>
+                    </div>
+                 </ItemTemplate>
+            </asp:DataList>
         </div>
 
         <div id="acc" class="side-menu-item">

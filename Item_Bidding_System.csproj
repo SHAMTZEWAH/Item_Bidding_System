@@ -132,6 +132,9 @@
     <Compile Include="Admin\ManageProduct.aspx.designer.cs">
       <DependentUpon>ManageProduct.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Admin\ProcessPhoto.ashx.cs">
+      <DependentUpon>ProcessPhoto.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Admin\WebCrawler.aspx.cs">
       <DependentUpon>WebCrawler.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -166,6 +169,9 @@
     </Compile>
     <Compile Include="General\LoginPage.aspx.designer.cs">
       <DependentUpon>LoginPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="General\ProcessPhoto.ashx.cs">
+      <DependentUpon>ProcessPhoto.ashx</DependentUpon>
     </Compile>
     <Compile Include="General\Product.aspx.cs">
       <DependentUpon>Product.aspx</DependentUpon>
@@ -345,6 +351,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ItemBidding.Master" />
+    <Content Include="Admin\ProcessPhoto.ashx" />
+    <Content Include="General\ProcessPhoto.ashx" />
     <None Include="packages.config" />
     <Content Include="Seller\ProcessPhoto.ashx" />
     <Content Include="User\ProcessPhoto.ashx" />
