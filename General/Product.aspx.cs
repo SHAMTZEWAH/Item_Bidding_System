@@ -18,14 +18,15 @@ namespace Item_Bidding_System.General
         protected void Page_Load(object sender, EventArgs e)
         {
             //SqlConnection con;
-            
-            PageAsyncTask pageAsyncTask = new PageAsyncTask(executeAllMethodAsync);
-            Page.RegisterAsyncTask(pageAsyncTask);
-            //Method to invoke the registered async-methods immedietly and not after the PreRender-Event
-            Page.ExecuteRegisteredAsyncTasks();
+            if (!IsPostBack)
+            {
+               
+            }
+            executeAllMethodAsync();
+
         }
 
-        async Task executeAllMethodAsync()
+        void executeAllMethodAsync()
         {
             if (!IsPostBack)
             {
@@ -34,17 +35,17 @@ namespace Item_Bidding_System.General
                     if (Request.QueryString["selection"].ToString() != null)
                     {
                         //show category product when the user click on the category bar below the search bar
-                        await loadContentAsync(Request.QueryString["selection"].ToString());
+                        loadContentAsync(Request.QueryString["selection"].ToString());
 
                     }
                     else if (Request.QueryString["keyword"].ToString() != null) //searching keyword (on search bar)
                     {
                         //show product based on the keyword
-                        await loadContentAsync(Request.QueryString["keyword"].ToString());
+                         loadContentAsync(Request.QueryString["keyword"].ToString());
                     }
                     else
                     {
-                        await loadHotProductAsync();
+                         loadHotProductAsync();
                     }
 
 
@@ -52,7 +53,7 @@ namespace Item_Bidding_System.General
                 catch (NullReferenceException ex)
                 {
                     //Show Hot product
-                    await loadHotProductAsync(); 
+                     loadHotProductAsync(); 
                 }
                 finally
                 {
@@ -74,7 +75,7 @@ namespace Item_Bidding_System.General
             //}
         }
 
-        async Task loadHotProductAsync()
+        void loadHotProductAsync()
         {
             SqlConnection con;
             string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -89,8 +90,6 @@ namespace Item_Bidding_System.General
             }
 
             //execute query
-            await Task.Run(() =>
-            {
                 try
                 {
 
@@ -118,10 +117,9 @@ namespace Item_Bidding_System.General
                     con.Close();
                     con.Dispose();
                 }
-            }); 
         } 
 
-        async Task<DataTable> loadSPAsync(string filterDetails, string sp)
+        DataTable loadSPAsync(string filterDetails, string sp)
         {
             string username = "";
             string[] category = { };
@@ -131,6 +129,7 @@ namespace Item_Bidding_System.General
             string[] sellingFormat = { };
             string selectedSellingFormat = "";
             string selection = "";
+            int flag = 0;
             SqlDataAdapter adapter = new SqlDataAdapter();
             DataTable dataTable = new DataTable();
 
@@ -140,23 +139,7 @@ namespace Item_Bidding_System.General
 
             //apply string query
             SqlCommand cmdRetrieve;
-            string queryWithoutMinAndMax1 = "SELECT ProductPhoto.productPhotoURL, ProductDetails.productName, FixedPriceProduct.productPrice, Product.productStock--, ISNULL(allProduct.yourBid,0) AS yourBid " +
-                "FROM ProductPhoto INNER JOIN " +
-                "Product ON ProductPhoto.productId = Product.productId " +
-                "FULL JOIN BidTable ON Product.productId = BidTable.productId INNER JOIN " +
-                "ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId INNER JOIN " +
-                "FixedPriceProduct ON Product.productId = FixedPriceProduct.productId FULL JOIN " +
-                "AuctionProduct ON AuctionProduct.productId = Product.productId INNER JOIN " +
-                "SubStore ON SubStore.subStoreId = Product.subStoreId INNER JOIN " +
-                "Seller ON Seller.sellerId = SubStore.sellerId INNER JOIN " +
-                "Account ON Account.accId = Seller.accId INNER JOIN " +
-                "Address ON Address.accId = Account.accId " +
-                "WHERE(Product.addDateTime >= DateAdd(day, 1, @secondDate) AND Product.addDateTime < DateAdd(month, 1, @startDate)) AND ProductPhoto.photoStatus = 'Main' AND " +
-                "ProductDetails.productCategory LIKE '%' + @category + '%' AND FixedPriceProduct.productPrice >= @minprice AND FixedPriceProduct.productPrice <= @maxprice AND Address.state LIKE '%' + @state + '%' AND " +
-                "AuctionProduct.productId IS @sellingformat " +
-                "GROUP BY ProductPhoto.productPhotoURL, ProductDetails.productName, FixedPriceProduct.productPrice, Product.productStock, addDateTime " +
-                "ORDER BY Product.addDateTime DESC";
-            string queryWithoutMinAndMax = "ProductPhoto.productPhotoURL, ProductDetails.productName, FixedPriceProduct.productPrice, Product.productStock " +
+            string queryWithoutMinAndMax = "SELECT Product.productId, ProductPhoto.productPhotoURL, ProductPhoto.productPhoto, ProductDetails.productName, MAX(BidTable.bidPrice) AS maxBid, FixedPriceProduct.productPrice, Product.productStock, ISNULL(allProduct.yourBid,0) AS yourBid " +
                 "FROM ProductPhoto INNER JOIN " +
                 "Product ON ProductPhoto.productId = Product.productId " +
                 "FULL JOIN BidTable ON Product.productId = BidTable.productId INNER JOIN " +
@@ -167,9 +150,10 @@ namespace Item_Bidding_System.General
                 "SubStore ON SubStore.subStoreId = Product.subStoreId INNER JOIN " +
                 "Seller ON Seller.sellerId = SubStore.sellerId INNER JOIN " +
                 "Account ON Account.accId = Seller.accId INNER JOIN " +
-                "Address ON Address.accId = Account.accId " +
+                "Address ON Address.accId = Account.accId LEFT JOIN " +
+                "vw_allProduct AS allProduct ON allProduct.productId = Product.productId " +
                 "WHERE(Product.addDateTime >= DateAdd(day, 1, @secondDate) AND Product.addDateTime < DateAdd(month, 1, @startDate)) AND ProductPhoto.photoStatus = 'Main' AND " +
-                "AuctionProduct.productId IS @sellingformat AND FixedPriceProduct.productPrice >= @minprice AND FixedPriceProduct.productPrice <= @maxprice AND ";
+                "FixedPriceProduct.productPrice >= @minprice AND FixedPriceProduct.productPrice <= @maxprice AND ";
             string query = "";
             
             if (con.State.ToString() == "Open")
@@ -186,8 +170,7 @@ namespace Item_Bidding_System.General
                 con.Open();
 
                 //wait for the username to have value 
-                await Task.Run(() =>
-                {
+
                     try
                     {
                         username = User.Identity.Name;
@@ -196,11 +179,8 @@ namespace Item_Bidding_System.General
                     {
                         username = "";
                     }
-                });
-
+                
                 //wait for the category to have value
-                await Task.Run(() =>
-                {
                     try
                     {
                         string qValue = Request.QueryString["category"];
@@ -210,11 +190,8 @@ namespace Item_Bidding_System.General
                     {
                         category = new string[1] { "" };
                     }
-                });
 
                 //wait for the min price to have value
-                await Task.Run(() =>
-                {
                     try
                     {
                         minPrice = Request.QueryString["minPrice"];
@@ -223,11 +200,8 @@ namespace Item_Bidding_System.General
                     {
                         minPrice = "";
                     }
-                });
 
                 //wait for the max price to have value
-                await Task.Run(() =>
-                {
                     try
                     {
                         maxPrice = Request.QueryString["maxPrice"];
@@ -236,11 +210,8 @@ namespace Item_Bidding_System.General
                     {
                         maxPrice = "";
                     }
-                });
 
                 //wait for the state to have value
-                await Task.Run(() =>
-                {
                     try
                     {
                         string qValue = Request.QueryString["state"];
@@ -250,11 +221,8 @@ namespace Item_Bidding_System.General
                     {
                         state = new string[1] { "" };
                     }
-                });
 
                 //wait for the state to have value
-                await Task.Run(() =>
-                {
                     try
                     {
                         string qValue = Request.QueryString["option"];
@@ -264,11 +232,8 @@ namespace Item_Bidding_System.General
                     {
                         sellingFormat = new string[1] {""};
                     }
-                });
 
                 //wait for the selection to have value
-                await Task.Run(() =>
-                {
                     try
                     {
                         selection = Request.QueryString["selection"];
@@ -277,7 +242,6 @@ namespace Item_Bidding_System.General
                     {
                         selection = "";
                     }
-                });
 
                 //if no min and max
                 //if have min and max
@@ -301,39 +265,72 @@ namespace Item_Bidding_System.General
                 }
 
                 //Auction product is null or not null (selling format)
-                int count = 0;
+                flag = 0;
                 foreach (string opt in sellingFormat) //OpenAuction
                 {
                     if (opt == "SealedBidAuction" || opt == "OpenBidAuction")
                     {
-                        selectedSellingFormat = "NOT NULL";
+                        query += "AuctionProduct.productId IS NOT NULL AND ";
+                        ++flag;
                         break;
                     }
-                    count++;
+                    else if (string.IsNullOrEmpty(opt))
+                    {
+                        break;
+                    }
+                    ++flag;
                 }
-                if (count > 1)
+                if (flag == 1)
                 {
-                    selectedSellingFormat = "NULL";
+                    query += "AuctionProduct.productId IS NULL AND ";
+                }
+                else if(flag==0)
+                {
+                    query += "";
                 }
 
                 //product category
                 //Address.state LIKE '%' + @state + '%' AND ";
-                for(int i=0; i<category.Length; i++)
+                flag = 0;
+                query += "";
+                for(int i=0; i<category.Length && !string.IsNullOrEmpty(category[i]); i++)
                 {
-                    query += "ProductDetails.productCategory LIKE '%' + @category"+(i+1)+"'%' AND ";
+                    query += "ProductDetails.productCategory = '"+category[i]+ "' OR ";
+                    flag++;
                 }
+                query = query.TrimEnd(new char[] { 'O', 'R', ' ' });
+                if (flag > 0)
+                {
+                    query += " AND ";
+                }
+
 
                 //address state
-                for (int i = 0; i < state.Length; i++)
+                flag = 0;
+                query += "";
+                for (int i = 0; i < state.Length && !string.IsNullOrEmpty(state[i]); i++)
                 {
-                    query += "Address.state LIKE '%' + @state" + (i + 1) + "'%' AND ";
+                    query += "Address.state = '" + state[i] + "' OR ";
+                    flag++;
+                }
+                query = query.TrimEnd(new char[] { 'O', 'R', ' ' });
+                if (flag > 0)
+                {
+                    query += " AND ";
                 }
 
-                query.TrimEnd(new char[] {'A','N','D'});
-                query += "GROUP BY ProductPhoto.productPhotoURL, ProductDetails.productName, FixedPriceProduct.productPrice, Product.productStock, addDateTime ";
+                query.TrimEnd(new char[] {' '});
+                if(query.EndsWith("AND"))
+                {
+                    query = query.TrimEnd(new char[] { 'A', 'N', 'D' });
+                }
+                else if (query.EndsWith("OR"))
+                {
+                    query = query.TrimEnd(new char[] { 'O', 'R' });
+                }
+                query += " GROUP BY Product.productId, ProductPhoto.productPhotoURL, ProductPhoto.productPhoto, ProductDetails.productName, Product.addDateTime, FixedPriceProduct.productPrice, Product.productStock, allProduct.yourBid ";
 
                 //selection
-                cmdRetrieve = new SqlCommand(query, con);
                 if (selection == "NewlyAdded")
                 {
                     query += "ORDER BY Product.addDateTime DESC";
@@ -344,9 +341,8 @@ namespace Item_Bidding_System.General
                 }
 
                 //wait for the cmdRetrieve is ready
-                await Task.Run(() =>
-                {
-                    int monthInt = DateTime.Now.Month;
+                cmdRetrieve = new SqlCommand(query, con);
+                int monthInt = DateTime.Now.Month;
                     string month = "";
                     if (monthInt <= 9)
                     {
@@ -361,19 +357,9 @@ namespace Item_Bidding_System.General
                     cmdRetrieve.Parameters.AddWithValue("@startDate",(month+"/01/2022"));
                     cmdRetrieve.Parameters.AddWithValue("@minprice", minPrice);
                     cmdRetrieve.Parameters.AddWithValue("@maxprice", maxPrice);
-                    cmdRetrieve.Parameters.AddWithValue("@sellingformat", sellingFormat);
-                    for (int i=0; i<category.Length; i++)
-                    {
-                        cmdRetrieve.Parameters.AddWithValue("@category"+(i+1), category);
-                    }
-                    for (int i = 0; i < state.Length; i++)
-                    {
-                        cmdRetrieve.Parameters.AddWithValue("@state"+(i+1), state);
-                    }
-                });
 
                 //wait for the dataTable to be fill before return
-                adapter.SelectCommand = cmdRetrieve;
+                adapter = new SqlDataAdapter(cmdRetrieve);
                 adapter.Fill(dataTable);
 
                 
@@ -396,103 +382,31 @@ namespace Item_Bidding_System.General
             return dataTable;
         }
 
-        async Task loadContentAsync(string filterDetails)
+        void loadContentAsync(string filterDetails)
         {
-            //async task assign in var
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-
-            //var checkCategory = loadSPAsync(filterDetails, "pr_filterCategory");
-            //var checkName = loadSPAsync(filterDetails, "pr_filterName");
-            //var checkBrand = loadSPAsync(filterDetails, "pr_filterBrand");
-            //var checkBusinessName = loadSPAsync(filterDetails, "pr_filterBusinessName");
-            //var checkModel = loadSPAsync(filterDetails, "pr_filterModel");
-            //var checkType = loadSPAsync(filterDetails, "pr_filterType");
-            var getProduct = loadSPAsync(filterDetails, "");
-
-            stopWatch.Stop();
-            Label1.Text = stopWatch.Elapsed.TotalSeconds.ToString();
-
-            //check which task finish first 
             DataTable resultTable = new DataTable();
 
-            var filterTasks = new List<Task> { getProduct };
-            while(filterTasks.Count > 0)
-            {
-                Task finishedTask = await Task.WhenAny(filterTasks);
-                if(finishedTask == getProduct)
-                {
-                    //assign dataset to the repeater
-                    Repeater1.DataSource = resultTable;
-                    Repeater1.DataBind();
-                }
-            }
-            //var filterTasks = new List<Task> { checkCategory, checkName, checkBrand, checkBusinessName, checkModel, checkType };
-            //while (filterTasks.Count > 0)
-            //{
-            //    //check if any dataTable has data
-            //    Task finishedTask = await Task.WhenAny(filterTasks);
-            //    if (finishedTask == checkCategory)
-            //    {
-            //        if(checkCategory.Result.Rows.Count > 0)
-            //        {
-            //            resultTable.Merge(checkCategory.Result);
-            //        }
-            //    }
-            //    else if (finishedTask == checkName)
-            //    {
-            //        if (checkName.Result.Rows.Count > 0)
-            //        {
-            //            resultTable.Merge(checkName.Result);
-            //        }
-            //    }
-            //    else if (finishedTask == checkBrand)
-            //    {
-            //        if (checkBrand.Result.Rows.Count > 0)
-            //        {
-            //            resultTable.Merge(checkBrand.Result);
-            //        }
-            //    }
-            //    else if (finishedTask == checkBusinessName)
-            //    {
-            //        if (checkBusinessName.Result.Rows.Count > 0)
-            //        {
-            //            resultTable.Merge(checkBusinessName.Result);
-            //        }
-            //    }
-            //    else if (finishedTask == checkModel)
-            //    {
-            //        if (checkModel.Result.Rows.Count > 0)
-            //        {
-            //            resultTable.Merge(checkModel.Result);
-            //        }
-            //    }
-            //    else if (finishedTask == checkType)
-            //    {
-            //        if (checkType.Result.Rows.Count > 0)
-            //        {
-            //            resultTable.Merge(checkType.Result);
-            //        }
-            //    }
-            //    filterTasks.Remove(finishedTask);
-            //}
+            resultTable = loadSPAsync(filterDetails, "");
 
-            
-
-            //// create a UniqueConstraint instance and set its columns that should make up
-            //// that uniqueness constraint - in your case, that would be a set of *three*
-            //// columns, obviously! Adapt to your needs!
-            //UniqueConstraint resultUnique =
-            //   new UniqueConstraint(new DataColumn[] { resultTable.Columns["productId"] });
-
-            //// add unique constraint to the list of constraints for your DataTable
-            //resultTable.Constraints.Add(resultUnique);
+            //assign dataset to the repeater
+            Repeater1.DataSource = resultTable;
+            Repeater1.DataBind();
         }
 
+        protected void Image2_Click(object sender, ImageClickEventArgs e)
+        {
+
+        }
+
+        protected void Image1_Click(object sender, ImageClickEventArgs e)
+        {
+
+        }
         protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
 
         }
+
+
     }
 }

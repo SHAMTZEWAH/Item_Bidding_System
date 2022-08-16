@@ -27,10 +27,9 @@ namespace Item_Bidding_System.Admin
                 foreach (CheckBox checkbox in checkBox1)
                 {
                     GridViewRow gvr = (GridViewRow)checkbox.NamingContainer;
-                    displayToggle(checkbox,gvr.RowIndex);
+                    displayToggle(checkbox, gvr.RowIndex);
                 }
             }
-            
         }
 
         //to store the photo temporarily before update into database
@@ -785,7 +784,7 @@ namespace Item_Bidding_System.Admin
                 //run the script to make css transformation (toggle go left or right)
                 //ClientScript.RegisterStartupScript(this.GetType(), "transform", script);
                 chkBox.Checked = true;
-                dataStyle += (dataStyle == "--transformValue:0px;") ? "--transformValue:26px;" : "--transformValue:0px;"; 
+                dataStyle = dataStyle.Replace("--transformValue:0px;", "--transformValue:26px;");
                 classes += (classes == "") ? sliderFocus : " " + sliderFocus; //add into the class string
                 classes += (classes == "") ? sliderChecked : " " + sliderChecked;
             }

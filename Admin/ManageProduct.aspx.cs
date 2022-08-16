@@ -23,7 +23,8 @@ namespace Item_Bidding_System.Admin
                 //retrieve all the checkbox which is checked
                 foreach (CheckBox checkbox in checkBox1)
                 {
-                    displayToggle(checkbox);
+                    GridViewRow gvr = (GridViewRow)checkbox.NamingContainer;
+                    displayToggle(checkbox, gvr.RowIndex);
                 }
 
             }
@@ -182,47 +183,44 @@ namespace Item_Bidding_System.Admin
             return chkBoxContainer;
         }
 
-        void displayToggle(Control sender)
+        void displayToggle(Control sender, int rowNo)
         {
             var chkBox = (CheckBox)sender;
 
             //add new class
-            string sliderFocus = "slider-focus";
-            string sliderChecked = "slider-checked";
+            string sliderFocus = "slider-focus"; //just some decoration purpose in shadow
+            string sliderChecked = "slider-checked"; //when the slider is checked
             //string sliderBeforeChecked = "slider-before-checked";
 
             //get the span element
-            var control = chkBox.Parent.Controls.OfType<HtmlGenericControl>().LastOrDefault();
+            //var control = chkBox.Parent.Controls.OfType<HtmlGenericControl>().LastOrDefault(); //the flag is always place at the end of the column
+            var control = userGrid.Rows[rowNo].FindControl("btnToggleRound") as HtmlGenericControl;
 
             string classes = ((HtmlGenericControl)control).Attributes["class"];
-
+            string dataStyle = ((HtmlGenericControl)control).Attributes["style"];
             //get status
-            GridViewRow grvRow = (GridViewRow)chkBox.NamingContainer;
-            Label statusControl = (Label)grvRow.FindControl("lblStatusContent");
+            //GridViewRow grvRow = (GridViewRow)chkBox.NamingContainer;
+            //Label statusControl = (Label)grvRow.FindControl("lblStatusContent");
+            Label statusControl = userGrid.Rows[rowNo].FindControl("lblStatusContent") as Label;
             string status = statusControl.Text;
 
             //change toggle
-            if (status == "Flagged")
+            if (status.Trim().Equals("Flagged"))
             {
-                //toggle round button move to right
-                string script = "<script type=\"text/javascript\">" +
-                    "document.querySelector('.slider').style.setProperty('--transformValue', '26px');" +
-                    "</script>";
-
-                //RegisterStartupScript vs RegisterClientScriptBlock
-                //one is run before end of form tag, another one is after start of form tag
-                ClientScript.RegisterStartupScript(this.GetType(), "transform", script);
                 chkBox.Checked = true;
-                classes += (classes == "") ? sliderFocus : " " + sliderFocus;
+                dataStyle = dataStyle.Replace("--transformValue:0px;", "--transformValue:26px;");
+                classes += (classes == "") ? sliderFocus : " " + sliderFocus; //add into the class string
                 classes += (classes == "") ? sliderChecked : " " + sliderChecked;
             }
             else
             {
                 chkBox.Checked = false;
+                dataStyle = dataStyle.Replace("--transformValue:26px;", "--transformValue:0px;");
                 classes = classes.Replace(sliderFocus, "");
                 classes = classes.Replace(sliderChecked, "");
             }
-            control.Attributes.Add("class", classes);
+            control.Attributes.Add("class", classes); //add the class attribute back to the control
+            control.Attributes.Add("style", dataStyle);
         }
 
         void updateStatusText(Object sender, string productStatus)
@@ -234,7 +232,7 @@ namespace Item_Bidding_System.Admin
             lblProductStatus.Text = productStatus;
         }
 
-        void updateProductStatusUI(Object sender)
+        void updateProductStatusUI(Object sender, int rowNo)
         {
             var chkBox = (CheckBox)sender;
             string productId = "";
@@ -257,7 +255,7 @@ namespace Item_Bidding_System.Admin
                 }
                 updateProductStatus(productId, productStatus);
                 updateStatusText(sender, productStatus);
-                displayToggle((Control)sender);
+                displayToggle((Control)sender, rowNo);
             }
             catch (Exception ex)
             {
@@ -273,7 +271,9 @@ namespace Item_Bidding_System.Admin
         }
         protected void CheckBox1_CheckedChanged1(object sender, EventArgs e)
         {
-            updateProductStatusUI(sender);
+            var chkBox = (CheckBox)sender;
+            var hfRowNo = chkBox.NamingContainer.FindControl("hfRowNo") as HiddenField;
+            updateProductStatusUI(sender, Convert.ToInt32(hfRowNo.Value));
         }
 
         /*Useless function*/

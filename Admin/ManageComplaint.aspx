@@ -121,14 +121,14 @@
                                  <div>
                                 <label class="switch" runat="server">
                                     <asp:CheckBox ID="CheckBox1" type="checkbox" runat="server" OnCheckedChanged="CheckBox1_CheckedChanged" Text="" AutoPostBack="True" Checked="False" ViewStateMode="Inherit" TextAlign="Right" ClientIDMode="Static" EnableViewState="True" OnDataBinding="CheckBox1_DataBinding" OnLoad="CheckBox1_Load" />
-                                    <span id="btnToggleRound" class="slider round" runat="server"></span>
+                                    <span id="btnToggleRound" class="slider round" style="--transformValue:0px;" runat="server"></span>
                                 </label>
                                 </div>
                                  <div>
                                      <asp:Label ID="lblStatusContent" runat="server" Text='<%#  Eval("reportStatus") %>'></asp:Label>
                                  </div>
                              </div>
-                             
+                             <asp:HiddenField ID="hfRowNo" Value='<%# Container.DataItemIndex %>' runat="server" />
                          </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>

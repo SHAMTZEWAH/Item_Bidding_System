@@ -26,7 +26,8 @@ namespace Item_Bidding_System.Admin
                 //retrieve all the checkbox which is checked
                 foreach (CheckBox checkbox in checkBox1)
                 {
-                    displayToggle(checkbox);
+                    GridViewRow gvr = (GridViewRow)checkbox.NamingContainer;
+                    displayToggle(checkbox, gvr.RowIndex);
                 }
                 
             }
@@ -180,7 +181,7 @@ namespace Item_Bidding_System.Admin
             }
         }
 
-        void displayToggle(Control sender)
+        void displayToggle(Control sender, int rowNo)
         {
             var chkBox = (CheckBox)sender;
 
@@ -190,38 +191,43 @@ namespace Item_Bidding_System.Admin
             //string sliderBeforeChecked = "slider-before-checked";
 
             //get the span element
-            var control = chkBox.Parent.Controls.OfType<HtmlGenericControl>().LastOrDefault(); //the flag is always place at the end of the column
+            //var control = chkBox.Parent.Controls.OfType<HtmlGenericControl>().LastOrDefault(); //the flag is always place at the end of the column
+            var control = userGrid.Rows[rowNo].FindControl("btnToggleRound") as HtmlGenericControl;
 
             string classes = ((HtmlGenericControl)control).Attributes["class"];
-
+            string dataStyle = ((HtmlGenericControl)control).Attributes["style"];
             //get status
-            GridViewRow grvRow = (GridViewRow)chkBox.NamingContainer;
-            Label statusControl = (Label)grvRow.FindControl("lblStatusContent");
+            //GridViewRow grvRow = (GridViewRow)chkBox.NamingContainer;
+            //Label statusControl = (Label)grvRow.FindControl("lblStatusContent");
+            Label statusControl = userGrid.Rows[rowNo].FindControl("lblStatusContent") as Label;
             string status = statusControl.Text;
 
             //change toggle
-            if (status == "Resolved")
+            if (status.Trim().Equals("Flagged"))
             {
                 //toggle round button move to right
-                string script = "<script type=\"text/javascript\">" +
-                    "document.querySelector('.slider').style.setProperty('--transformValue', '26px');" +
-                    "</script>";
+                //string script = "<script type=\"text/javascript\">" +
+                //    "document.querySelector('.slider').style.setProperty('--transformValue', '26px');" +
+                //    "</script>";
 
                 //RegisterStartupScript vs RegisterClientScriptBlock
                 //one is run before end of form tag, another one is after start of form tag
                 //run the script to make css transformation (toggle go left or right)
-                ClientScript.RegisterStartupScript(this.GetType(), "transform", script);
+                //ClientScript.RegisterStartupScript(this.GetType(), "transform", script);
                 chkBox.Checked = true;
+                dataStyle = dataStyle.Replace("--transformValue:0px;", "--transformValue:26px;");
                 classes += (classes == "") ? sliderFocus : " " + sliderFocus; //add into the class string
                 classes += (classes == "") ? sliderChecked : " " + sliderChecked;
             }
             else
             {
                 chkBox.Checked = false;
+                dataStyle = dataStyle.Replace("--transformValue:26px;", "--transformValue:0px;");
                 classes = classes.Replace(sliderFocus, "");
                 classes = classes.Replace(sliderChecked, "");
             }
             control.Attributes.Add("class", classes); //add the class attribute back to the control
+            control.Attributes.Add("style", dataStyle);
         }
 
         void updateStatusText(Object sender, string complaintStatus)
@@ -234,7 +240,7 @@ namespace Item_Bidding_System.Admin
         }
 
         //the main method to load the data (status) and toggle
-        void updateComplaintStatusUI(Object sender)
+        void updateComplaintStatusUI(Object sender, int rowNo)
         {
             var chkBox = (CheckBox)sender;
             string complaintId = "";
@@ -262,7 +268,7 @@ namespace Item_Bidding_System.Admin
                 updateStatusText(sender, complaintStatus);
 
                 //update the toggle (at left or right)
-                displayToggle((Control)sender);
+                displayToggle((Control)sender, rowNo);
             }
             catch (Exception ex)
             {
@@ -282,7 +288,9 @@ namespace Item_Bidding_System.Admin
             //{
             //    ViewState.Remove(checkbox.UniqueID);
             //}
-            updateComplaintStatusUI(sender);
+            var chkBox = (CheckBox)sender;
+            var hfRowNo = chkBox.NamingContainer.FindControl("hfRowNo") as HiddenField;
+            updateComplaintStatusUI(sender, Convert.ToInt32(hfRowNo.Value));
         }
 
         /*Useless function*/
