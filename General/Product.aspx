@@ -24,9 +24,9 @@
                                     <%# !Eval("productPhoto").Equals(DBNull.Value) ?true:false %>'>
                                         <asp:ImageButton ID="Image2" ImageUrl='<%# String.Concat("~/User/ProcessPhoto.ashx?prodId=",Eval("productId")) %>' Width="200px" runat="server" Height="100px" OnClick="Image2_Click" />
                                     </div>
-                                    <asp:HiddenField ID="hfRowAccId" Value='<%# Eval("productId") %>' runat="server" />
+                                    <asp:HiddenField ID="hfRowProdId" Value='<%# Eval("productId") %>' runat="server" />
                                  </div>
-
+                                <asp:HiddenField ID="hfRow" Value='<%# Container.ItemIndex %>' runat="server" />
                                 <asp:HiddenField ID="hfProductPhotoURL" Value='<%# Eval("productPhotoURL") %>' runat="server" />
                                 <asp:HiddenField ID="hfProductPhoto" Value='<%# Eval("productPhoto") %>' runat="server" />
                             </div>

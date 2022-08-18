@@ -393,14 +393,29 @@ namespace Item_Bidding_System.General
             Repeater1.DataBind();
         }
 
+        void redirectToProductDetails(int rowNo)
+        {
+            //get prodName
+            //get repeater row controls
+            var prodNameCtrl = Repeater1.Items[rowNo].FindControl("prodName") as Label;
+            string prodName = prodNameCtrl.Text;
+
+            //redirect to the product details page
+            Response.Redirect("/General/ProductDetails.aspx?prodName=" + prodName);
+        }
+
         protected void Image2_Click(object sender, ImageClickEventArgs e)
         {
-
+            var imgBtn = (ImageButton)sender;
+            var hfRow = imgBtn.NamingContainer.FindControl("hfRow") as HiddenField;
+            redirectToProductDetails(Convert.ToInt32(hfRow.Value));
         }
 
         protected void Image1_Click(object sender, ImageClickEventArgs e)
         {
-
+            var imgBtn = (ImageButton)sender;
+            var hfRow = imgBtn.NamingContainer.FindControl("hfRow") as HiddenField;
+            redirectToProductDetails(Convert.ToInt32(hfRow.Value));
         }
         protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
