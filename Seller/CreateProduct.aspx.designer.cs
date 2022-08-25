@@ -11,7 +11,7 @@ namespace Item_Bidding_System.Seller
 {
 
 
-    public partial class EditProductDetails
+    public partial class CreateProduct
     {
 
         /// <summary>
@@ -231,6 +231,33 @@ namespace Item_Bidding_System.Seller
         protected global::System.Web.UI.WebControls.CheckBoxList chkSellOption;
 
         /// <summary>
+        /// stockRow control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow stockRow;
+
+        /// <summary>
+        /// lblStock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblStock;
+
+        /// <summary>
+        /// txtStock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtStock;
+
+        /// <summary>
         /// UpdatePanel2 control.
         /// </summary>
         /// <remarks>
@@ -267,13 +294,13 @@ namespace Item_Bidding_System.Seller
         protected global::System.Web.UI.WebControls.DropDownList ddlDuration;
 
         /// <summary>
-        /// CompareValidator3 control.
+        /// CompareValidator2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CompareValidator CompareValidator3;
+        protected global::System.Web.UI.WebControls.CompareValidator CompareValidator2;
 
         /// <summary>
         /// txtFixedPrice control.
@@ -285,22 +312,22 @@ namespace Item_Bidding_System.Seller
         protected global::System.Web.UI.WebControls.TextBox txtFixedPrice;
 
         /// <summary>
-        /// RequiredFieldValidator7 control.
+        /// RequiredFieldValidator5 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator7;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator5;
 
         /// <summary>
-        /// RegularExpressionValidator4 control.
+        /// RegularExpressionValidator1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator4;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator1;
 
         /// <summary>
         /// txtStartPrice control.
@@ -312,40 +339,40 @@ namespace Item_Bidding_System.Seller
         protected global::System.Web.UI.WebControls.TextBox txtStartPrice;
 
         /// <summary>
-        /// RequiredFieldValidator8 control.
+        /// RequiredFieldValidator6 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator8;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
 
         /// <summary>
-        /// RegularExpressionValidator5 control.
+        /// RegularExpressionValidator2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator5;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator2;
 
         /// <summary>
-        /// Td1 control.
+        /// reservePriceHeader control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell Td1;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell reservePriceHeader;
 
         /// <summary>
-        /// Div1 control.
+        /// reservePriceContainer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Div1;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl reservePriceContainer;
 
         /// <summary>
         /// txtReservePrice control.
@@ -355,15 +382,6 @@ namespace Item_Bidding_System.Seller
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtReservePrice;
-
-        /// <summary>
-        /// txtStock control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtStock;
 
         /// <summary>
         /// btnConfirm control.

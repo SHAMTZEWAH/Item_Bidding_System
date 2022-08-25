@@ -1,4 +1,8 @@
-﻿ <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EditProductDetails.ascx.cs" Inherits="Item_Bidding_System.Seller.EditProductDetails" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/ItemBidding.Master" AutoEventWireup="true" CodeBehind="CreateProduct.aspx.cs" Inherits="Item_Bidding_System.Seller.CreateProduct" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
 
 <link type="text/css" rel="stylesheet" href="../MasterCSS.css" />
 <link type="text/css" rel="stylesheet" href="../Content.css" />
@@ -16,7 +20,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:TextBox ID="txtProdName" CssClass="textBox" runat="server" OnTextChanged="txtProdName_TextChanged"></asp:TextBox>
+                            <asp:TextBox ID="txtProdName" CssClass="textBox" runat="server"></asp:TextBox>
                         </div>
                         <div>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="Please enter the product name." ControlToValidate="txtProdName" ValidationGroup="ProductDetails">*</asp:RequiredFieldValidator>
@@ -30,7 +34,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:DropDownList ID="ddlProdCategory" CssClass="textBox" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlProdCategory_SelectedIndexChanged">
+                            <asp:DropDownList ID="ddlProdCategory" CssClass="textBox" runat="server" AutoPostBack="True">
                                 <asp:ListItem Value="-1">--Select Category--</asp:ListItem>
                                 <asp:ListItem Value="Fashion Apparel">Fashion Apparel</asp:ListItem>
                                 <asp:ListItem Value="Artworks">Artworks</asp:ListItem>
@@ -51,7 +55,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:TextBox ID="txtType" CssClass="textBox" runat="server" placeholder="eg. Toys, Watches,..." ToolTip="eg. Watch, Toys, Stamps" OnTextChanged="txtType_TextChanged"></asp:TextBox>
+                            <asp:TextBox ID="txtType" CssClass="textBox" runat="server" placeholder="eg. Toys, Watches,..." ToolTip="eg. Watch, Toys, Stamps"></asp:TextBox>
                         </div>
                         <div>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Please enter the type of the product." ValidationGroup="ProductDetails" Text="*" ControlToValidate="txtType"></asp:RequiredFieldValidator>
@@ -64,7 +68,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:TextBox ID="txtBrand" CssClass="textBox" runat="server" ToolTip='Enter "No Brand" if don&apos;t have' OnTextChanged="txtBrand_TextChanged"></asp:TextBox>
+                            <asp:TextBox ID="txtBrand" CssClass="textBox" runat="server" ToolTip='Enter "No Brand" if don&apos;t have'></asp:TextBox>
                         </div>
                         <div>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="Please enter product brand." Text="*" ValidationGroup="ProductDetails" ControlToValidate="txtBrand"></asp:RequiredFieldValidator>
@@ -77,7 +81,7 @@
                 <td>
                     <div>
                         <div class="medium-top-inner-gap">
-                            <asp:TextBox ID="txtModel" CssClass="textBox" runat="server" ToolTip='Enter "No Model" if don&apos;t have' OnTextChanged="txtModel_TextChanged"></asp:TextBox>
+                            <asp:TextBox ID="txtModel" CssClass="textBox" runat="server" ToolTip='Enter "No Model" if don&apos;t have'></asp:TextBox>
                         </div>
                         <div>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="Please enter product model" ControlToValidate="txtModel" Enabled="True" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
@@ -103,26 +107,26 @@
                         </div>
                     </div>
                      <div id="insertURLContainer" class="displayLess medium-top-inner-gap">
-                         <!--Insert upload url-->
+                         <!--Display upload url-->
                          <div>Paste URL</div>
                          <div class="flex-flow flex-row">
                              <div>
-                                 <asp:TextBox ID="txtInsertURL" runat="server"></asp:TextBox>
+                                 <asp:TextBox ID="txtInsertURL" runat="server" ValidationGroup="urlValidate"></asp:TextBox>
                              </div>
                             <div>
-                                <asp:Button ID="btnSubmitURL" runat="server" Text="Submit URL" OnClick="btnSubmitURL_Click" /> <!--Submit URL and display preview image-->
+                                <asp:Button ID="btnSubmitURL" runat="server" Text="Submit URL" OnClick="btnSubmitURL_Click" ValidationGroup="urlValidate" CausesValidation="True" /> <!--Submit URL and display preview image-->
                             </div>
                          </div>
                     </div>
                      <div id="uploadPhotoContainer" class="displayLess medium-top-inner-gap">
                          <div>Upload Images</div>
                          <div>
-                         <!--Insert upload file-->
+                         <!--Display upload file-->
                              <div>
                                  <asp:FileUpload ID="txtUploadPhoto" runat="server" AllowMultiple="True" />
                              </div>
                              <div>
-                                 <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ErrorMessage="Only .jpg, .png, bitmap image is supported" Text="*" ValidationExpression="/^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w].*))+(.jpeg|.JPEG|.gif|.GIF|.png|.PNG|.JPG|.jpg|.bitmap|.BITMAP)$/" ControlToValidate="txtUploadPhoto" ValidationGroup="photoValidate"></asp:RegularExpressionValidator>
+                                 <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ErrorMessage="Only .jpg, .png, bitmap image is supported" Text="*" ValidationExpression="/^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w].*))+(.jpeg|.JPEG|.gif|.GIF|.png|.PNG|.JPG|.jpg|.bitmap|.BITMAP)$/" ControlToValidate="txtUploadPhoto" ValidationGroup="photoValidate" SetFocusOnError="True"></asp:RegularExpressionValidator>
                              </div>
                             <div>
                                 <asp:Button ID="btnSubmitPhoto" runat="server" Text="Submit Photo" OnClick="btnSubmitPhoto_Click" /> <!--Submit URL and display preview image-->
@@ -132,26 +136,26 @@
                     </div>
                 </td>
             </tr>
-                <tr>
-                    <td colspan="2">
-                        <div class="small-top-gap flex-center-center">
+            <tr>
+                <td colspan="2">
+                    <div class="small-top-gap flex-center-center">
                         <!--display image-->
-                        <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
+                        <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional" OnDataBinding="UpdatePanel1_DataBinding">
                             <ContentTemplate>
                                 <asp:DataList ID="DataList1" runat="server" RepeatDirection="Horizontal" RepeatColumns="3" >
                                     <ItemTemplate>
-                                        <div class="flex-row small-top-gap" visible='<%# !Eval("productPhotoURL").Equals(DBNull.Value) || !Eval("productPhoto").Equals(DBNull.Value)?true:false %>' runat="server">
+                                        <div class="flex-row small-top-gap" runat="server">
                                             <div id="imgCon1" class="border-black flex-column" runat="server" visible='<%# !Eval("productPhotoURL").Equals(DBNull.Value)?true:false %>'>
                                                 <asp:Image ID="Image1" Width="200px" ImageUrl='<%# Eval("productPhotoURL") %>' runat="server" Height="100px" />
                                                 <asp:Button ID="btnRemoveImg1" cssClass="btn-small-lightgray" Width="110px"  runat="server" Text="Remove" OnClick="btnRemoveImg1_Click" />
                                             </div>
                                             <div id="imgCon2" class="border-black flex-column" runat="server" visible='
                                                 <%# !Eval("productPhoto").Equals(DBNull.Value) ?true:false %>'>
-                                                <asp:Image ID="Image2" ImageUrl='<%# String.Concat("~/Seller/ProcessPhoto.ashx?prodId=",Eval("productId"),"&photoId=",Eval("productPhotoId")) %>' Width="200px" runat="server" Height="100px" />
+                                                <asp:Image ID="Image2" Width="200px" ImageUrl='<%# String.Concat("~/Seller/ProcessPhoto.ashx?photoId=",Eval("id")) %>' runat="server" Height="100px" />
                                                 <asp:Button ID="btnRemoveImg2" cssClass="btn-small-lightgray" Width="110px"  runat="server" Text="Remove" OnClick="btnRemoveImg2_Click" />
                                             </div>
-                                            <asp:HiddenField ID="hfRowProdId" Value='<%# Eval("productId") %>' runat="server" />
-                                            <asp:HiddenField ID="hfRow" Value='<%# Eval("productPhotoId") %>' runat="server" />
+                                            
+                                            <asp:HiddenField ID="hfRow" Value='<%# Eval("id") %>' runat="server" />
                                         </div>
                                     </ItemTemplate>
                                 </asp:DataList>
@@ -163,13 +167,13 @@
                         </asp:UpdatePanel>
                         
                     </div>
-                    </td>
-                </tr>
+                </td>
+            </tr>
             <tr>
                 <td class="lbl">SubStore:</td>
                 <td>
                     <div class="medium-top-inner-gap">
-                            <asp:DropDownList ID="ddlSubStore" CssClass="textBox" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSubStore_SelectedIndexChanged">
+                            <asp:DropDownList ID="ddlSubStore" CssClass="textBox" runat="server" AutoPostBack="True">
                             </asp:DropDownList>
                     </div>
                     <div>
@@ -181,31 +185,42 @@
                 <td class="lbl">Description:</td>
                 <td>
                      <div class="medium-top-inner-gap">
-                         <asp:TextBox ID="txtDesc" CssClass="textBox" runat="server" OnTextChanged="txtDesc_TextChanged"></asp:TextBox>
+                         <asp:TextBox ID="txtDesc" CssClass="textBox" runat="server"></asp:TextBox>
                     </div>
                 </td>
             </tr>
         </table>
         </div>
-        <div class="content-subcontainer">
+        <div class="content-subcontainer flex-column">
             <div class="title2-black content-title">Selling Details</div>
             <table style="width: 100%;">
             <tr>
                 <td class="lbl">Selling Format:</td>
                 <td>
                     <div class="medium-top-inner-gap">
-                        <asp:CheckBoxList ID="chkSellOption" CssClass="textBox" runat="server" Enabled="False" OnSelectedIndexChanged="chkSellOption_SelectedIndexChanged">
-                            <asp:ListItem Value="FixedPrice">Fixed Price</asp:ListItem>
+                        <asp:CheckBoxList ID="chkSellOption" CssClass="textBox" runat="server" OnSelectedIndexChanged="chkSellOption_SelectedIndexChanged" AutoPostBack="True">
+                            <asp:ListItem Value="FixedPrice" Enabled="False" Selected="True">Fixed Price</asp:ListItem>
                             <asp:ListItem Value="OpenBidAuction">Open Bid Auction</asp:ListItem>
                             <asp:ListItem Value="SealedBidAuction">Sealed Bid Auction</asp:ListItem>
                         </asp:CheckBoxList>
                     </div>
                 </td>
             </tr>
-        </table>
-            <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                <tr id="stockRow" runat="server">
+                        <td>
+                            <asp:Label ID="lblStock" CssClass="lbl" runat="server" Text="Stock:"></asp:Label>
+                        </td>
+                        <td>
+                            <div class="medium-top-inner-gap">
+                                <asp:TextBox ID="txtStock" CssClass="textBox" runat="server"></asp:TextBox>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <asp:UpdatePanel ID="UpdatePanel2" runat="server" UpdateMode="Conditional">
                     <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="chkSellOption" EventName="SelectedIndexChanged" />
+                        <asp:PostBackTrigger ControlID="chkSellOption" />
                     </Triggers>
                     <ContentTemplate>
                         <asp:Panel ID="Panel1" runat="server">
@@ -216,16 +231,16 @@
                             <div id="durationCon" runat="server">
                                 <div class="medium-top-inner-gap">
                                     <asp:DropDownList ID="ddlDuration" CssClass="textBox" runat="server">
-                                        <asp:ListItem Value="-1">--Select Duration--</asp:ListItem>
-                                        <asp:ListItem Value="1">1 days</asp:ListItem>
-                                        <asp:ListItem Value="3">3 days</asp:ListItem>
-                                        <asp:ListItem Value="5">5 days</asp:ListItem>
-                                        <asp:ListItem Value="7">7 days</asp:ListItem>
-                                        <asp:ListItem Value="10">10 days</asp:ListItem>
+                                        <asp:ListItem Value="-1 ">--Select Duration--</asp:ListItem>
+                                        <asp:ListItem Value="1 ">1 days</asp:ListItem>
+                                        <asp:ListItem Value="3 ">3 days</asp:ListItem>
+                                        <asp:ListItem Value="5 ">5 days</asp:ListItem>
+                                        <asp:ListItem Value="7 ">7 days</asp:ListItem>
+                                        <asp:ListItem Value="10 ">10 days</asp:ListItem>
                                     </asp:DropDownList>
                                 </div>
                                 <div>
-                                    <asp:CompareValidator ID="CompareValidator3" runat="server" ErrorMessage="Please select a duration" ControlToValidate="ddlDuration" Text="*" ValidationGroup="ProductDetails" Operator="NotEqual" ValueToCompare="-1"></asp:CompareValidator>
+                                    <asp:CompareValidator ID="CompareValidator2" runat="server" ErrorMessage="Please select a duration" ControlToValidate="ddlDuration" Text="*" ValidationGroup="ProductDetails" Operator="NotEqual" ValueToCompare="-1"></asp:CompareValidator>
                                 </div>
                             </div>
                         </td>
@@ -237,8 +252,8 @@
                                  <asp:TextBox ID="txtFixedPrice" CssClass="textBox" runat="server" ToolTip="The selling price which accepted by the seller"></asp:TextBox>
                             </div>
                             <div>
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ErrorMessage="Please enter digit and maximum 1 dot only." Enabled="false" ControlToValidate="txtFixedPrice" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
-                                <asp:RegularExpressionValidator ID="RegularExpressionValidator4" runat="server" Enabled="false" ValidationGroup="ProductDetails" Text="*" ValidationExpression="^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\.[0-9]{2}$" ErrorMessage="Please enter digit only." ControlToValidate="txtFixedPrice"></asp:RegularExpressionValidator>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="Please enter digit and maximum 1 dot only." Enabled="false" ControlToValidate="txtFixedPrice" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" Enabled="false" ValidationGroup="ProductDetails" Text="*" ValidationExpression="^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\.[0-9]{2}$" ErrorMessage="Please enter digit only." ControlToValidate="txtFixedPrice"></asp:RegularExpressionValidator>
                             </div>
                         </td>
                     </tr>
@@ -250,25 +265,17 @@
                                     <asp:TextBox ID="txtStartPrice" CssClass="textBox" runat="server"></asp:TextBox>
                                 </div>
                                 <div>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="Please enter digit and maximum 1 dot only." Enabled="false" ControlToValidate="txtStartPrice" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
-                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator5" runat="server" Enabled="false" ValidationGroup="ProductDetails" Text="*" ValidationExpression="^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\.[0-9]{2}$" ErrorMessage="Please enter digit only." ControlToValidate="txtStartPrice"></asp:RegularExpressionValidator>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="Please enter digit and maximum 1 dot only." Enabled="false" ControlToValidate="txtStartPrice" ValidationGroup="ProductDetails" Text="*"></asp:RequiredFieldValidator>
+                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" Enabled="false" ValidationGroup="ProductDetails" Text="*" ValidationExpression="^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\.[0-9]{2}$" ErrorMessage="Please enter digit only." ControlToValidate="txtStartPrice"></asp:RegularExpressionValidator>
                                 </div>
                             </div>
                         </td>
                     </tr>
                      <tr>
-                        <td id="Td1" class="lbl" style="display:none;" runat="server">Reserve Price:</td>
+                        <td id="reservePriceHeader" class="lbl" runat="server">Reserve Price:</td>
                         <td>
-                            <div id="Div1" class="medium-top-inner-gap" style="display:none;" runat="server">
+                            <div id="reservePriceContainer" class="medium-top-inner-gap" runat="server">
                                 <asp:TextBox ID="txtReservePrice" CssClass="textBox" runat="server"></asp:TextBox>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="lbl" style="display:none;">Stock:</td>
-                        <td>
-                            <div class="medium-top-inner-gap" style="display:none;">
-                                <asp:TextBox ID="txtStock" CssClass="textBox" runat="server"></asp:TextBox>
                             </div>
                         </td>
                     </tr>
@@ -323,5 +330,5 @@
     }
 
     
-</script>
-    
+    </script>
+    </asp:Content>

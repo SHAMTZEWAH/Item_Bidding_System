@@ -42,6 +42,13 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td class="medium-bottom-inner-gap">
+                                        <a href="SignUpPage.aspx">
+                                            <div>Create a User Account</div>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="cell-fail" align="center" style="color:Red;">
                                         <asp:Literal ID="FailureText" runat="server" EnableViewState="False"></asp:Literal>
                                     </td>

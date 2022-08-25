@@ -27,12 +27,12 @@
                 </div>
             </div>
             <div id="radioContainer" class="filter-content">
-                <asp:RadioButtonList ID="RadioButtonList1" runat="server" OnSelectedIndexChanged="RadioButtonList1_SelectedIndexChanged1" AutoPostBack="True">
+                <asp:RadioButtonList ID="RadioButtonList1" runat="server" OnSelectedIndexChanged="RadioButtonList1_SelectedIndexChanged" AutoPostBack="True">
                     <asp:ListItem Value="">Recently added</asp:ListItem>
                     <asp:ListItem Value="accId">AccountId</asp:ListItem> 
                     <asp:ListItem Value="username">Username</asp:ListItem>
                     <asp:ListItem Value="email">Email</asp:ListItem> 
-                    <asp:ListItem>RoleName</asp:ListItem> 
+                    <asp:ListItem Value="RoleName">RoleName</asp:ListItem> 
                     
                 </asp:RadioButtonList>
             </div>
@@ -49,11 +49,11 @@
             <div id="SubStoreCon" class="substore-container" runat="server">
                
             </div>
-            <div class="content-subcontainer">
-                <asp:GridView ID="userGrid" runat="server" class="role-display"  CellPadding="4" ForeColor="Black" GridLines="Horizontal" Width="1250px" AllowSorting="True" AutoGenerateColumns="False" Height="147px" OnRowDataBound="userGrid_RowDataBound" OnRowDeleting="userGrid_RowDeleting" OnRowEditing="userGrid_RowEditing" OnRowUpdating="userGrid_RowUpdating" OnRowCancelingEdit="userGrid_RowCancelingEdit" OnSelectedIndexChanged="userGrid_SelectedIndexChanged">
+            <div class="content-subcontainer" style="border:none;">
+                <asp:GridView ID="userGrid" runat="server" class="role-display"  CellPadding="4" ForeColor="Black" GridLines="Horizontal" Width="1000px" AllowSorting="True" AutoGenerateColumns="False" Height="147px" OnRowDataBound="userGrid_RowDataBound" OnRowDeleting="userGrid_RowDeleting" OnRowEditing="userGrid_RowEditing" OnRowUpdating="userGrid_RowUpdating" OnRowCancelingEdit="userGrid_RowCancelingEdit" OnSelectedIndexChanged="userGrid_SelectedIndexChanged">
                 
                 <Columns>
-                    <asp:CommandField ShowEditButton="True" />
+                    <asp:CommandField />
                     <asp:TemplateField Visible = "False">
                         <HeaderTemplate>
                             <asp:CheckBox ID = "chkHeader" runat="server" OnCheckedChanged="chkHeader_CheckedChanged"/>
@@ -70,7 +70,7 @@
                             <asp:Label ID = "lblCustID" runat="server" Text="CustID"></asp:Label>
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <div><%# Eval("accId") %></div>
+                            <asp:Label ID="accId" runat="server" Text='<%# Eval("accId") %>'></asp:Label>
                         </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
@@ -80,56 +80,65 @@
                             <asp:Label ID = "lblusername" runat="server" Text="Username"></asp:Label>
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <div id="username"><%# Eval("username") %></div>
+                            <asp:Label ID="username" runat="server" Text='<%# Eval("username") %>'></asp:Label>
                         </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
 
                     <asp:TemplateField>
                         <HeaderTemplate>
-                            <asp:Label ID = "lblCustName" runat="server" Text="Customer Name"></asp:Label>
+                            <asp:Label ID = "lblEmail" runat="server" Text="Email"></asp:Label>
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <div><%# Eval("email") %></div>
+                            <asp:Label ID="email" runat="server" Text='<%# Eval("email") %>'></asp:Label>
                         </ItemTemplate>
+                        <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
+                    </asp:TemplateField>
+
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <asp:Label ID = "lblSellerRole" runat="server" Text="Seller Registration Status"></asp:Label>
+                        </HeaderTemplate>
+                         <ItemTemplate>
+                             <div>
+                                 <asp:Label ID="sellerRole" runat="server" Text='<%# Eval("sellerStatus") == DBNull.Value?"NULL":Eval("sellerStatus") %>'></asp:Label>
+                             </div>
+                         </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
                         
                     <asp:TemplateField>
-                         <EditItemTemplate>
-                            <asp:DropDownList ID ="ddlRoles" runat="server" AutoPostBack="True" Width="152px" OnSelectedIndexChanged="ddlRoles_SelectedIndexChanged">
-                            </asp:DropDownList>
-                        </EditItemTemplate>
                         <HeaderTemplate>
                             <asp:Label ID = "lblRoles" runat="server" Text="Roles"></asp:Label>
                         </HeaderTemplate>
                          <ItemTemplate>
-                             <div><%# Eval("RoleName") %></div>
+                             <div>
+                                 <asp:DropDownList ID ="ddlRoles" runat="server" AutoPostBack="True" Width="152px" OnSelectedIndexChanged="ddlRoles_SelectedIndexChanged">
+                            </asp:DropDownList>
+                                 <asp:HiddenField ID="hfRole" Value='<%# Eval("RoleName") %>' runat="server" />
+                             </div>
                          </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
 
                     <asp:TemplateField>
                         <HeaderTemplate>
-                            
+                            <asp:Label ID = "lblStatus" runat="server" Text="Status"></asp:Label>
                         </HeaderTemplate>
-                        <ItemTemplate>
-                            <div>
-                                <asp:Button ID="btnFlag" CssClass="btn-medium-red" runat="server" Text="Flag" onclick="btnFlag_Click"/>
-                            </div>
-                        </ItemTemplate>
-                        <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
-                    </asp:TemplateField>
-
-                    <asp:TemplateField>
-                        <HeaderTemplate>
-                            
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            <div>
-                                <asp:Button ID="btnUnflag" CssClass="btn-small-blue" runat="server" Text="Unflag" onclick="btnUnflag_Click"/>
-                            </div>
-                        </ItemTemplate>
+                         <ItemTemplate>
+                             <div>
+                                 <div>
+                                <label class="switch" runat="server">
+                                    <asp:CheckBox ID="CheckBox1" type="checkbox" runat="server" OnCheckedChanged="CheckBox1_CheckedChanged" Text="" AutoPostBack="True" Checked="False" ViewStateMode="Inherit" TextAlign="Right" ClientIDMode="Static" EnableViewState="True" />
+                                    <span id="btnToggleRound" class="slider round" style="--transformValue:0px;" runat="server"></span>
+                                </label>
+                                </div>
+                                 <div>
+                                     <asp:Label ID="lblStatusContent" runat="server" Text='<%#  Eval("accStatus") %>'></asp:Label>
+                                 </div>
+                             </div>
+                             <asp:HiddenField ID="hfRowNo" Value='<%# Container.DataItemIndex %>' runat="server" />
+                         </ItemTemplate>
                         <ItemStyle HorizontalAlign = "Center" VerticalAlign="Middle" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" />
                     </asp:TemplateField>
                     

@@ -14,8 +14,13 @@
             <tr>
                 <td class="lbl">Name:</td>
                 <td>
-                    <div class="medium-top-inner-gap">
-                        <asp:TextBox ID="txtName" CssClass="textBox" runat="server"></asp:TextBox>
+                    <div>
+                        <div class="medium-top-inner-gap">
+                            <asp:TextBox ID="txtName" CssClass="textBox" runat="server"></asp:TextBox>
+                        </div>
+                        <div>
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="RequiredFieldValidator" ControlToValidate="txtName" Text="*"></asp:RequiredFieldValidator>
+                        </div>
                     </div>
                 </td>
                 
@@ -35,7 +40,10 @@
                         <div class="textBox flex-center-center phone-container">
                             <div class="phone-prefix">(601)</div>
                             <div><asp:TextBox ID="PhoneNo" CssClass="phone-subcontainer textBox-custom" runat="server" placeholder="Phone No" MaxLength="16"></asp:TextBox></div>
-                            <div></div>
+                            <div>
+                                <asp:RequiredFieldValidator ID="PhoneNoValidator" runat="server" ControlToValidate="PhoneNo" ErrorMessage="Phone No is required." ForeColor="Red" Display="Dynamic" ValidationGroup="CreateUserWizard1" ClientIDMode="Static">*</asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ErrorMessage="Please enter at least 8 digit only." ValidationExpression="\d{8-16}" ControlToValidate="PhoneNo"></asp:RegularExpressionValidator>
+                            </div>
                         </div>
                     </div>
                     

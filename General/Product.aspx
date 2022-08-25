@@ -12,9 +12,24 @@
         <div class="content-subcontainer">
             <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound">
                 <ItemTemplate>
-                <div class="content-subcontainer content-subcontainer-adjust" >
+                <div class="content-subcontainer content-subcontainer-adjust">
                         <div>
-                            <img class="medium-image" alt="" runat="server" src='<%# Eval("productPhotoURL") %>' /> <!--src="# Eval("") "-->
+                            <div id="productPhoto">
+                                <!--display image-->
+                                <div class="flex-column small-top-gap" visible='<%# !Eval("productPhotoURL").Equals(DBNull.Value) || !Eval("productPhoto").Equals(DBNull.Value)?true:false %>' runat="server">
+                                    <div id="imgCon1" class="border-black flex-column" runat="server" visible='<%# !Eval("productPhotoURL").Equals(DBNull.Value)?true:false %>'>
+                                        <asp:ImageButton ID="Image1" Width="200px" ImageUrl='<%# Eval("productPhotoURL") %>' runat="server" Height="100px" Onclick="Image1_Click"/>
+                                    </div>
+                                    <div id="imgCon2" class="border-black flex-column" runat="server" visible='
+                                    <%# !Eval("productPhoto").Equals(DBNull.Value) ?true:false %>'>
+                                        <asp:ImageButton ID="Image2" ImageUrl='<%# String.Concat("~/User/ProcessPhoto.ashx?prodId=",Eval("productId")) %>' Width="200px" runat="server" Height="100px" OnClick="Image2_Click" />
+                                    </div>
+                                    <asp:HiddenField ID="hfRowProdId" Value='<%# Eval("productId") %>' runat="server" />
+                                 </div>
+                                <asp:HiddenField ID="hfRow" Value='<%# Container.ItemIndex %>' runat="server" />
+                                <asp:HiddenField ID="hfProductPhotoURL" Value='<%# Eval("productPhotoURL") %>' runat="server" />
+                                <asp:HiddenField ID="hfProductPhoto" Value='<%# Eval("productPhoto") %>' runat="server" />
+                            </div>
                         </div>
                         <div class="flex-column flex-start">
                             <div>

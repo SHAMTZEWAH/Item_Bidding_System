@@ -9,7 +9,7 @@
         <div class="filter-subtitle">Selection:</div>
         <asp:RadioButtonList ID="radioSelect" CssClass="filterSelect" runat="server" OnSelectedIndexChanged="radioSelect_SelectedIndexChanged" AutoPostBack="True" ViewStateMode="Enabled">
             <asp:ListItem>Hots</asp:ListItem>
-            <asp:ListItem>Newly Added</asp:ListItem>
+            <asp:ListItem Value="NewlyAdded">Newly Added</asp:ListItem>
         </asp:RadioButtonList>
     </div>
     <div class="filter-subcontainer">
@@ -62,8 +62,8 @@
         <div class="filter-subtitle">Selling Options:</div>
         <asp:CheckBoxList CssClass="sellingOption" ID="chkBoxSellOption" runat="server" AutoPostBack="True" OnSelectedIndexChanged="chkBoxSellOption_SelectedIndexChanged">
             <asp:ListItem>Fixed price</asp:ListItem>
-            <asp:ListItem>Open Bid Auction</asp:ListItem>
-            <asp:ListItem>Sealed bid auction</asp:ListItem>
+            <asp:ListItem Value="OpenBidAuction">Open Bid Auction</asp:ListItem>
+            <asp:ListItem Value="SealedBidAuction">Sealed bid auction</asp:ListItem>
         </asp:CheckBoxList>
     </div>
 </div>

@@ -8,13 +8,13 @@
             Admin Hub
         </div>
         <div class="side-menu-item">
-            <a class="side-menu" href="Admin/ManageAccount.aspx">Manage Account Role</a> <!--Url to manage acc role page-->
+            <a class="side-menu" href="ManageAccount.aspx">Manage Account Role</a> <!--Url to manage acc role page-->
         </div>
         <div class="side-menu-item">
-            <a class="side-menu" href="Admin/ManageProduct.aspx">Monitor Product</a> <!--Url to monitor product page-->
+            <a class="side-menu" href="ManageProduct.aspx">Monitor Product</a> <!--Url to monitor product page-->
         </div>
         <div class="side-menu-item">
-            <a class="side-menu" href="Admin/ManageComplaint.aspx">Monitor Complaint Report</a> <!--Url to monitor complaint page-->
+            <a class="side-menu" href="ManageComplaint.aspx">Monitor Complaint Report</a> <!--Url to monitor complaint page-->
         </div>
     </div>
 </nav>

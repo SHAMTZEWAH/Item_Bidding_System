@@ -8,7 +8,7 @@
 
     <div class="content-container">
         <div class="top-filter"> <!--Row 1-->
-            <div class="title2-black-bold content-title">Response Offer</div>
+            <div class="title2-black-bold content-title">Sales Summary</div>
             <div class="displayLess">
                 <asp:Label ID="lblNoData" runat="server" Text="" Visible="false"></asp:Label>
             </div>

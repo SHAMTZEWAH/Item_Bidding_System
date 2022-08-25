@@ -586,11 +586,13 @@ namespace Item_Bidding_System.User
             SqlCommand cmdRetrieve;
             SqlCommand cmdGetUserId;
             //name, email, phoneNo, address
-            string query = "SELECT Account.name, Account.email, Account.phoneNo " +
-                "FROM Account WHERE Account.userId = @userId";
+            string query = "SELECT Account.username, Account.email, Account.phoneNo, Address.poscode, Address.street " +
+                "FROM Account INNER JOIN " +
+                "Address ON Account.accId = Address.accId " +
+                "WHERE Account.userId = @userId";
             
             //get user id
-            string queryGetUserId = "SELECT aspnet_Users.UserId FROM aspnet_Users WHERE aspnet_Users.Username = @name AND aspnet_Users.Email = @emailC";
+            string queryGetUserId = "SELECT aspnet_Users.UserId FROM aspnet_Users INNER JOIN aspnet_Membership ON aspnet_Users.UserId = aspnet_Membership.UserId WHERE aspnet_Users.Username = @name AND aspnet_Membership.Email = @emailC";
 
             //execute
             try
@@ -598,7 +600,7 @@ namespace Item_Bidding_System.User
                 con.Open();
                 cmdGetUserId = new SqlCommand(queryGetUserId, con);
                 cmdGetUserId.Parameters.AddWithValue("@name", User.Identity.Name);
-                cmdGetUserId.Parameters.AddWithValue("@email", Membership.GetUser().Email);
+                cmdGetUserId.Parameters.AddWithValue("@emailC", Membership.GetUser().Email);
 
                 cmdRetrieve = new SqlCommand(query, con);
                 cmdRetrieve.Parameters.AddWithValue("@userId", cmdGetUserId.ExecuteScalar());
@@ -607,7 +609,7 @@ namespace Item_Bidding_System.User
                 {
                     while (reader.Read())
                     {
-                        txtName.Text = reader["name"].ToString();
+                        txtName.Text = reader["username"].ToString();
                         txtEmail.Text = reader["email"].ToString();
                         PhoneNo.Text = reader["phoneNo"].ToString();
                         txtZip.Text = reader["poscode"].ToString();

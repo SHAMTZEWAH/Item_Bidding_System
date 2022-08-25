@@ -1,15 +1,11 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebCrawler.aspx.cs" Inherits="Item_Bidding_System.Admin.WebCrawler" %>
+﻿<%@ Page Language="C#" Async="true" AutoEventWireup="true" MasterPageFile="~/ItemBidding.Master" CodeBehind="WebCrawler.aspx.cs" Inherits="Item_Bidding_System.Admin.WebCrawler" %>
+<%@ Register TagPrefix="Master" TagName="Side" Src="~/SideMenuAdmin.ascx" %>
 
-<!DOCTYPE html>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <div>
-        </div>
-    </form>
-</body>
-</html>
+</asp:Content>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
+    
+    </asp:Content>
+

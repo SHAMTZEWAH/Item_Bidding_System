@@ -26,7 +26,7 @@
                                 <asp:Label ID="lblNoData" runat="server" Text="No Data To Display" Visible="false"></asp:Label>
                             </FooterTemplate>
                         </asp:Repeater>
-                        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT ProductPhoto.productPhotoURL FROM Product INNER JOIN ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId AND ProductDetails.productName = @prodName INNER JOIN ProductPhoto ON Product.productId = ProductPhoto.productId">
+                        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT ProductPhoto.productPhoto, ProductPhoto.productPhotoURL FROM Product INNER JOIN ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId AND ProductDetails.productName = @prodName INNER JOIN ProductPhoto ON Product.productId = ProductPhoto.productId">
                             <SelectParameters>
                                 <asp:QueryStringParameter Name="prodName" QueryStringField="prodName" />
                             </SelectParameters>
@@ -47,10 +47,10 @@
                 </details>
             </div>
         </div>
-
+         
         <div class="content-subcontainer" style="overflow: initial;"><!--right part-->
             <div class="datalist-container"> <!---->
-                <asp:DataList ID="DataList1" runat="server" OnItemDataBound="DataList1_ItemDataBound">
+               <asp:DataList ID="DataList1" runat="server" OnItemDataBound="DataList1_ItemDataBound">
                      <ItemTemplate>
                         <table width="100%">
                             <tr> <!--Row 1-->

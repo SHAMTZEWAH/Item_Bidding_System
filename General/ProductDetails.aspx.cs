@@ -19,6 +19,7 @@ namespace Item_Bidding_System.General
             {
                 loadContent(Request.QueryString["prodName"]!=null?Request.QueryString["prodName"]:"");
             }
+
         }
 
         void DataList_errorMsg(Exception ex)
@@ -440,8 +441,13 @@ namespace Item_Bidding_System.General
                 //assign value to the price recommendation label
                 Label label = (item.FindControl("lblProdDesc") as Label);
                 string maxBidText = (item.FindControl("lblCurrentBid") as Label).Text.ToString();
-                double maxBid = Convert.ToDouble(String.Format("{0:0.00}", Decimal.Parse(maxBidText)));
-                priceRecommendation(label, maxBid);
+                double maxBid = 0.0;
+                if (!string.IsNullOrEmpty(maxBidText))
+                {
+                    maxBid = Convert.ToDouble(String.Format("{0:0.00}", Decimal.Parse(maxBidText)));
+                    priceRecommendation(label, maxBid);
+                }
+                
             }
         }
 
@@ -644,7 +650,7 @@ namespace Item_Bidding_System.General
                 if (accId == null)
                 {
                     alertMsg();
-                    Response.Redirect("/General/LoginPage.aspx");
+                    Response.Redirect("~/General/LoginPage.aspx");
                 }
 
                 //get prodId
@@ -652,7 +658,7 @@ namespace Item_Bidding_System.General
                 if (prodId == null)
                 {
                     alertMsg();
-                    Response.Redirect("/General/Home.aspx");
+                    Response.Redirect("~/General/Home.aspx");
                 }
 
                 //get price

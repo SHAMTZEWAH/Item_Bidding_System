@@ -35,7 +35,7 @@ namespace Item_Bidding_System.General
                 var index = e.Item.ItemIndex;
                 Label lblProdName =  (Label)Repeater1.Items[index].FindControl("lblName");
                 string prodName = lblProdName.Text;
-                Response.Redirect("/General/ProductDetails.aspx?prodName=" + prodName);
+                Response.Redirect("/General/ProductDetails.aspx?prodName=" + prodName + "&category="+"&keyword=");
             }
         }
 
@@ -55,7 +55,27 @@ namespace Item_Bidding_System.General
             }
         }
 
-        
+        protected void Image1_Click(object sender, ImageClickEventArgs e)
+        {
+
+        }
+
+        protected void Image2_Click(object sender, ImageClickEventArgs e)
+        {
+
+        }
+
+        protected void Image1_1_Click(object sender, ImageClickEventArgs e)
+        {
+
+        }
+
+        protected void Image2_1_Click(object sender, ImageClickEventArgs e)
+        {
+
+        }
+
+
         // div onclick ->
         // the product name is obtained from data bound ->
         // save at cookies / somewhere ->

@@ -19,7 +19,7 @@
                     <i class="bi bi-plus-circle-fill"></i>
                     <div class="filter-text">Upload New Products</div>
                 </div>
-                <div id="btnCreateStore" class="btn-create-store btn-medium-white btnCreateStore" runat="server" Onclick="btnSubStore_Click"> <!--Event at C#-->
+                <div id="btnCreateStore" class="btn-create-store btn-medium-white btnCreateStore" runat="server" Onclick="btnCreateStore_Click"> <!--Event at C#-->
                     <i class="bi bi-shop"></i>
                     <div class="">
                         <div>Create New Substore</div>
@@ -35,8 +35,11 @@
                 </asp:RadioButtonList>
             </div>
              </div>
+        
         <div id="SubStoreCon" class="substore-container" runat="server">
-               
+               <asp:Panel ID="Panel1" CssClass="substore-container" runat="server">
+
+               </asp:Panel>
             </div>
         <div class="content-subcontainer-no-marginTop" runat="server">
             
@@ -83,7 +86,7 @@
                            
                         </div>
                         <div class="flex-column flex-around">
-                            <button class="btn-medium-blue btnHover" onclick="/User/EditProduct.aspx?prodName=">Edit</button> <!--URL need to add-->
+                            <asp:Button ID="btnEdit" CssClass="btn-medium-blue btnHover" runat="server" Text="Edit" onclick="btnEdit_Click"/>
                         </div>
                 </div>
                 </ItemTemplate>
