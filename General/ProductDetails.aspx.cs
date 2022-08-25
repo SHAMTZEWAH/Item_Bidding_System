@@ -19,6 +19,7 @@ namespace Item_Bidding_System.General
             {
                 loadContent(Request.QueryString["prodName"]!=null?Request.QueryString["prodName"]:"");
             }
+
         }
 
         void DataList_errorMsg(Exception ex)
@@ -444,8 +445,9 @@ namespace Item_Bidding_System.General
                 if (!string.IsNullOrEmpty(maxBidText))
                 {
                     maxBid = Convert.ToDouble(String.Format("{0:0.00}", Decimal.Parse(maxBidText)));
+                    priceRecommendation(label, maxBid);
                 }
-                priceRecommendation(label, maxBid);
+                
             }
         }
 

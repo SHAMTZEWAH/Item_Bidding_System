@@ -47,10 +47,10 @@
                 </details>
             </div>
         </div>
-
+         
         <div class="content-subcontainer" style="overflow: initial;"><!--right part-->
             <div class="datalist-container"> <!---->
-                <asp:DataList ID="DataList1" runat="server" OnItemDataBound="DataList1_ItemDataBound">
+               <asp:DataList ID="DataList1" runat="server" OnItemDataBound="DataList1_ItemDataBound">
                      <ItemTemplate>
                         <table width="100%">
                             <tr> <!--Row 1-->

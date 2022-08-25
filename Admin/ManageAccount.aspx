@@ -32,7 +32,7 @@
                     <asp:ListItem Value="accId">AccountId</asp:ListItem> 
                     <asp:ListItem Value="username">Username</asp:ListItem>
                     <asp:ListItem Value="email">Email</asp:ListItem> 
-                    <asp:ListItem>RoleName</asp:ListItem> 
+                    <asp:ListItem Value="RoleName">RoleName</asp:ListItem> 
                     
                 </asp:RadioButtonList>
             </div>

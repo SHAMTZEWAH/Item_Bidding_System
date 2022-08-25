@@ -60,7 +60,7 @@ FixedPriceProduct ON ProductPhoto.productId = FixedPriceProduct.productId INNER 
 Product ON ProductPhoto.productId = Product.productId AND FixedPriceProduct.productId = Product.productId INNER JOIN 
 ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId FULL JOIN 
 OrderProduct ON Product.productId = OrderProduct.productId 
-WHERE ProductPhoto.photoStatus = 'Main' 
+WHERE ProductPhoto.photoStatus = 'Main' AND Product.productStatus = 'Unflagged'
 ORDER BY CountSales
 ">
             </asp:SqlDataSource>
@@ -127,7 +127,7 @@ FixedPriceProduct ON ProductPhoto.productId = FixedPriceProduct.productId INNER 
 Product ON ProductPhoto.productId = Product.productId AND FixedPriceProduct.productId = Product.productId INNER JOIN 
 ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId FULL JOIN 
 OrderProduct ON Product.productId = OrderProduct.productId 
-WHERE ProductPhoto.photoStatus = 'Main' 
+WHERE ProductPhoto.photoStatus = 'Main' AND Product.productStatus = 'Unflagged'
 ORDER BY Product.addDateTime DESC
 
 ">

@@ -29,6 +29,18 @@ namespace Item_Bidding_System.Admin
                     GridViewRow gvr = (GridViewRow)checkbox.NamingContainer;
                     displayToggle(checkbox, gvr.RowIndex);
                 }
+                try
+                {
+                    if(Request.QueryString["filter"].ToString() != null)
+                    {
+                        RadioButtonList1.SelectedValue = Request.QueryString["filter"].ToString();
+                    }
+                }
+                catch(Exception ex)
+                {
+                    lblNoData.Visible = true;
+                    lblNoData.Text = ex.Message.ToString();
+                }
             }
         }
 
@@ -116,7 +128,13 @@ namespace Item_Bidding_System.Admin
                 "aspnet_UsersInRoles ON Account.userId = aspnet_UsersInRoles.UserId INNER JOIN " +
                 "aspnet_Roles ON aspnet_Roles.RoleId = aspnet_UsersInRoles.RoleId FULL JOIN " +
                 "Seller ON Seller.accId = Account.accId " +
-                "ORDER BY @filter";
+                "ORDER BY " +
+                "CASE @filter " +
+                "WHEN 'accId' THEN Account.accId " +
+                "WHEN 'username' THEN Account.username " +
+                "WHEN 'email' THEN Account.email " +
+                "WHEN 'RoleName' THEN aspnet_Roles.RoleName " +
+                "END";
 
             //execute
             try
@@ -127,6 +145,7 @@ namespace Item_Bidding_System.Admin
                 if(Request.QueryString["filter"] != null)
                 {
                     cmdRetrieve = new SqlCommand(queryFilter, con);
+                    string someStr = Request.QueryString["filter"].ToString();
                     cmdRetrieve.Parameters.AddWithValue("@filter",Request.QueryString["filter"].ToString());
                   
                 }
