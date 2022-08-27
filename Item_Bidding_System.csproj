@@ -46,12 +46,21 @@
     <Reference Include="AngleSharp, Version=0.14.0.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
       <HintPath>packages\AngleSharp.0.14.0\lib\net472\AngleSharp.dll</HintPath>
     </Reference>
+    <Reference Include="FSharp.Core, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\FSharp.Core.4.5.2\lib\net45\FSharp.Core.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.11.45.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>packages\HtmlAgilityPack.1.11.45\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NRobotsCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\NRobotsCore.1.1.3\lib\net451\NRobotsCore.dll</HintPath>
+    </Reference>
+    <Reference Include="ScrapySharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ScrapySharp.3.0.0\lib\netstandard2.0\ScrapySharp.dll</HintPath>
+    </Reference>
+    <Reference Include="ScrapySharp.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ScrapySharp.3.0.0\lib\netstandard2.0\ScrapySharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>packages\Serilog.2.10.0\lib\net46\Serilog.dll</HintPath>
@@ -78,6 +87,7 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
@@ -113,6 +123,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -130,7 +141,8 @@
     <Content Include="Admin\ManageAccount.aspx" />
     <Content Include="Admin\ManageComplaint.aspx" />
     <Content Include="Admin\ManageProduct.aspx" />
-    <Content Include="Admin\WebCrawler.aspx" />
+    <Content Include="Admin\UpdateWebCrawler.aspx" />
+    <Content Include="Seller\WebCrawler.aspx" />
     <Content Include="App_Data\ItemBidDB.mdf" />
     <Content Include="App_Data\ItemBidDB_log.ldf">
       <DependentUpon>ItemBidDB.mdf</DependentUpon>
@@ -166,7 +178,11 @@
     <Content Include="TopMenuGeneral.ascx" />
     <Content Include="TopMenuSeller.ascx" />
     <Content Include="User\AccountManagement.aspx" />
+    <Content Include="User\Cart.aspx" />
+    <Content Include="User\paymentPage.aspx" />
     <Content Include="User\SellerRegistration.aspx" />
+    <Content Include="User\shippingPage.aspx" />
+    <Content Include="User\voucherStakingPage.aspx" />
     <Content Include="User\Watchlist.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -195,11 +211,18 @@
     <Compile Include="Admin\ProcessPhoto.ashx.cs">
       <DependentUpon>ProcessPhoto.ashx</DependentUpon>
     </Compile>
-    <Compile Include="Admin\WebCrawler.aspx.cs">
+    <Compile Include="Admin\UpdateWebCrawler.aspx.cs">
+      <DependentUpon>UpdateWebCrawler.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\UpdateWebCrawler.aspx.designer.cs">
+      <DependentUpon>UpdateWebCrawler.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Seller\WebCrawler.aspx.cs">
       <DependentUpon>WebCrawler.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Admin\WebCrawler.aspx.designer.cs">
+    <Compile Include="Seller\WebCrawler.aspx.designer.cs">
       <DependentUpon>WebCrawler.aspx</DependentUpon>
     </Compile>
     <Compile Include="ErrorPage.aspx.cs">
@@ -391,6 +414,20 @@
     <Compile Include="User\AccountManagement.aspx.designer.cs">
       <DependentUpon>AccountManagement.aspx</DependentUpon>
     </Compile>
+    <Compile Include="User\Cart.aspx.cs">
+      <DependentUpon>Cart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User\Cart.aspx.designer.cs">
+      <DependentUpon>Cart.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="User\paymentPage.aspx.cs">
+      <DependentUpon>paymentPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User\paymentPage.aspx.designer.cs">
+      <DependentUpon>paymentPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="User\ProcessPhoto.ashx.cs">
       <DependentUpon>ProcessPhoto.ashx</DependentUpon>
     </Compile>
@@ -400,6 +437,20 @@
     </Compile>
     <Compile Include="User\SellerRegistration.aspx.designer.cs">
       <DependentUpon>SellerRegistration.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="User\shippingPage.aspx.cs">
+      <DependentUpon>shippingPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User\shippingPage.aspx.designer.cs">
+      <DependentUpon>shippingPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="User\voucherStakingPage.aspx.cs">
+      <DependentUpon>voucherStakingPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User\voucherStakingPage.aspx.designer.cs">
+      <DependentUpon>voucherStakingPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="User\Watchlist.aspx.cs">
       <DependentUpon>Watchlist.aspx</DependentUpon>
@@ -424,7 +475,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Themes\Theme1\" />
     <Folder Include="Images\" />
   </ItemGroup>
   <PropertyGroup>

@@ -345,5 +345,10 @@ namespace Item_Bidding_System.Admin
         {
 
         }
+
+        protected void btnUpdateRef_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/UpdateWebCrawler.aspx");
+        }
     }
 }

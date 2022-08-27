@@ -16,20 +16,25 @@
             <div class="displayLess">
                 <asp:Label ID="lblNoData" runat="server" Text="" Visible="false"></asp:Label>
             </div>
-            <div class="filter-option"> <!--Row 2-->
-                <div class="btn-filter btn-medium-white">
-                    <i class="bi bi-funnel-fill"></i>
-                    <div class="filter-text">Filter</div>
+            <div class="flex-row">
+                <div class="filter-option"> <!--Row 2-->
+                    <div class="btn-filter btn-medium-white">
+                        <i class="bi bi-funnel-fill"></i>
+                        <div class="filter-text">Filter</div>
+                    </div>
                 </div>
-            </div>
-            <div id="radioContainer" class="filter-content">
-                <asp:RadioButtonList ID="RadioButtonList1" runat="server" OnSelectedIndexChanged="RadioButtonList1_SelectedIndexChanged1" AutoPostBack="True">
-                    <asp:ListItem Value="addDateTime">Recently added</asp:ListItem>
-                    <asp:ListItem Value="productName">Product Name</asp:ListItem>
-                    <asp:ListItem Value="productBrand">Brand</asp:ListItem> 
-                    <asp:ListItem Value="productModel">Product Model</asp:ListItem> 
-                    <asp:ListItem Value="businessName">BusinessName</asp:ListItem>                     
-                </asp:RadioButtonList>
+                <div id="radioContainer" class="filter-content">
+                    <asp:RadioButtonList ID="RadioButtonList1" runat="server" OnSelectedIndexChanged="RadioButtonList1_SelectedIndexChanged1" AutoPostBack="True">
+                        <asp:ListItem Value="addDateTime">Recently added</asp:ListItem>
+                        <asp:ListItem Value="productName">Product Name</asp:ListItem>
+                        <asp:ListItem Value="productBrand">Brand</asp:ListItem> 
+                        <asp:ListItem Value="productModel">Product Model</asp:ListItem> 
+                        <asp:ListItem Value="businessName">BusinessName</asp:ListItem>                     
+                    </asp:RadioButtonList>
+                </div>
+                <div style="align-self:center;">
+                    <asp:Button ID="btnUpdateRef" CssClass="btn-filter btn-medium-white" runat="server" Text="Update Crawled Info" OnClick="btnUpdateRef_Click" />
+                </div>
             </div>
              </div>
 
