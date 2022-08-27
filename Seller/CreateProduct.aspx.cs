@@ -611,6 +611,10 @@ namespace Item_Bidding_System.Seller
             //delete the temporary table
             removeAllPhoto();
 
+            //redirect to web crawler to operate
+            if (!string.IsNullOrEmpty(Session["prodName"].ToString()) && !string.IsNullOrEmpty(Session["prodId"].ToString()))
+                Response.Redirect("~/WebCrawler.aspx?prodName="+ Session["prodName"] + "&prodId=" + Session["prodId"]);
+
         }
         void displayErrorMsg(Exception ex)
         {
@@ -676,8 +680,8 @@ namespace Item_Bidding_System.Seller
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string queryProductDetails = "INSERT INTO ProductDetails(productDetailsId, productName, productCategory, productType, productBrand, productModel) " +
-                "VALUES(@productDetailsId, @productName, @productCategory, @productType, @productBrand, @productModel)";
+            string queryProductDetails = "INSERT INTO ProductDetails(productDetailsId, productName, productCategory, productType, productBrand, productModel, keyword) " +
+                "VALUES(@productDetailsId, @productName, @productCategory, @productType, @productBrand, @productModel, @keyword)";
 
             try
             {
@@ -689,6 +693,7 @@ namespace Item_Bidding_System.Seller
                 cmdRetrieve.Parameters.AddWithValue("@productType", txtType.Text);
                 cmdRetrieve.Parameters.AddWithValue("@productBrand", txtBrand.Text);
                 cmdRetrieve.Parameters.AddWithValue("@productModel", txtModel.Text);
+                cmdRetrieve.Parameters.AddWithValue("@keyword", txtKeyword.Text);
                 cmdRetrieve.ExecuteNonQuery();
             }
             catch (NullReferenceException ex)
@@ -871,6 +876,7 @@ namespace Item_Bidding_System.Seller
 
                 //get productId 
                 productId = getProductId();
+                Session["prodId"] = productId;
 
                 //get subStoreId
                 subStoreId = ddlSubStore.SelectedValue;
@@ -919,6 +925,7 @@ namespace Item_Bidding_System.Seller
                 }
 
                 //empty all text field
+                Session["prodName"] = txtProdName.Text;
                 txtProdName.Text = "";
                 ddlProdCategory.SelectedValue = "-1";
                 txtType.Text = "";

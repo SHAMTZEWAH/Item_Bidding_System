@@ -182,6 +182,14 @@
                 </td>
              </tr>
              <tr>
+                 <td class="lbl">Keyword: (Please seperate keywords by comma)</td>
+                 <td>
+                     <div class="medium-top-inner-gap">
+                         <asp:TextBox ID="txtKeyword" CssClass="textBox" runat="server"></asp:TextBox>
+                    </div>
+                 </td>
+             </tr>
+             <tr>
                 <td class="lbl">Description:</td>
                 <td>
                      <div class="medium-top-inner-gap">

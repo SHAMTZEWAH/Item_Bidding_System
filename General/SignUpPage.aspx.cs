@@ -90,6 +90,42 @@ namespace Item_Bidding_System.General
             return userId;
         }
 
+        int getPointCount()
+        {
+            int count = 0;
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT COUNT(pointId) FROM Voucher";
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                count = (int)cmdRetrieve.ExecuteScalar();
+
+            }
+            catch (NullReferenceException ex)
+            {
+                string alertMsg = "[!] The action is unable to complete: " + ex.ToString();
+                string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+
+            return count;
+        }
+
         void createUserAcc(string username, string email, string phoneNo)
         {
             //create connection
@@ -120,6 +156,7 @@ namespace Item_Bidding_System.General
                 //get userId
                 Guid userId;
                 userId = getUserId(email);
+                Session["accId"] = accId;
 
                 con.Open();
                 cmdRetrieve = new SqlCommand(query, con);
@@ -135,6 +172,54 @@ namespace Item_Bidding_System.General
             catch (NullReferenceException ex)
             {
                 string alertMsg = "[!] The action is unable to complete: "+ ex.ToString();
+                string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        void createVoucherStake()
+        {
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "INSERT INTO Voucher(pointId, point, accId, pointStake, pointReward) " +
+                "VALUES(@pointId, 0, @accId, 0, 0)";
+
+            //execute
+            try
+            {
+                string accId = "";
+                int pointId = 0;
+
+                //get acc id
+                if (String.IsNullOrEmpty(Session["accId"].ToString()))
+                {
+                    accId = Session["accId"].ToString();
+                }
+
+                //get point id
+                pointId = getPointCount();
+
+
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@pointId", pointId);
+                cmdRetrieve.Parameters.AddWithValue("@accId", accId);
+                cmdRetrieve.ExecuteNonQuery();
+            }
+            catch (NullReferenceException ex)
+            {
+                string alertMsg = "[!] The action is unable to complete: " + ex.ToString();
                 string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
 
@@ -187,10 +272,7 @@ namespace Item_Bidding_System.General
 
         }
 
-        protected void CreateUserWizard1_CreatingUser(object sender, LoginCancelEventArgs e)
-        {
-            
-        }
+
 
         protected void CreateUserWizard1_CreatedUser1(object sender, EventArgs e)
         {
@@ -220,6 +302,9 @@ namespace Item_Bidding_System.General
 
             string wizardUsername = (sender as CreateUserWizard).UserName;
             Roles.AddUserToRole(wizardUsername, "Customer");
+
+            //create Voucher staking data
+            createVoucherStake();
 
             //string alertMsg = "[!] Error in sending email. Please try again.";
             //string script = "<script type=\"text/javascript\">alert('" + "created user" + "');</script>";
@@ -284,6 +369,11 @@ namespace Item_Bidding_System.General
             }
 
             return exist;
+        }
+
+        protected void CreateUserWizard1_CreatingUser(object sender, LoginCancelEventArgs e)
+        {
+
         }
     }
 }

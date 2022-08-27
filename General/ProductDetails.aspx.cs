@@ -17,7 +17,8 @@ namespace Item_Bidding_System.General
         {
             if (!IsPostBack)
             {
-                loadContent(Request.QueryString["prodName"]!=null?Request.QueryString["prodName"]:"");
+                Response.Redirect("~/Seller/WebCrawler.aspx?prodId=p_002&prodName=Bandai Figuarts Zero One Piece Armor Oden");
+                //loadContent(Request.QueryString["prodName"]!=null?Request.QueryString["prodName"]:"");
             }
 
         }
