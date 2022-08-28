@@ -7,7 +7,8 @@
     <link type="text/css" rel="stylesheet" href="General.css" />
     <link type="text/css" rel="stylesheet" href="SlideShow.css" />
     <link type="text/css" rel="stylesheet" href="../Dialog.css" />
- 
+
+    <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
     <div class="content-container-signUp container">
         <div class="content-subcontainer"> <!--left part-->
             <div class="multiple-image-container"> <!--top part / image container-->
@@ -77,7 +78,6 @@
                                             Time Left:&nbsp;
                                             <asp:Label ID="lblAddTime" runat="server" Text='<%# Eval("addDateTime") %>' Visible="False"></asp:Label>
                                             <asp:Label ID="lblDuration" runat="server" Text='<%# Eval("auctionDuration") %>' Visible="false"></asp:Label>
-                                            <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
                                             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                                 <ContentTemplate>
                                                     <asp:Label ID="lblTimeLeft" runat="server" Text='' />
@@ -91,8 +91,8 @@
 
                                         <div class="flex-row">
                                             Reference Price: RM
-                                            <asp:Label ID="lblRefLowPrice" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"productLowestPrice","{0:0.00}") %>' /> - RM
-                                            <asp:Label ID="lblRefHighPrice" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"productHighestPrice","{0:0.00}") %>' />
+                                            <asp:Label ID="lblRefLowPrice" runat="server" Text='<%#DataBinder.Eval(Container.DataItem,"productAveragePrice","{0:0.00}") %>' /> 
+                                            <%--<asp:Label ID="lblRefHighPrice" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"productHighestPrice","{0:0.00}") %>' />--%>
                                         </div>
                                     </div>
                                 </td>
@@ -109,7 +109,7 @@
                                                 <asp:Label ID="lblCurrentBid" CssClass="title4-blue-bold" runat="server" Text='<%# DataBinder.Eval(Container.DataItem,"currentBid","{0:0.00}") %>' />
                                             </div>
                                             <div>
-                                                <asp:TextBox ID="txtBid" CssClass="small-textBox" runat="server"></asp:TextBox>
+                                                <asp:TextBox ID="txtBid" CssClass="small-textBox" runat="server" OnTextChanged="txtBid_TextChanged"></asp:TextBox>
                                             </div>
                                             <div class="placeholder-size">
                                                 Enter RM<asp:Label ID="lblRecommendPrice" runat="server" Text=""></asp:Label> or more
@@ -135,7 +135,7 @@
                                     <div class="flex-row flex-between-center">
                                         <div class="flex-column">
                                             Best Offer:
-                                            <asp:TextBox ID="TextBox1" CssClass="small-textBox" runat="server" placeholder="Private Bid"></asp:TextBox>
+                                            <asp:TextBox ID="txtMakeOffer" CssClass="small-textBox" runat="server" placeholder="Private Bid" OnTextChanged="txtMakeOffer_TextChanged"></asp:TextBox>
                                             <div class="placeholder-size small-textBox-width" >Submit good offer privately once.</div>
                                         </div>
                                         <div class="flex-column medium-left-gap">
@@ -155,7 +155,7 @@
                                             <asp:Label ID="Label1" runat="server" CssClass="title4-blue-bold" Text='<%# DataBinder.Eval(Container.DataItem,"productPrice","{0:0.00}") %>' />
                                         </div>
                                         <div class="flex-column flex-between-center medium-left-gap">
-                                            <asp:Button ID="Button1" CssClass="btn-medium-golden-custom small-bottom-gap" runat="server" Text="Add to Cart" />
+                                            <asp:Button ID="btnAddToCart" CssClass="btn-medium-golden-custom small-bottom-gap" runat="server" Text="Add to Cart" Onclick="btnAddToCart_Click"/>
                                             <asp:Button ID="btnAddToWatchlist" CssClass="btn-medium-golden-custom btn-padding small-bottom-gap" runat="server" Text="Add to Watchlist" OnClick="btnAddToWatchlist_Click" />
                                         </div>
                                     </div>
@@ -172,20 +172,20 @@
                 </asp:DataList>
             </div>
             <div id="bidTable" class="bid-table"><!--Table for View bid-->
-        <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource2">
-            <Columns>
-                <asp:BoundField DataField="Username" HeaderText="Username" SortExpression="Username" />
-                <asp:BoundField DataField="Bid Amount" HeaderText="Bid Amount" SortExpression="Bid Amount" ReadOnly="True" />
-                <asp:BoundField DataField="Bid Time" HeaderText="Bid Time" SortExpression="Bid Time" />
-            </Columns>
-        </asp:GridView>
-        <!--Bid Table-->
-        <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT Account.username AS Username, CAST(BidTable.bidPrice AS Numeric(10,2)) AS [Bid Amount], BidTable.bidDateTime AS [Bid Time] FROM Account INNER JOIN BidTable ON Account.accId = BidTable.accId INNER JOIN Product ON BidTable.productId = Product.productId INNER JOIN ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId WHERE (BidTable.bidType = 'Open') AND (ProductDetails.productName = @prodName)">
-            <SelectParameters>
-                <asp:QueryStringParameter Name="prodName" QueryStringField="prodName" />
-            </SelectParameters>
-        </asp:SqlDataSource>
-    </div>
+                <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource2" ShowHeaderWhenEmpty="True">
+                    <Columns>
+                        <asp:BoundField DataField="Username" HeaderText="Username" SortExpression="Username" />
+                        <asp:BoundField DataField="Bid Amount" HeaderText="Bid Amount" SortExpression="Bid Amount" ReadOnly="True" />
+                        <asp:BoundField DataField="Bid Time" HeaderText="Bid Time" SortExpression="Bid Time" />
+                    </Columns>
+                </asp:GridView>
+                <!--Bid Table-->
+                <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT Account.username AS Username, CAST(BidTable.bidPrice AS Numeric(10,2)) AS [Bid Amount], BidTable.bidDateTime AS [Bid Time] FROM Account INNER JOIN BidTable ON Account.accId = BidTable.accId INNER JOIN Product ON BidTable.productId = Product.productId INNER JOIN ProductDetails ON Product.productDetailsId = ProductDetails.productDetailsId WHERE (BidTable.bidType = 'Open') AND (ProductDetails.productName = @prodName)">
+                    <SelectParameters>
+                        <asp:QueryStringParameter Name="prodName" QueryStringField="prodName" />
+                    </SelectParameters>
+                </asp:SqlDataSource>
+            </div>
         </div>
         <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT Seller.businessName, Product.productId FROM ProductDetails INNER JOIN Product ON ProductDetails.productDetailsId = Product.productDetailsId INNER JOIN SubStore ON Product.subStoreId = SubStore.subStoreId INNER JOIN Seller ON SubStore.sellerId = Seller.sellerId WHERE (ProductDetails.productName = @prodName)">
             <SelectParameters>
@@ -341,7 +341,8 @@
         displayImage(0);
         
     </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+    </script>
     <script>
         $(document).ready(function () {
             $("#viewBid").click(function () {

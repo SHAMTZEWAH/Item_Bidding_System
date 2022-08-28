@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" Async="true" AutoEventWireup="true" CodeBehind="WebCrawler.aspx.cs" Inherits="Item_Bidding_System.Admin.WebCrawler" %>
+﻿<%@ Page Language="C#" Async="true" AsyncTimeout="600000" AutoEventWireup="true" CodeBehind="WebCrawler.aspx.cs" Inherits="Item_Bidding_System.Admin.WebCrawler" %>
 
 <!DOCTYPE html>
 

@@ -30,7 +30,7 @@
                
             </div>
             <div class="content-subcontainer">
-                <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" >
+                <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
             <Columns>
                 <asp:TemplateField>
                     <HeaderTemplate>Order ID</HeaderTemplate>

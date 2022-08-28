@@ -24,7 +24,9 @@ namespace Item_Bidding_System.Admin
         {
             if (!IsPostBack)
             {
-                if (!string.IsNullOrEmpty(Request.QueryString["prodName"].ToString()) && !string.IsNullOrEmpty(Request.QueryString["prodId"].ToString())){
+
+                if (!string.IsNullOrEmpty(Request.QueryString["prodName"].ToString()) && !string.IsNullOrEmpty(Request.QueryString["prodId"].ToString()))
+                {
                     Session["prodId"] = Request.QueryString["prodId"].ToString();
                     RegisterAsyncTask(new PageAsyncTask(mainMethod));
                 }
@@ -92,19 +94,23 @@ namespace Item_Bidding_System.Admin
             //string url = "https://shopee.com.my/search?keyword=" + keyword;
             //ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "none", "<script src='scrape.js' type='text/javascript'>scrape("+url+")</script>", false);
 
+            //create new product list
+            productList = new List<CrawlProduct>();
 
             //crawl Google Shopping reference price
             await crawlGoogleShopURL(keyword, 1);
+            Task.Delay(100).Wait();
 
             //crawl IPrice website reference price
             await crawlIPriceasync(keyword, 1);
+            Task.Delay(100).Wait();
+
             insertProductRef();
-            Response.Redirect("~/CreateProduct.aspx");
+            Response.Redirect("~/Seller/CreateProduct.aspx");
         }
 
         private async Task crawlIPriceasync(string keyword, int n_pages)
         {
-            productList = new List<CrawlProduct>();
             List<string> keywordList = keyword.Split('+').ToList();
 
             //use google bot indexing to get top 3 websites (exclude ads)
@@ -171,7 +177,6 @@ namespace Item_Bidding_System.Admin
 
         private async Task crawlGoogleShopURL(string keyword, int n_pages)
         {
-            productList = new List<CrawlProduct>();
             List<string> keywordList = keyword.Split('+').ToList();
 
             //use google bot indexing to get top 3 websites (exclude ads)
@@ -228,7 +233,8 @@ namespace Item_Bidding_System.Admin
                                     var someClass = price.Attributes["class"].DeEntitizeValue;
                                     if (someClass.Equals("a8Pemb OFFNJ"))
                                     {
-                                        result.Price = price.InnerText;
+                                        var rawPrice = price.InnerText.Split('+');
+                                        result.Price = rawPrice[0];
                                         break;
                                     }
                                 }
@@ -303,7 +309,7 @@ namespace Item_Bidding_System.Admin
 
             //prepare command 
             SqlCommand cmdRetrieve;
-            string query = "INSERT INTO ProductInfo(productInfoId, productName, price, productId) VALUES (@productInfoId, @productName, @price, @productId)";
+            string query = "INSERT INTO ProductInfo(productInfoId, productName, price, productId) VALUES(@productInfoId, @productName, @price, @productId)";
 
             //execute
             try
@@ -312,30 +318,37 @@ namespace Item_Bidding_System.Admin
                 int count = getProductInfoCount();
 
                 //get product id
-                if (string.IsNullOrEmpty(Session["prodId"].ToString()))
+                if (!string.IsNullOrEmpty(Session["prodId"].ToString()))
                 {
                     productId = Session["prodId"].ToString();
                 }
 
+                con.Open();
                 foreach (var product in productList)
                 {
-                    //get productInfo Id
-                    if (count + 1 > 9)
+                    try
                     {
-                        productInfoId = "pi_0" + (count + 1);
-                    }
-                    else
-                    {
-                        productInfoId = "pi_00" + (count + 1);
-                    }
+                        //get productInfo Id
+                        if (count + 1 > 9)
+                        {
+                            productInfoId = "pi_0" + (count + 1);
+                        }
+                        else
+                        {
+                            productInfoId = "pi_00" + (count + 1);
+                        }
 
-                    con.Open();
-                    cmdRetrieve = new SqlCommand(query, con);
-                    cmdRetrieve.Parameters.AddWithValue("@productInfoId", productInfoId);
-                    cmdRetrieve.Parameters.AddWithValue("@productName", product.Name);
-                    cmdRetrieve.Parameters.AddWithValue("@price", product.Price);
-                    cmdRetrieve.Parameters.AddWithValue("@productId", productId);
-                    cmdRetrieve.ExecuteNonQuery();
+                        cmdRetrieve = new SqlCommand(query, con);
+                        cmdRetrieve.Parameters.AddWithValue("@productInfoId", productInfoId);
+                        cmdRetrieve.Parameters.AddWithValue("@productName", product.Name);
+                        cmdRetrieve.Parameters.AddWithValue("@price", Convert.ToDouble(product.Price.Replace("RM", "").Trim()));
+                        cmdRetrieve.Parameters.AddWithValue("@productId", productId);
+                        cmdRetrieve.ExecuteNonQuery();
+                    }
+                    catch(Exception ex)
+                    {
+                        continue;
+                    }
 
                     count++;
                 }

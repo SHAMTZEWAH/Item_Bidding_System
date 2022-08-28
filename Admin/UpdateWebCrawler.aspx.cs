@@ -78,6 +78,8 @@ namespace Item_Bidding_System.Admin
         private async Task mainMethod()
         {
             int countProductId = 0;
+            productList = new List<CrawlProduct>();
+            productIdList = new List<string>();
 
             //get all keyword
             List<string> keywordList = getAllKeyword();
@@ -86,12 +88,14 @@ namespace Item_Bidding_System.Admin
             {
                 //crawl Google Shopping reference price
                 await crawlGoogleShopURL(keyword, 1);
+                Task.Delay(100).Wait();
 
                 //crawl IPrice website reference price
                 await crawlIPriceasync(keyword, 1);
+                Task.Delay(100).Wait();
 
                 //update the data if available, else add data
-                foreach(var product in productList)
+                foreach (var product in productList)
                 {
                     //if available
                     if (checkProductInfo(product.Name) > 0)
@@ -121,7 +125,6 @@ namespace Item_Bidding_System.Admin
 
         private async Task crawlIPriceasync(string keyword, int n_pages)
         {
-            productList = new List<CrawlProduct>();
             List<string> keywordList = keyword.Split('+').ToList();
 
             //use google bot indexing to get top 3 websites (exclude ads)
@@ -188,7 +191,6 @@ namespace Item_Bidding_System.Admin
 
         private async Task crawlGoogleShopURL(string keyword, int n_pages)
         {
-            productList = new List<CrawlProduct>();
             List<string> keywordList = keyword.Split('+').ToList();
 
             //use google bot indexing to get top 3 websites (exclude ads)
@@ -245,7 +247,8 @@ namespace Item_Bidding_System.Admin
                                     var someClass = price.Attributes["class"].DeEntitizeValue;
                                     if (someClass.Equals("a8Pemb OFFNJ"))
                                     {
-                                        result.Price = price.InnerText;
+                                        var rawPrice = price.InnerText.Split('+');
+                                        result.Price = rawPrice[0];
                                         break;
                                     }
                                 }
@@ -379,7 +382,7 @@ namespace Item_Bidding_System.Admin
                 cmdRetrieve = new SqlCommand(query, con);
                 cmdRetrieve.Parameters.AddWithValue("@productInfoId", productInfoId);
                 cmdRetrieve.Parameters.AddWithValue("@productName", productName);
-                cmdRetrieve.Parameters.AddWithValue("@price", price);
+                cmdRetrieve.Parameters.AddWithValue("@price", Convert.ToDouble(price.Replace("RM", "").Trim()));
                 cmdRetrieve.Parameters.AddWithValue("@productId", productId);
                 cmdRetrieve.ExecuteNonQuery();
 
