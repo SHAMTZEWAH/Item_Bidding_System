@@ -14,7 +14,12 @@ namespace Item_Bidding_System.Seller
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            loadDDL();
+            if (!IsPostBack)
+            {
+                loadDDL();
+                loadData();
+            }
+            
         }
 
         //load the drop down list with product name
@@ -75,7 +80,7 @@ namespace Item_Bidding_System.Seller
             SqlCommand cmdRetrieve;
 
             //get details
-            string query = "SELECT Product.productId, productPhotoURL, productName, productBrand, productModel, , totalPrice, street, poscode, city, state, country, createOrderDateTime " +
+            string query = "SELECT Product.productId, productPhoto, productPhotoURL, productName, productBrand, productModel, totalPrice, street, poscode, city, state, country, createOrderDateTime " +
                 "FROM OrderProduct INNER JOIN " +
                 "Product ON OrderProduct.productId = Product.productId INNER JOIN " +
                 "ProductPhoto ON Product.productId = ProductPhoto.productId INNER JOIN " +
@@ -133,7 +138,7 @@ namespace Item_Bidding_System.Seller
                 GridView1.DataSource = cmdRetrieve.ExecuteReader();
                 GridView1.DataBind();
             }
-            catch (NullReferenceException ex)
+            catch (Exception ex)
             {
                 lblNoData.Visible = true;
                 lblNoData.Text = ex.Message.ToString();

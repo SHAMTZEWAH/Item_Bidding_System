@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -17,8 +19,7 @@ namespace Item_Bidding_System.General
         {
             if (!IsPostBack)
             {
-                Response.Redirect("~/Seller/WebCrawler.aspx?prodId=p_002&prodName=Bandai Figuarts Zero One Piece Armor Oden");
-                //loadContent(Request.QueryString["prodName"]!=null?Request.QueryString["prodName"]:"");
+                loadContent(Request.QueryString["prodName"]!=null?Request.QueryString["prodName"]:"");
             }
 
         }
@@ -52,8 +53,33 @@ namespace Item_Bidding_System.General
         private DateTime endTime(Object sender)
         {
             var ticker = (Control)sender;
-            DateTime addDateTime = Convert.ToDateTime((ticker.NamingContainer.FindControl("lblAddTime") as Label).Text);
-            int duration = Convert.ToInt32((ticker.NamingContainer.FindControl("lblDuration") as Label).Text);
+
+            //get bid started time
+            string time = (DataList1.Items[0].FindControl("lblAddTime") as Label).Text;
+            if (!string.IsNullOrEmpty(time))
+            {
+                Session["endTime"] = time;
+            }
+            else
+            {
+                time = Session["endTime"].ToString();
+            }
+
+            //convert time to DateTime data type
+            DateTime addDateTime = Convert.ToDateTime(time);
+
+            //get bid duration left
+            string durationTxt = (DataList1.Items[0].FindControl("lblDuration") as Label).Text;
+            if (!string.IsNullOrEmpty(durationTxt))
+            {
+                Session["bidDurationLeft"] = durationTxt;
+            }
+            else
+            {
+                durationTxt = Session["bidDurationLeft"].ToString();
+            }
+
+            int duration = Convert.ToInt32(durationTxt);
             DateTime endDateTime = addDateTime.AddDays(duration);
             return endDateTime;
         }
@@ -219,8 +245,10 @@ namespace Item_Bidding_System.General
             //prepare command 
             SqlCommand cmdRetrieve;
             //use prodid to get watchProductId
-            string query = "SELECT watchStatus FROM WatchlistProduct, Watchlist, Product WHERE WatchlistProduct.productId = Product.productId AND WatchlistProduct.productId = @prodId " +
-                "AND WathclistProduct.watchProductId = Watchlist.watchProductId AND Watchlist.accId = @accId";
+            string query = "SELECT watchStatus FROM WatchlistProduct INNER JOIN Watchlist " +
+                "ON WatchlistProduct.watchProductId = Watchlist.watchProductId " +
+                "WHERE WatchlistProduct.productId = @prodId AND " +
+                "Watchlist.accId = @accId";
 
             //execute
             try
@@ -252,12 +280,17 @@ namespace Item_Bidding_System.General
                         {
                             if ((string)reader["watchStatus"]=="Favourite")
                             {
-                                query = "UPDATE WatchlistProduct SET watchStatus = 'Bidded " +
-                                    "WHERE WatchlistProduct.watchProductId " +
+                                query = "UPDATE WatchlistProduct SET watchStatus = 'Bidded' " +
+                                    "WHERE WatchlistProduct.watchProductId = " +
                                     "(SELECT WatchlistProduct.watchProductId " +
                                     "FROM Watchlist, WatchlistProduct " +
-                                    "WHERE Watchlist.watchProductId = WatchlistProduct.watchProductId AND WatchlistProduct.productId = 'p_001' AND Watchlist.accId = 'a_002')";
+                                    "WHERE Watchlist.watchProductId = WatchlistProduct.watchProductId AND WatchlistProduct.productId = @prodId AND Watchlist.accId = @accId)";
 
+                                if(con.State == ConnectionState.Open)
+                                {
+                                    con.Close();
+                                    con.Open();
+                                } 
                                 cmdRetrieve = new SqlCommand(query, con);
                                 cmdRetrieve.Parameters.AddWithValue("@watchStatus", "Bidded");
                                 cmdRetrieve.Parameters.AddWithValue("@prodId", prodId);
@@ -415,7 +448,7 @@ namespace Item_Bidding_System.General
                 DataList1.DataSource = cmdRetrieve.ExecuteReader();
                 DataList1.DataBind();
             }
-            catch (NullReferenceException ex)
+            catch (Exception ex)
             {
                 DataList_errorMsg(ex);
             }
@@ -440,7 +473,7 @@ namespace Item_Bidding_System.General
                 lblDesc.Text = prodDesc;
 
                 //assign value to the price recommendation label
-                Label label = (item.FindControl("lblProdDesc") as Label);
+                Label label = (item.FindControl("lblRecommendPrice") as Label);
                 string maxBidText = (item.FindControl("lblCurrentBid") as Label).Text.ToString();
                 double maxBid = 0.0;
                 if (!string.IsNullOrEmpty(maxBidText))
@@ -448,7 +481,6 @@ namespace Item_Bidding_System.General
                     maxBid = Convert.ToDouble(String.Format("{0:0.00}", Decimal.Parse(maxBidText)));
                     priceRecommendation(label, maxBid);
                 }
-                
             }
         }
 
@@ -604,13 +636,14 @@ namespace Item_Bidding_System.General
             {
                 maxBid = maxBid + 100.00;
             }
+
             //assign to the label
-            label.Text = maxBid.ToString();
+            label.Text = String.Format("{0:0.##}",maxBid.ToString());
         }
 
         //save offer bid into database
 
-        private void offerBid(string type, Object sender)
+        private void offerBid(string type, string price)
         {
             //create connection
             SqlConnection con;
@@ -643,9 +676,6 @@ namespace Item_Bidding_System.General
                     bidId = "b_00" + (getCountBidTable + 1);
                 }
 
-                //get price
-                double price = 0.0;
-
                 //get accId
                 string accId = getAccId();
                 if (accId == null)
@@ -662,15 +692,10 @@ namespace Item_Bidding_System.General
                     Response.Redirect("~/General/Home.aspx");
                 }
 
-                //get price
-                var control = (Control)sender;
-                TextBox txtBid = (TextBox)control.NamingContainer.FindControl("txtBid");
-                price = Convert.ToDouble(String.Format("{0:0.00}", Decimal.Parse(txtBid.Text)));
-
                 con.Open();
                 cmdRetrieve = new SqlCommand(query, con);
                 cmdRetrieve.Parameters.AddWithValue("@id", bidId);
-                cmdRetrieve.Parameters.AddWithValue("@price", price);
+                cmdRetrieve.Parameters.AddWithValue("@price", Convert.ToDouble(String.Format("{0:0.##}", price)));
                 cmdRetrieve.Parameters.AddWithValue("@dateTime", DateTime.Now);
                 cmdRetrieve.Parameters.AddWithValue("@type", type);
                 cmdRetrieve.Parameters.AddWithValue("@accId", accId);
@@ -715,13 +740,108 @@ namespace Item_Bidding_System.General
         //place bid
         protected void btnPlaceBid_Click(object sender, EventArgs e)
         {
-            offerBid("Open", sender);
+            var ctrl = (Control)sender;
+            var txtBid = ctrl.NamingContainer.FindControl("txtBid") as TextBox;
+            var currentBid = ctrl.NamingContainer.FindControl("lblRecommendPrice") as Label;
+            Label label = (DataList1.Items[0].FindControl("lblRecommendPrice") as Label);
+            Label lblMaxBid = (DataList1.Items[0].FindControl("lblCurrentBid") as Label);
+
+            bool match = Regex.IsMatch(txtBid.Text, @"^\d+(?:\.\d{2})?$");
+
+            try
+            {
+                if (!string.IsNullOrEmpty(txtBid.Text) && Convert.ToDouble(txtBid.Text) >= Convert.ToDouble(currentBid.Text) && match)
+                {
+                    offerBid("Open", txtBid.Text);
+
+                    (ctrl.NamingContainer.FindControl("lblCurrentBid") as Label).Text = txtBid.Text;
+                    txtBid.Text = "";
+                    priceRecommendation(label, Convert.ToDouble(String.Format("{0:0.##}",lblMaxBid.Text)));
+                }
+                else
+                {
+                    string alertMsg = "[!] Please enter amount of bid more than current bid in digit.";
+                    string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
+                }
+            }
+            catch(Exception ex)
+            {
+                string alertMsg = "[!] Please enter amount of bid more than current bid in digit.";
+                string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
+            }
+            
+            
         }
 
         //make offer
         protected void btnMakeOffer_Click(object sender, EventArgs e)
         {
-            offerBid("Private", sender);
+            var ctrl = (Control)sender;
+            var txtBid = ctrl.NamingContainer.FindControl("txtMakeOffer") as TextBox;
+            var currentBid = ctrl.NamingContainer.FindControl("lblRecommendPrice") as Label;
+            bool match = Regex.IsMatch(txtBid.Text, @"^\d+(?:\.\d{2})?$");
+            Label label = (DataList1.Items[0].FindControl("lblRecommendPrice") as Label);
+            Label lblMaxBid = (DataList1.Items[0].FindControl("lblCurrentBid") as Label);
+
+            try
+            {
+                if (!string.IsNullOrEmpty(txtBid.Text) && Convert.ToDouble(txtBid.Text) >= Convert.ToDouble(currentBid.Text) && match && checkPrivateOffer() <= 0)
+                {
+                    offerBid("Private", txtBid.Text);
+                    txtBid.Text = "";
+                    priceRecommendation(label, Convert.ToDouble(String.Format("{0:0.##}", lblMaxBid.Text)));
+                }
+                else
+                {
+                    string alertMsg = "[!] Please enter amount of bid more than current bid in digit.";
+                    string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
+                }
+            }
+            catch(Exception ex)
+            {
+                string alertMsg = "[!] Please enter amount of bid more than current bid in digit.";
+                string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
+            }   
+        }
+
+        int checkPrivateOffer()
+        {
+            int count = 0;
+
+            //create connection
+            SqlConnection con;
+            string strCon = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(strCon);
+
+            //prepare command 
+            SqlCommand cmdRetrieve;
+            string query = "SELECT COUNT(bidId) FROM BidTable WHERE BidTable.accId = @accId AND BidTable.productId = @prodId" +
+                "";
+
+            //execute
+            try
+            {
+                con.Open();
+                cmdRetrieve = new SqlCommand(query, con);
+                cmdRetrieve.Parameters.AddWithValue("@prodId", getProdId());
+                cmdRetrieve.Parameters.AddWithValue("@accId", getAccId());
+                count = (int)cmdRetrieve.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                DataList_errorMsg(ex);
+
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+            return count;
         }
 
         //add to watchlist
@@ -786,6 +906,38 @@ namespace Item_Bidding_System.General
                 }
             }
             
+        }
+
+        //add to cart
+        protected void btnAddToCart_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //validation purpose
+        protected void txtBid_TextChanged(object sender, EventArgs e)
+        {
+            var ctrl = (TextBox)sender;
+            bool match = Regex.IsMatch(ctrl.Text, @"^\d+(?:\.\d{2})?$");
+            if (!match)
+            {
+                string alertMsg = "[!] Please enter amount of bid more than current bid in digit.";
+                string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
+            }
+        }
+
+        protected void txtMakeOffer_TextChanged(object sender, EventArgs e)
+        {
+            var ctrl = (TextBox)sender;
+            bool match = Regex.IsMatch(ctrl.Text, @"^\d+(?:\.\d{2})?$");
+
+            if (!match)
+            {
+                string alertMsg = "[!] Please enter amount of bid more than current bid in digit.";
+                string script = "<script type=\"text/javascript\">alert('" + alertMsg + "');</script>";
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script);
+            }
         }
 
     }
